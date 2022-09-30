@@ -1,10 +1,12 @@
 import Image from "next/image";
 import { logo } from "../../../public";
 
-export default function Brand({ fill, title }) {
+export default function Brand({ title, style }) {
   return (
     <>
-      <Image src={logo} alt="" width={fill} height={fill} />
+      <div className={`relative ${style}`}>
+        <Image src={logo} alt="" layout="fill" />
+      </div>
       <span>{title}</span>
     </>
   );
