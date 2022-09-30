@@ -1,2 +1,5 @@
 import Header from "./Header";
-export { Header };
+import Filter from "./Filter";
+import CardPost from "./CardPost";
+
+export { Header, Filter, CardPost };
