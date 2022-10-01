@@ -1,4 +1,5 @@
 import { CardPost, Filter, Header, Layout } from "../components";
+import posts from "../utils/post.json";
 
 export default function Home() {
   return (
@@ -6,7 +7,10 @@ export default function Home() {
       <Header />
       <section>
         <Filter />
-        {/* <CardPost /> */}
+
+        {posts.map((post) => (
+          <CardPost key={post.id} post={post} />
+        ))}
       </section>
     </Layout>
   );

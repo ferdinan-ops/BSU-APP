@@ -20,7 +20,7 @@ export default function Filter() {
   ];
 
   return (
-    <div className="mt-[30px] flex flex-row gap-5 overflow-y-auto md:mt-[60px] md:mb-[30px]">
+    <div className="mt-[30px] mb-[30px] flex flex-row gap-5 overflow-y-auto md:mt-[60px]">
       <button
         className={`cursor-pointer rounded-full border px-4 py-1 text-[15px] font-semibold md:px-5 md:py-1.5 md:text-base ${
           filtered === "Semua Soal"
