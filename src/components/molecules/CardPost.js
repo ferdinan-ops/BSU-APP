@@ -1,34 +1,16 @@
-import Image from "next/image";
 import React from "react";
 import { liked, message } from "../../../public";
-import Moment from "react-moment";
 import Router from "next/router";
-import { IconWrapper, InfoSoal, More } from "../atoms";
+import { IconWrapper, InfoSoal } from "../atoms";
+import ProfileHeader from "./ProfileHeader";
 
 export default function CardPost({ post }) {
-
-  const profileHandler = (e, id) => {
-    e.stopPropagation();
-    Router.push(`/profile/${id}`);
-  }
-
-  const detailHandler = (id) => {
-    Router.push(`/detail/${id}`);
-  }
+  const { id, user, updated_at } = post;
 
   return (
-    <div className="mb-10 w-full rounded-lg border border-[#DCDCDC] text-font cursor-pointer hover:bg-slate-50" onClick={() => detailHandler(post.id)}>
+    <div className="mb-10 w-full rounded-lg border border-[#DCDCDC] text-font cursor-pointer hover:bg-slate-50" onClick={() => Router.push(`/detail/${id}`)}>
       <div className="flex items-center justify-between border-b border-[#DCDCDC] p-5">
-        <div className="flex cursor-pointer items-center gap-4" onClick={(e) => profileHandler(e, post.user.id)}>
-          <img src={post.user.profilePicture} alt="" className="h-[30px] w-[30px] rounded-full md:h-10 md:w-10" />
-          <p className="text-[15px] font-semibold md:text-base">
-            {post.user.username}{" "}
-            <span className="text-xs text-[#ADADAD] md:text-sm">
-              &bull; <Moment fromNow>{post.updated_at}</Moment>
-            </span>
-          </p>
-        </div>
-        <More />
+        <ProfileHeader user={user} date={updated_at} />
       </div>
 
       <div className="card-body p-5">
@@ -46,13 +28,13 @@ export default function CardPost({ post }) {
             </table>
 
             <div className="mt-[30px] flex gap-5 text-sm md:mt-auto md:text-base">
-              <div className="flex items-center gap-2 font-semibold">
+              <div className="flex items-center gap-3 font-semibold">
                 <IconWrapper img={liked} style="bg-[#EB5757]/30" />
                 <p>12</p>
               </div>
-              <div className="flex items-center gap-2 font-semibold">
+              <div className="flex items-center gap-3 font-semibold">
                 <IconWrapper img={message} style="bg-[#6C5CE7]/30" />
-                <p>12</p>
+                <p>{post.comment.length}</p>
               </div>
             </div>
           </div>

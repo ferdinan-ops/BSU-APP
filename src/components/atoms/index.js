@@ -7,5 +7,17 @@ import Layout from "./Layout";
 import More from "./More";
 import InfoSoal from "./InfoSoal";
 import IconWrapper from "./IconWrapper";
+import Gapping from "./Gapping";
 
-export { Input, Brand, Gap, Button, SearchBar, Layout, More, InfoSoal, IconWrapper };
+export {
+  Input,
+  Brand,
+  Gap,
+  Button,
+  SearchBar,
+  Layout,
+  More,
+  InfoSoal,
+  IconWrapper,
+  Gapping,
+};

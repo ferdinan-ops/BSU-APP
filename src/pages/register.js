@@ -2,10 +2,14 @@ import { registerBg } from "../../public";
 import Image from "next/image";
 import { Brand, Button, Gap, Input } from "../components";
 import Link from "next/link";
+import Head from "next/head";
 
 export default function Register() {
   return (
     <section className="flex min-h-screen w-full p-8 font-medium xl:max-h-screen">
+      <Head>
+        <title>BSU - Daftar</title>
+      </Head>
       <div className="relative m-auto flex flex-1 flex-col xl:m-0">
         <div className="top-0 left-0 mb-14 flex flex-col items-center gap-3 font-semibold text-font xl:absolute xl:mb-0 xl:flex-row">
           <Brand title="BSU (Bank Soal UNIKA)" style="h-8 w-8" />
