@@ -5,5 +5,7 @@ import Button from "./Button";
 import SearchBar from "./SearchBar";
 import Layout from "./Layout";
 import More from "./More";
+import InfoSoal from "./InfoSoal";
+import IconWrapper from "./IconWrapper";
 
-export { Input, Brand, Gap, Button, SearchBar, Layout, More };
+export { Input, Brand, Gap, Button, SearchBar, Layout, More, InfoSoal, IconWrapper };

@@ -25,7 +25,7 @@ export default function Home() {
               <CardPost post={post} key={post.id} />
             ))}
           </div>
-          <div className="h-[472px] max-h-[472px] w-4/12">
+          <div className="sticky top-[130px] hidden  h-[472px] max-h-[472px] w-4/12 xl:block">
             <PromoteCard />
           </div>
         </section>

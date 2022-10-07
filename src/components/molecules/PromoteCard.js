@@ -2,7 +2,7 @@ import React from "react";
 
 export default function PromoteCard() {
   return (
-    <aside className="card-shadow sticky h-full w-full items-center justify-center rounded-lg bg-primary p-[30px]">
+    <aside className="card-shadow relative h-full w-full items-center justify-center rounded-lg bg-primary p-[30px]">
       <div className="flex h-full flex-col items-center justify-between">
         <h1 className="text-center text-2xl font-bold text-white">
           Ayo tambahkan soal yang kamu punya !
