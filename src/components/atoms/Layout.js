@@ -11,7 +11,7 @@ export default function Layout({ title, children }) {
       </Head>
       <section className="container mx-auto px-6 md:px-6 xl:px-0">
         <Header />
-        <Gap height={96} />
+        <Gap style="h-24" />
         {children}
       </section>
     </>

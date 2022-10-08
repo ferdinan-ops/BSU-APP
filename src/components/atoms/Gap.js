@@ -1,5 +1,5 @@
 import React from "react";
 
-export default function Gap({ width, height }) {
-  return <div style={{ width, height }} />;
+export default function Gap({ style }) {
+  return <div className={style}></div>;
 }

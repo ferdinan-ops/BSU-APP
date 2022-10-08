@@ -23,13 +23,13 @@ export default function Login() {
 
           <form className="mt-14">
             <Input title="Email" type="email" placeholder="Email" />
-            <Gap height={20} />
+            <Gap style="h-5" />
             <Input title="Password" type="password" placeholder="Password" />
-            <Gap height={32} />
+            <Gap style="h-[32px]" />
             <div className="shadow-button h-11 rounded-lg bg-primary font-semibold text-font">
               <Button>Masuk</Button>
             </div>
-            <Gap height={20} />
+            <Gap style="h-5" />
             <div className="h-11 rounded-lg border border-auth text-gray hover:bg-slate-50">
               <Button>
                 <Image alt="" src={google} width={24} height={24} />{" "}

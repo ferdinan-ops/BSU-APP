@@ -1,7 +1,13 @@
 import React from "react";
 import Moment from "react-moment";
 
-export default function ProfileImage({ user, imgSize, isPost }) {
+export default function ProfileImage({
+  user,
+  date,
+  imgStyle,
+  nameStyle,
+  isPost,
+}) {
   return (
     <div
       className="flex cursor-pointer items-center gap-4"
@@ -13,9 +19,9 @@ export default function ProfileImage({ user, imgSize, isPost }) {
       <img
         src={user.profilePicture}
         alt=""
-        className={`h-[${imgSize}px] w-[${imgSize}px] rounded-full md:h-10 md:w-10`}
+        className={`rounded-full ${imgStyle}`}
       />
-      <p className="text-[15px] font-semibold md:text-base">
+      <p className={`font-semibold ${nameStyle}`}>
         {user.username}{" "}
         <span className="text-xs text-[#ADADAD] md:text-sm">
           {isPost && "&bull;"} <Moment fromNow>{date}</Moment>

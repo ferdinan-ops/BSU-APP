@@ -16,6 +16,7 @@ import message from "./icons/message.svg";
 import more from "./icons/more.svg";
 import deleted from "./icons/delete.svg";
 import edit from "./icons/edit.svg";
+import image from "./icons/image.svg";
 
 export {
   loginBg,
@@ -33,4 +34,5 @@ export {
   deleted,
   edit,
   loginPromote,
+  image,
 };
