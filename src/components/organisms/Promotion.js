@@ -1,6 +1,12 @@
+import Router from "next/router";
 import React from "react";
 
-export default function PromoteCard() {
+export default function Promotion() {
+  const linkedHandler = (e) => {
+    e.preventDefault()
+    Router.push("/post/create")
+  }
+
   return (
     <aside className="card-shadow relative h-full w-full items-center justify-center rounded-lg bg-primary p-[30px]">
       <div className="flex h-full flex-col items-center justify-between">
@@ -10,7 +16,7 @@ export default function PromoteCard() {
         <div className="z-10 flex">
           <img src="/images/login-promote.png" alt="" className="h-60" />
         </div>
-        <button className="w-full rounded-full bg-white py-2 text-xl font-semibold text-primary hover:bg-slate-100">
+        <button className="w-full rounded-full bg-white py-2 text-xl font-semibold text-primary hover:bg-slate-100" onClick={linkedHandler}>
           Tambahkan Soal
         </button>
       </div>

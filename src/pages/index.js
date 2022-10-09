@@ -1,5 +1,5 @@
-import { CardPost, Filter, Gap, Layout, PromoteCard } from "../components";
-import { getQuestions, questionSelectors } from "../config/redux/features/";
+import { CardPost, Filter, Gap, Layout, Promotion } from "../components";
+import { getQuestions, questionSelectors } from "../config/redux/features";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 
@@ -23,7 +23,7 @@ export default function Home() {
             ))}
           </div>
           <div className="sticky top-[130px] hidden h-[472px] max-h-[472px] w-4/12 xl:block">
-            <PromoteCard />
+            <Promotion />
           </div>
         </section>
       </section>

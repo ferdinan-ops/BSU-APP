@@ -4,6 +4,7 @@ import registerBg from "./images/register-bg.jpg";
 import logo from "./images/logo.svg";
 import dummyProfile from "./images/profile.jpg";
 import loginPromote from "./images/login-promote.png";
+import footerLogo from "./images/footer-logo.svg";
 
 // icons
 import google from "./icons/Google.svg";
@@ -35,4 +36,5 @@ export {
   edit,
   loginPromote,
   image,
+  footerLogo
 };

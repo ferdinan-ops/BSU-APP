@@ -1,7 +1,7 @@
 import Head from "next/head";
 import React from "react";
-import { Header } from "../molecules";
-import Gap from "./Gap";
+import { Footer, Header } from "../organisms";
+import { Gap } from "../atoms";
 
 export default function Layout({ title, children }) {
   return (
@@ -14,6 +14,7 @@ export default function Layout({ title, children }) {
         <Gap style="h-24" />
         {children}
       </section>
+      <Footer />
     </>
   );
 }

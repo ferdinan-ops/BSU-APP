@@ -19,6 +19,7 @@ module.exports = {
         font: "#2D3436",
         gray: "#667085",
         auth: "#C2C9D1",
+        "gray-2": "#ADADAD"
       },
       fontFamily: {
         sans: ["Inter", "sans-serif"],

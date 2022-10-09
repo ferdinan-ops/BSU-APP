@@ -1,16 +1,17 @@
-import React from "react";
 import { liked, message } from "../../../public";
+import { Author } from "../molecules";
+import { Info, Icon } from "../atoms";
 import Router from "next/router";
-import { IconWrapper, InfoSoal } from "../atoms";
-import ProfileHeader from "./ProfileHeader";
+import React from "react";
 
 export default function CardPost({ post }) {
   const { id, user, updated_at } = post;
+  const linkedCard = (id) => Router.push(`/post/${id}`);
 
   return (
-    <div className="mb-10 w-full rounded-lg border border-[#DCDCDC] text-font cursor-pointer hover:bg-slate-50" onClick={() => Router.push(`/detail/${id}`)}>
+    <div className="mb-10 last:mb-0 w-full cursor-pointer rounded-lg border border-[#DCDCDC] text-font hover:bg-slate-50" onClick={() => linkedCard(id)}>
       <div className="flex items-center justify-between border-b border-[#DCDCDC] p-5">
-        <ProfileHeader user={user} date={updated_at} />
+        <Author user={user} date={updated_at} size="h-[30px] w-[30px] md:h-10 md:w-10" />
       </div>
 
       <div className="card-body p-5">
@@ -20,20 +21,20 @@ export default function CardPost({ post }) {
             <h1 className="text-xl font-semibold md:text-2xl">{post.mataKuliah}</h1>
             <table className="mt-5 text-sm md:text-base">
               <tbody>
-                <InfoSoal title="Fakultas" content={post.fakultas} />
-                <InfoSoal title="Program Studi" content={post.programStudi} />
-                <InfoSoal title="Semester" content={post.semester} />
-                <InfoSoal title="Kategori" content={post.kategori} />
+                <Info title="Fakultas" content={post.fakultas} />
+                <Info title="Program Studi" content={post.programStudi} />
+                <Info title="Semester" content={post.semester} />
+                <Info title="Kategori" content={post.kategori} />
               </tbody>
             </table>
 
             <div className="mt-[30px] flex gap-5 text-sm md:mt-auto md:text-base">
               <div className="flex items-center gap-3 font-semibold">
-                <IconWrapper img={liked} style="bg-[#EB5757]/30" />
+                <Icon img={liked} style="bg-[#EB5757]/30" />
                 <p>12</p>
               </div>
               <div className="flex items-center gap-3 font-semibold">
-                <IconWrapper img={message} style="bg-[#6C5CE7]/30" />
+                <Icon img={message} style="bg-[#6C5CE7]/30" />
                 <p>{post.comment.length}</p>
               </div>
             </div>

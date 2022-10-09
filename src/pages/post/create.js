@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Button, Dropdown, Gap, Input, Layout, Upload } from "../components";
-import { allFakultas, allSemester } from "../utils/listData";
+import { Button, Dropdown, Gap, Input, Layout, Upload } from "../../components";
+import { allFakultas, allSemester } from "../../utils/listData";
 
 export default function Create() {
   const [mataKuliah, setMataKuliah] = useState("");
