@@ -2,8 +2,8 @@ import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/too
 import axios from "axios";
 
 export const getQuestions = createAsyncThunk("questions/getQuestions", async () => {
-  const response = await axios.get("http://localhost:5000/questions");
-  return response.data;
+  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_APIURI}/questions`);
+  return data;
 });
 
 const questionsEntity = createEntityAdapter({
@@ -11,7 +11,7 @@ const questionsEntity = createEntityAdapter({
 });
 
 const questionSlice = createSlice({
-  name: "post",
+  name: "question",
   initialState: questionsEntity.getInitialState(),
   extraReducers: {
     [getQuestions.fulfilled]: (state, action) => {
