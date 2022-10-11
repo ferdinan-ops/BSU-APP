@@ -8,6 +8,8 @@ export default function CardPost({ post }) {
   const { id, user, updated_at } = post;
   const linkedCard = (id) => Router.push(`/post/${id}`);
 
+  console.log(post);
+
   return (
     <div className="mb-10 last:mb-0 w-full cursor-pointer rounded-lg border border-[#DCDCDC] text-font hover:bg-slate-50" onClick={() => linkedCard(id)}>
       <div className="flex items-center justify-between border-b border-[#DCDCDC] p-5">
