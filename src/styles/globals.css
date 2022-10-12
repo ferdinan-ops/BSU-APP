@@ -30,4 +30,8 @@ body {
   .icon-wrapper {
     @apply flex h-[30px] w-[30px] items-center justify-center rounded-full;
   }
+
+  .tabs {
+    @apply w-full border-b-4 pb-4;
+  }
 }

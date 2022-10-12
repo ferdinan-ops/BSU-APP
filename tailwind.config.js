@@ -11,9 +11,9 @@ module.exports = {
       },
     },
     extend: {
-      // boxShadow: {
-      //   button: "0px 10px 25px rgba(252, 185, 0, 0.3);",
-      // },
+      boxShadow: {
+        profile: "0px 20px 30px rgba(45, 52, 54, 0.2)",
+      },
       colors: {
         primary: "#FCB900",
         font: "#2D3436",

@@ -18,6 +18,8 @@ import more from "./icons/more.svg";
 import deleted from "./icons/delete.svg";
 import edit from "./icons/edit.svg";
 import image from "./icons/image.svg";
+import cross from "./icons/cross.svg";
+import camera from "./icons/camera.svg";
 
 export {
   loginBg,
@@ -36,5 +38,7 @@ export {
   edit,
   loginPromote,
   image,
-  footerLogo
+  footerLogo,
+  cross,
+  camera,
 };

@@ -30,7 +30,7 @@ export default function Header() {
               <Image src={plus} layout="fill" alt="" />
             </a>
           </Link>
-          <Link href="/profile">
+          <Link href="/profile/1">
             <a className="relative h-[50px] w-[50px] cursor-pointer overflow-hidden rounded-full">
               <Image src={dummyProfile} layout="fill" alt="" />
             </a>

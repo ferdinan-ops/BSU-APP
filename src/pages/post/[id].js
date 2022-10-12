@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import Moment from "react-moment";
 import { useDispatch, useSelector } from "react-redux";
 import { liked } from "../../../public";
-import { Author, Button, Gap, Info, Layout, More } from "../../components";
+import { Author, Button, Gap, Info, Layout } from "../../components";
 import { getQuestions, questionSelectors } from "../../config/redux/features";
 
 export default function Detail() {
@@ -64,7 +64,6 @@ export default function Detail() {
                 <p className="mt-4 leading-relaxed ml-[47px] text-xs md:text-sm">{comments.content}</p>
               </div>
             ))}
-
 
             <form className="flex flex-col text-font mt-[50px]">
               <label className="text-base md:text-lg font-semibold">Tulis Komentar:</label>
