@@ -55,17 +55,15 @@ export default function Update() {
   return (
     <Layout title="BSU - Create">
       {question && (
-        <section className="my-[30px] text-font md:my-[60px]">
-          <h1 className="mb-[30px] text-center text-[32px] font-bold uppercase md:mb-[60px]">
-            Ubah SOAL: {question.mataKuliah}
-          </h1>
-          <form className="mx-auto w-8/12" onSubmit={submitHandler}>
+        <section className="my-[30px] text-font md:my-[60px] w-full md:w-10/12 xl:w-8/12 mx-auto">
+          <h1 className="text-center text-xl md:text-[32px] font-bold uppercase">Ubah SOAL: {question.mataKuliah}</h1>
+          <form className="mt-[30px] md:mt-[60px]" onSubmit={submitHandler}>
             <Input value={mataKuliah} title="Mata Kuliah" placeholder="Matematika Diskrit" onChange={(e) => setMataKuliah(e.target.value)} />
             <Gap style="h-[30px] md:h-[40px]" />
             <Dropdown title="Fakultas" listData={allFakultas} selected={fakultas} setSelected={setFakultas} />
             <Gap style="h-[30px] md:h-[40px]" />
             <Input value={programStudi} title="Program Studi" placeholder="Teknik Informatika" onChange={(e) => setProgramStudi(e.target.value)} />
-            <div className="my-[30px] flex w-full gap-[30px] md:my-[60px]">
+            <div className="my-[30px] flex w-full flex-col md:flex-row gap-[30px] md:my-[60px]">
               <div className="w-full">
                 <Input value={tahunAjaran} title="Tahun Ajaran" placeholder="2020/2021" onChange={(e) => setTahunAjaran(e.target.value)} />
               </div>

@@ -1,3 +1,5 @@
+import { AddIcon, BellIcon, HomeIcon, SearchIcon, UserIcon } from "../assets/Icons";
+
 export const allFakultas = [
   "Ekonomi",
   "Pertanian",
@@ -19,3 +21,14 @@ export const allSemester = [
   "7 (Tujuh)",
   "8 (Delapan)",
 ];
+
+
+export const allLinks = (currentUserId) => {
+  return [
+    { href: "/", Icons: HomeIcon },
+    { href: "/search", Icons: SearchIcon },
+    { href: "/post/create", Icons: AddIcon },
+    { href: "/notification", Icons: BellIcon },
+    { href: `/profile/${currentUserId}`, Icons: UserIcon },
+  ]
+}
