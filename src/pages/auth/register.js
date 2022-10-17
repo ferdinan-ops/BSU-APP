@@ -1,10 +1,50 @@
-import { registerBg } from "../../../public";
-import Image from "next/image";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { Brand, Button, Gap, Input } from "../../components";
+import { registerBg } from "../../../public";
+import { auth } from "../../config/firebase";
+import { Ring } from '@uiball/loaders';
+import toast from "react-hot-toast";
+import { useState } from "react";
+import Router from "next/router";
+import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
 
 export default function Register() {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const resetField = () => {
+    setEmail("");
+    setUsername("");
+    setPassword("");
+    setIsLoading(false);
+  }
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    if (!username && !email && !password) {
+      setIsLoading(false);
+      toast('Mohon isi data anda dengan benar', { icon: '⚠️' });
+      return;
+    }
+
+    try {
+      const response = await createUserWithEmailAndPassword(auth, email, password);
+      updateProfile(response.user, { displayName: username });
+      toast.success("Akun Anda berhasil terdaftar");
+      resetField();
+      Router.push("/");
+    } catch (error) {
+      toast.error(error);
+      resetField();
+    }
+  }
+
   return (
     <section className="flex min-h-screen w-full p-8 font-medium xl:max-h-screen">
       <Head>
@@ -21,15 +61,15 @@ export default function Register() {
             Silahkan isi data anda untuk membuat akun Anda
           </p>
 
-          <form className="mt-14">
-            <Input title="Username" placeholder="Username" />
+          <form className="mt-14" onSubmit={submitHandler}>
+            <Input title="Username" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
             <Gap style="h-5" />
-            <Input title="Email" type="email" placeholder="Email" />
+            <Input title="Email" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
             <Gap style="h-5" />
-            <Input title="Password" type="password" placeholder="Password" />
+            <Input title="Password" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
             <Gap style="h-[32px]" />
             <div className="h-11 rounded-lg bg-primary font-semibold text-font">
-              <Button>Daftar</Button>
+              <Button type="submit">{isLoading ? (<Ring size={20} lineWeight={5} speed={2} color="#fff" />) : "Daftar"}</Button>
             </div>
           </form>
 
