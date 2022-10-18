@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getQuestions, questionSelectors, } from "../../../config/redux/features";
+import { getDummyQuestions, questionDummySelectors, } from "../../../config/redux/features";
 import { Button, Dropdown, Gap, Input, Layout, Upload } from "../../../components";
 import { allFakultas, allSemester } from "../../../utils/listData";
 
@@ -17,9 +17,9 @@ export default function Update() {
   const dispatch = useDispatch();
   const { id } = router.query;
 
-  const question = useSelector((state) => questionSelectors.selectById(state, id));
+  const question = useSelector((state) => questionDummySelectors.selectById(state, id));
 
-  useEffect(() => { dispatch(getQuestions()) }, [dispatch]);
+  useEffect(() => { dispatch(getDummyQuestions()) }, [dispatch]);
 
   useEffect(() => {
     if (question) {

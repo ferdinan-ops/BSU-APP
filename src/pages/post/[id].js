@@ -5,15 +5,15 @@ import Moment from "react-moment";
 import { useDispatch, useSelector } from "react-redux";
 import { liked } from "../../../public";
 import { Author, Button, Gap, Info, Layout } from "../../components";
-import { getQuestions, questionSelectors } from "../../config/redux/features";
+import { getDummyQuestions, questionDummySelectors } from "../../config/redux/features";
 
 export default function Detail() {
   const router = useRouter();
   const { id } = router.query;
   const dispatch = useDispatch();
-  const question = useSelector((state) => questionSelectors.selectById(state, id));
+  const question = useSelector((state) => questionDummySelectors.selectById(state, id));
 
-  useEffect(() => { dispatch(getQuestions()) }, [dispatch]);
+  useEffect(() => { dispatch(getDummyQuestions()) }, [dispatch]);
 
   return (
     <Layout title="BSU - Detail">

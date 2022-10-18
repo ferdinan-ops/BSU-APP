@@ -1,5 +1,5 @@
 import { CardPost, Filter, Gap, Layout, Promotion } from "../components";
-import { getQuestions, questionSelectors } from "../config/redux/features";
+import { getDummyQuestions, questionDummySelectors } from "../config/redux/features";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
@@ -7,16 +7,17 @@ export default function Home() {
   const [items, setItems] = useState([]);
 
   const dispatch = useDispatch();
-  const questions = useSelector(questionSelectors.selectAll);
+  const questions = useSelector(questionDummySelectors.selectAll);
   const menus = [...new Set(questions.map((Val) => Val.fakultas))];
 
   useEffect(() => {
-    dispatch(getQuestions())
+    dispatch(getDummyQuestions())
   }, [dispatch]);
 
   useEffect(() => {
     if (questions) setItems(questions)
   }, [questions])
+
 
   const filterItem = (curcat) => {
     const newItems = questions.filter(questions => questions.fakultas === curcat);

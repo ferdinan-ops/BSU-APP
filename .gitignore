@@ -5,6 +5,8 @@
 /.pnp
 .pnp.js
 /src/pages/api/
+/src/models
+/src/database/controllers
 
 # testing
 /coverage

@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, CardPost, Layout, Modals } from "../../components"
-import { getQuestions, getUsers, questionSelectors, userSelectors } from '../../config/redux/features';
+import { getDummyQuestions, getDummyUsers, questionDummySelectors, userDummySelectors } from '../../config/redux/features';
 
 export default function Profile() {
   const [myQuestions, setMyQuestions] = useState([]);
@@ -13,12 +13,12 @@ export default function Profile() {
   const { id } = router.query;
   const dispatch = useDispatch();
 
-  const user = useSelector(state => userSelectors.selectById(state, id));
-  const questions = useSelector(questionSelectors.selectAll);
+  const user = useSelector(state => userDummySelectors.selectById(state, id));
+  const questions = useSelector(questionDummySelectors.selectAll);
 
   useEffect(() => {
-    dispatch(getUsers());
-    dispatch(getQuestions());
+    dispatch(getDummyUsers());
+    dispatch(getDummyQuestions());
   }, [dispatch]);
 
   useEffect(() => {

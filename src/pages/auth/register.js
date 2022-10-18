@@ -5,16 +5,18 @@ import { auth } from "../../config/firebase";
 import { Ring } from '@uiball/loaders';
 import toast from "react-hot-toast";
 import { useState } from "react";
-import Router from "next/router";
 import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
+import { useDispatch, useSelector } from "react-redux";
+import { createAuth } from "../../functions/auth";
 
 export default function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const resetField = () => {
     setEmail("");
@@ -33,16 +35,15 @@ export default function Register() {
       return;
     }
 
-    try {
-      const response = await createUserWithEmailAndPassword(auth, email, password);
-      updateProfile(response.user, { displayName: username });
-      toast.success("Akun Anda berhasil terdaftar");
+    createUserWithEmailAndPassword(auth, email, password).then(async ({ user }) => {
+      await updateProfile(user, { displayName: username });
+      const fields = { uid: user.uid, username: user.displayName, email: user.email };
+      createAuth(fields, dispatch, resetField);
+      toast.success("Akun Anda telah berhasil dibuat");
+    }).catch((error) => {
+      toast.error(error.message);
       resetField();
-      Router.push("/");
-    } catch (error) {
-      toast.error(error);
-      resetField();
-    }
+    });
   }
 
   return (
@@ -66,7 +67,7 @@ export default function Register() {
             <Gap style="h-5" />
             <Input title="Email" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
             <Gap style="h-5" />
-            <Input title="Password" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Input title="Password" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="on" />
             <Gap style="h-[32px]" />
             <div className="h-11 rounded-lg bg-primary font-semibold text-font">
               <Button type="submit">{isLoading ? (<Ring size={20} lineWeight={5} speed={2} color="#fff" />) : "Daftar"}</Button>

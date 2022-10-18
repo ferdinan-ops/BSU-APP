@@ -9,11 +9,15 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
+import { createAuth } from "../../functions/auth";
+import { useDispatch } from "react-redux";
+import { login } from "../../config/redux/features";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const resetField = () => {
     setEmail("");
@@ -31,29 +35,29 @@ export default function Login() {
       return;
     }
 
-    try {
-      const response = await signInWithEmailAndPassword(auth, email, password);
+    signInWithEmailAndPassword(auth, email, password).then(({ user }) => {
+      dispatch(login(user));
+      console.log(user);
       toast.success("Selamat Anda berhasil Masuk");
       resetField();
       Router.push("/");
-    } catch (error) {
-      toast.error(error);
+    }).catch((error) => {
+      toast.error(error.message);
       resetField();
-    }
+    })
   }
 
   const loginWGoogleHandler = async (e) => {
     e.preventDefault();
 
-    try {
-      const req = await signInWithPopup(auth, provider);
+    signInWithPopup(auth, provider).then(({ user }) => {
+      const fields = { uid: user.uid, username: user.displayName, email: user.email, photo: user.photoURL };
+      createAuth(fields, dispatch, resetField);
       toast.success("Selamat Anda berhasil Masuk");
+    }).catch((error) => {
+      toast.error(error.message);
       resetField();
-      Router.push("/");
-    } catch (error) {
-      toast.error(error);
-      resetField();
-    }
+    })
   }
 
   return (
@@ -75,7 +79,7 @@ export default function Login() {
           <form className="mt-14" onSubmit={handleSubmit}>
             <Input title="Email" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
             <Gap style="h-5" />
-            <Input title="Password" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Input title="Password" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="on" />
             <Gap style="h-[32px]" />
             <div className="shadow-button h-11 rounded-lg bg-primary font-semibold text-font">
               <Button type="submit">{isLoading ? (<Ring size={20} lineWeight={5} speed={2} color="#fff" />) : "Masuk"}</Button>
