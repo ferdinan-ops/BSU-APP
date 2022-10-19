@@ -1,15 +1,14 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Layout } from '../../components'
-import { getUsers, userSelectors } from '../../config/redux/features';
+import React, { useEffect, useState } from 'react';
+import { Layout } from '../../components';
+import { dummy } from '../../utils/dummy';
 
 export default function Notification() {
-  const dispatch = useDispatch();
-  const users = useSelector(userSelectors.selectAll);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    dispatch(getUsers());
-  }, [dispatch]);
+    const getUsers = dummy.map(({ user }) => user);
+    setUsers(getUsers);
+  }, []);
 
   return (
     <Layout title="BSU - Notification">

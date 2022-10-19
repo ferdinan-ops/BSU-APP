@@ -1,37 +1,26 @@
 import { CardPost, Filter, Gap, Layout, Promotion } from "../components";
-import { getDummyQuestions, questionDummySelectors } from "../config/redux/features";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { dummy } from "../utils/dummy";
 
 export default function Home() {
-  const [items, setItems] = useState([]);
+  const [questions, setQuestions] = useState(dummy);
+  const [filtered, setFiltered] = useState(dummy);
 
-  const dispatch = useDispatch();
-  const questions = useSelector(questionDummySelectors.selectAll);
-  const menus = [...new Set(questions.map((Val) => Val.fakultas))];
-
-  useEffect(() => {
-    dispatch(getDummyQuestions())
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (questions) setItems(questions)
-  }, [questions])
-
+  const menus = [...new Set(filtered.map((Val) => Val.fakultas))];
 
   const filterItem = (curcat) => {
-    const newItems = questions.filter(questions => questions.fakultas === curcat);
-    setItems(newItems);
+    const newItems = dummy.filter((question) => question.fakultas === curcat);
+    setQuestions(newItems);
   }
 
   return (
     <Layout title="BSU - Home">
       <section>
-        <Filter setItems={setItems} filterItem={filterItem} all={questions} menus={menus} />
+        <Filter setItems={setQuestions} filterItem={filterItem} all={dummy} menus={menus} />
         <Gap style="h-10" />
         <section className="flex justify-between gap-[30px]">
           <div className="w-full xl:w-7/12">
-            {items.map((question) => (
+            {questions.map((question) => (
               <CardPost post={question} key={question.id} />
             ))}
           </div>

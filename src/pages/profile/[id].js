@@ -1,34 +1,28 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
 import { Button, CardPost, Layout, Modals } from "../../components"
-import { getDummyQuestions, getDummyUsers, questionDummySelectors, userDummySelectors } from '../../config/redux/features';
+import { dummy, users } from '../../utils/dummy';
 
 export default function Profile() {
+  const [user, setUser] = useState({});
   const [myQuestions, setMyQuestions] = useState([]);
-  const [saved, setSaved] = useState([]);
+  const [savedQuestions, setSavedQuestions] = useState([]);
   const [activeTab, setActiveTab] = useState("tabs1");
 
   const router = useRouter();
   const { id } = router.query;
-  const dispatch = useDispatch();
-
-  const user = useSelector(state => userDummySelectors.selectById(state, id));
-  const questions = useSelector(questionDummySelectors.selectAll);
 
   useEffect(() => {
-    dispatch(getDummyUsers());
-    dispatch(getDummyQuestions());
-  }, [dispatch]);
+    const getUserById = users.filter((user) => user.id === parseInt(id));
+    setUser(getUserById[0]);
+  }, [id]);
 
   useEffect(() => {
-    if (questions) {
-      const filtered = questions.filter((quest) => quest.user.id === parseInt(id));
-      const savedQuestions = questions.filter(({ saved }) => saved.some(save => save.id_user === parseInt(id)));
-      setMyQuestions(filtered);
-      setSaved(savedQuestions);
-    }
-  }, [questions, id]);
+    const userQuestions = dummy.filter((quest) => quest.user.id === parseInt(id));
+    const userSavedQuestions = dummy.filter(({ saved }) => saved.some((save) => save.id_user === parseInt(id)));
+    setMyQuestions(userQuestions);
+    setSavedQuestions(userSavedQuestions);
+  }, [id]);
 
   return (
     <>
@@ -59,7 +53,7 @@ export default function Profile() {
                   <CardPost post={question} key={question.id} />
                 ))
                 :
-                saved.map((question) => (
+                savedQuestions.map((question) => (
                   <CardPost post={question} key={question.id} />
                 ))
               }

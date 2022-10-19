@@ -17,7 +17,7 @@ export default function Upload({ img, ...rest }) {
             <p className="md:text-lg font-medium text-[#ADADAD] text-sm text-center">Tekan icon gambar di atas untuk upload gambar</p>
           </div>)}
       </div>
-      <input type="file" hidden ref={ref} {...rest} />
+      <input type="file" hidden ref={ref} {...rest} accept="image/*" />
     </div>
   );
 }

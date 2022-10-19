@@ -1,11 +1,11 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getDummyQuestions, questionDummySelectors, } from "../../../config/redux/features";
 import { Button, Dropdown, Gap, Input, Layout, Upload } from "../../../components";
 import { allFakultas, allSemester } from "../../../utils/listData";
+import { dummy } from "../../../utils/dummy";
 
 export default function Update() {
+  const [question, setQuestion] = useState({});
   const [mataKuliah, setMataKuliah] = useState("");
   const [fakultas, setFakultas] = useState(allFakultas[4]);
   const [programStudi, setProgramStudi] = useState("");
@@ -14,12 +14,12 @@ export default function Update() {
   const [imgPreview, setimgPreview] = useState(null);
 
   const router = useRouter();
-  const dispatch = useDispatch();
   const { id } = router.query;
 
-  const question = useSelector((state) => questionDummySelectors.selectById(state, id));
-
-  useEffect(() => { dispatch(getDummyQuestions()) }, [dispatch]);
+  useEffect(() => {
+    const getQuestionsById = dummy.filter((quest) => quest.id === parseInt(id));
+    setQuestion(getQuestionsById[0]);
+  }, [id]);
 
   useEffect(() => {
     if (question) {

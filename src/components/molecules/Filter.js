@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function Filter({ all, setItems, filterItem, menus }) {
+export default function Filter({ setItems, filterItem, menus, all }) {
   const [filtered, setFiltered] = useState("Semua Soal");
 
   const filterHandler = (e, fakultas) => {

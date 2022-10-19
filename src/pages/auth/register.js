@@ -1,22 +1,17 @@
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { Brand, Button, Gap, Input } from "../../components";
 import { registerBg } from "../../../public";
-import { auth } from "../../config/firebase";
 import { Ring } from '@uiball/loaders';
 import toast from "react-hot-toast";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
-import { useDispatch, useSelector } from "react-redux";
-import { createAuth } from "../../functions/auth";
 
 export default function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
 
   const resetField = () => {
     setEmail("");
@@ -35,15 +30,15 @@ export default function Register() {
       return;
     }
 
-    createUserWithEmailAndPassword(auth, email, password).then(async ({ user }) => {
-      await updateProfile(user, { displayName: username });
-      const fields = { uid: user.uid, username: user.displayName, email: user.email };
-      createAuth(fields, dispatch, resetField);
-      toast.success("Akun Anda telah berhasil dibuat");
-    }).catch((error) => {
-      toast.error(error.message);
-      resetField();
-    });
+    // createUserWithEmailAndPassword(auth, email, password).then(async ({ user }) => {
+    //   await updateProfile(user, { displayName: username });
+    //   const fields = { uid: user.uid, username: user.displayName, email: user.email };
+    //   createAuth(fields, dispatch, resetField);
+    //   toast.success("Akun Anda telah berhasil dibuat");
+    // }).catch((error) => {
+    //   toast.error(error.message);
+    //   resetField();
+    // });
   }
 
   return (

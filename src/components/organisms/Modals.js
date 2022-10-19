@@ -1,34 +1,32 @@
 import { Dialog, Transition } from '@headlessui/react'
 import Image from 'next/image'
 import { Fragment, useEffect, useRef, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { camera, cross } from '../../../public'
-import { getUsers, userSelectors } from '../../config/redux/features'
+import { dummy, users } from '../../utils/dummy'
 import { Button, Gap, Input } from '../atoms'
 import IconWrapper from '../atoms/Icon'
 
 export default function Modals({ id }) {
-  let [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
+  const [user, setUser] = useState({});
 
   const ref = useRef(null);
-  const dispatch = useDispatch();
-  const user = useSelector(state => userSelectors.selectById(state, id));
-
   const imageUploadHandler = (e) => {
     const file = e.target.files[0];
     setProfilePicture(URL.createObjectURL(file));
   };
 
   useEffect(() => {
-    dispatch(getUsers());
-  }, [dispatch]);
+    const selectUser = users.filter((user) => user.id === parseInt(id));
+    setUser(selectUser[0]);
+  }, [id]);
 
   useEffect(() => {
     if (user) {
-      setUsername(user.username);
-      setProfilePicture(user.profilePicture);
+      setUsername(user?.username);
+      setProfilePicture(user?.profilePicture);
     }
   }, [user])
 
@@ -36,7 +34,6 @@ export default function Modals({ id }) {
     e.preventDefault();
     alert("masih test");
   }
-
 
   return (
     <>
@@ -63,7 +60,7 @@ export default function Modals({ id }) {
                   </div>
                   <div className='px-[15px] pb-6 text-left'>
                     <div className='mx-auto mt-[30px] w-fit relative overflow-hidden rounded-full group cursor-pointer'>
-                      <img src={profilePicture} className="w-[100px] h-[100px]" alt="" />
+                      <img src={profilePicture} className="w-[100px] h-[100px] object-cover" alt="" />
                       <div className='absolute w-full h-full bg-slate-800/50 transition-all flex -bottom-full group-hover:bottom-0' onClick={() => ref.current.click()}>
                         <div className='relative w-7 h-7 m-auto'>
                           <Image src={camera} alt="" layout='fill' />
@@ -72,7 +69,7 @@ export default function Modals({ id }) {
                     </div>
                     <Gap style="md:h-[30px]" />
                     <Input title="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-                    <input type="file" hidden ref={ref} onChange={imageUploadHandler} />
+                    <input type="file" hidden ref={ref} onChange={imageUploadHandler} accept="image/*" />
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

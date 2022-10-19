@@ -1,19 +1,30 @@
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Moment from "react-moment";
-import { useDispatch, useSelector } from "react-redux";
 import { liked } from "../../../public";
 import { Author, Button, Gap, Info, Layout } from "../../components";
-import { getDummyQuestions, questionDummySelectors } from "../../config/redux/features";
+import { dummy } from "../../utils/dummy";
+import { Ring } from "@uiball/loaders";
 
 export default function Detail() {
+  const [question, setQuestion] = useState({});
   const router = useRouter();
   const { id } = router.query;
-  const dispatch = useDispatch();
-  const question = useSelector((state) => questionDummySelectors.selectById(state, id));
 
-  useEffect(() => { dispatch(getDummyQuestions()) }, [dispatch]);
+  useEffect(() => {
+    const questionById = dummy.filter((quest) => quest.id === parseInt(id));
+    setQuestion(questionById[0]);
+  }, [id]);
+
+  if (!question?.user) {
+    return (
+      <div className="flex fixed top-0 left-0 right-0 bottom-0 items-center justify-center">
+        <Ring size={50} lineWeight={8} speed={2} color="#FCB900" />
+      </div>
+    )
+  }
 
   return (
     <Layout title="BSU - Detail">
@@ -23,25 +34,21 @@ export default function Detail() {
             <h1 className="text-center md:text-[32px] font-bold uppercase text-xl">{question.mataKuliah}</h1>
             <div className="flex items-center justify-center gap-4 md:gap-5 mt-10">
               <img src={question.user.profilePicture} className="md:h-[50px] md:w-[50px] w-8 h-8 rounded-full" alt="" />
-              <p className="flex flex-col font-semibold text-sm md:text-base">
+              <div className="flex flex-col font-semibold text-sm md:text-base">
                 {question.user.username}
                 <Moment fromNow className="text-xs text-[#5C5C5C] md:text-sm">{question.updated_at}</Moment>
-              </p>
+              </div>
             </div>
           </div>
 
           <img src={question.image} className="mx-auto w-full rounded-lg shadow-lg" alt="" />
 
-          <table className="mx-auto block w-fit rounded-lg bg-white p-[30px] shadow-lg my-10">
+          <table className="mx-auto block w-fit rounded-lg bg-white p-[30px] shadow-lg my-10" cellPadding={5}>
             <tbody className="text-font text-sm md:text-base">
               <Info title="Mata Kuliah" content={question.mataKuliah} />
-              <Gap style="h-3" />
               <Info title="Fakultas" content={question.fakultas} />
-              <Gap style="h-3" />
               <Info title="Program Studi" content={question.programStudi} />
-              <Gap style="h-3" />
               <Info title="Semester" content={question.semester} />
-              <Gap style="h-3" />
               <Info title="Kategori" content={question.kategori} />
             </tbody>
           </table>

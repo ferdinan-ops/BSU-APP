@@ -11,7 +11,6 @@
   "dependencies": {
     "@headlessui/react": "^1.7.3",
     "@heroicons/react": "^2.0.12",
-    "@reduxjs/toolkit": "^1.8.5",
     "@uiball/loaders": "^1.2.6",
     "axios": "^1.1.2",
     "firebase": "^9.12.1",
@@ -23,7 +22,6 @@
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.0",
     "react-moment": "^1.1.2",
-    "react-redux": "^8.0.4",
     "react-tabs": "^5.1.0"
   },
   "devDependencies": {
