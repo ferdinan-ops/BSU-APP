@@ -27,30 +27,10 @@ export default function Login() {
       toast('Mohon isi data anda dengan benar', { icon: '⚠️' });
       return;
     }
-
-    // signInWithEmailAndPassword(auth, email, password).then(({ user }) => {
-    //   dispatch(login(user));
-    //   Cookies.set("token",)
-    //   toast.success("Selamat Anda berhasil Masuk");
-    //   resetField();
-    //   Router.push("/");
-    // }).catch((error) => {
-    //   toast.error(error.message);
-    //   resetField();
-    // })
   }
 
   const loginWGoogleHandler = async (e) => {
     e.preventDefault();
-
-    // signInWithPopup(auth, provider).then(({ user }) => {
-    //   const fields = { uid: user.uid, username: user.displayName, email: user.email, photo: user.photoURL };
-    //   createAuth(fields, dispatch, resetField);
-    //   toast.success("Selamat Anda berhasil Masuk");
-    // }).catch((error) => {
-    //   toast.error(error.message);
-    //   resetField();
-    // })
   }
 
   return (
@@ -80,12 +60,12 @@ export default function Login() {
             <Gap style="h-5" />
           </form>
 
-          <div className="h-11 rounded-lg border border-auth text-gray hover:bg-slate-50">
+          {/* <div className="h-11 rounded-lg border border-auth text-gray hover:bg-slate-50">
             <Button onClick={loginWGoogleHandler}>
               <Image alt="" src={google} width={24} height={24} />{" "}
               <span className="ml-2">Masuk dengan Google</span>
             </Button>
-          </div>
+          </div> */}
 
           <p className="mt-5 text-center text-gray">
             Belum punya akun?{" "}

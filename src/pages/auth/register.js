@@ -29,16 +29,6 @@ export default function Register() {
       toast('Mohon isi data anda dengan benar', { icon: '⚠️' });
       return;
     }
-
-    // createUserWithEmailAndPassword(auth, email, password).then(async ({ user }) => {
-    //   await updateProfile(user, { displayName: username });
-    //   const fields = { uid: user.uid, username: user.displayName, email: user.email };
-    //   createAuth(fields, dispatch, resetField);
-    //   toast.success("Akun Anda telah berhasil dibuat");
-    // }).catch((error) => {
-    //   toast.error(error.message);
-    //   resetField();
-    // });
   }
 
   return (
