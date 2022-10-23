@@ -1,5 +1,5 @@
 import { Brand, Button, Gap, Input } from "../../components";
-import { google, loginBg } from "../../../public";
+import { loginBg } from "../../../public";
 import { Ring } from "@uiball/loaders";
 import toast from "react-hot-toast";
 import { useState } from "react";
@@ -12,7 +12,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const resetField = () => {
+  const resetAll = () => {
     setEmail("");
     setPassword("");
     setIsLoading(false);
@@ -23,14 +23,12 @@ export default function Login() {
     setIsLoading(true);
 
     if (!email, !password) {
-      setIsLoading(false);
+      resetAll();
       toast('Mohon isi data anda dengan benar', { icon: '⚠️' });
       return;
     }
-  }
 
-  const loginWGoogleHandler = async (e) => {
-    e.preventDefault();
+    resetAll();
   }
 
   return (

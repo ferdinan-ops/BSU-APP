@@ -13,7 +13,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const resetField = () => {
+  const resetAll = () => {
     setEmail("");
     setUsername("");
     setPassword("");
@@ -25,10 +25,12 @@ export default function Register() {
     setIsLoading(true);
 
     if (!username && !email && !password) {
-      setIsLoading(false);
+      resetAll();
       toast('Mohon isi data anda dengan benar', { icon: '⚠️' });
       return;
     }
+
+    resetAll();
   }
 
   return (
