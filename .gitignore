@@ -5,7 +5,7 @@
 /.pnp
 .pnp.js
 /src/pages/api/
-/src/models
+/src/models/
 /src/database/
 
 # testing
