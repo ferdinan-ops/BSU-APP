@@ -1,36 +1,31 @@
 import { Brand, Button, Gap, Input } from "../../components";
 import { registerBg } from "../../../public";
 import { Ring } from '@uiball/loaders';
-import toast from "react-hot-toast";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
+import { useDispatch, useSelector } from "react-redux";
+import { registerAction } from "../../config/redux/actions";
 
 export default function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.authReducer);
 
   const resetAll = () => {
     setEmail("");
     setUsername("");
     setPassword("");
-    setIsLoading(false);
   }
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-
-    if (!username && !email && !password) {
-      resetAll();
-      toast('Mohon isi data anda dengan benar', { icon: '⚠️' });
-      return;
-    }
-
-    resetAll();
+    const formData = { username, email, password };
+    await dispatch(registerAction(formData, resetAll));
   }
 
   return (
@@ -56,7 +51,7 @@ export default function Register() {
             <Gap style="h-5" />
             <Input title="Password" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="on" />
             <Gap style="h-[32px]" />
-            <div className="h-11 rounded-lg bg-primary font-semibold text-font">
+            <div className={`h-11 rounded-lg bg-primary font-semibold text-font ${isLoading && "pointer-events-none bg-opacity-40"}`}>
               <Button type="submit">{isLoading ? (<Ring size={20} lineWeight={5} speed={2} color="#fff" />) : "Daftar"}</Button>
             </div>
           </form>

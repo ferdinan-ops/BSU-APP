@@ -1,7 +1,6 @@
 import { Brand, Button, Gap, Input } from "../../components";
 import { loginBg } from "../../../public";
 import { Ring } from "@uiball/loaders";
-import toast from "react-hot-toast";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,25 +9,14 @@ import Head from "next/head";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   const resetAll = () => {
     setEmail("");
     setPassword("");
-    setIsLoading(false);
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-
-    if (!email, !password) {
-      resetAll();
-      toast('Mohon isi data anda dengan benar', { icon: '⚠️' });
-      return;
-    }
-
-    resetAll();
   }
 
   return (
