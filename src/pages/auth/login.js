@@ -5,18 +5,33 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
+import { useDispatch, useSelector } from "react-redux";
+import { loginAction } from "../../config/redux/actions";
+import Router from "next/router";
+import { unauthPage } from "../../middlewares/authPage";
+
+export async function getServerSideProps(context) {
+  await unauthPage(context);
+  return { props: {} };
+}
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.authReducer);
 
   const resetAll = () => {
     setEmail("");
     setPassword("");
   }
 
-  const handleSubmit = async (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
+    const formData = { email, password };
+    await dispatch(loginAction(formData, resetAll));
+    Router.push("/");
   }
 
   return (
@@ -35,7 +50,7 @@ export default function Login() {
             Silahkan isi data anda untuk mengakses akun Anda
           </p>
 
-          <form className="mt-14" onSubmit={handleSubmit}>
+          <form className="mt-14" onSubmit={submitHandler}>
             <Input title="Email" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
             <Gap style="h-5" />
             <Input title="Password" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="on" />
@@ -45,13 +60,6 @@ export default function Login() {
             </div>
             <Gap style="h-5" />
           </form>
-
-          {/* <div className="h-11 rounded-lg border border-auth text-gray hover:bg-slate-50">
-            <Button onClick={loginWGoogleHandler}>
-              <Image alt="" src={google} width={24} height={24} />{" "}
-              <span className="ml-2">Masuk dengan Google</span>
-            </Button>
-          </div> */}
 
           <p className="mt-5 text-center text-gray">
             Belum punya akun?{" "}

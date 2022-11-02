@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { Button, Dropdown, Gap, Input, Layout, Upload } from "../../components";
 import { allFakultas, allSemester } from "../../utils/listData";
+import { authPage } from "../../middlewares/authPage";
+
+export async function getServerSideProps(context) {
+  await authPage(context);
+  return { props: {} }
+}
 
 export default function Create() {
   const [mataKuliah, setMataKuliah] = useState("");
@@ -8,7 +14,7 @@ export default function Create() {
   const [programStudi, setProgramStudi] = useState("");
   const [tahunAjaran, setTahunAjaran] = useState("");
   const [semester, setSemester] = useState(allSemester[0]);
-  const [imgPreview, setimgPreview] = useState(null);
+  const [imgPreview, setimgPreview] = useState([]);
 
   const resetFields = () => {
     setMataKuliah("");
@@ -20,8 +26,10 @@ export default function Create() {
   };
 
   const imageUploadHandler = (e) => {
-    const file = e.target.files[0];
-    setimgPreview(URL.createObjectURL(file));
+    for (let i = 0; i < e.target.files.length; i++) {
+      const newImages = URL.createObjectURL(e.target.files[i]);
+      setimgPreview((prevState) => [...prevState, newImages]);
+    }
   };
 
   const submitHandler = (e) => {
@@ -50,7 +58,7 @@ export default function Create() {
             </div>
           </div>
           <Gap style="h-[30px] md:h-[40px]" />
-          <Upload onChange={imageUploadHandler} img={imgPreview} />
+          <Upload onChange={imageUploadHandler} images={imgPreview} setImg={setimgPreview} multiple />
           <Gap style="h-[30px] md:h-[40px]" />
           <div className="shadow-button ml-auto h-11 w-28 md:w-48 rounded-lg bg-primary font-semibold text-font">
             <Button type="submit">Kirim</Button>

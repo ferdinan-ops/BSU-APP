@@ -1,12 +1,19 @@
 import { Brand, Button, Gap, Input } from "../../components";
+import { registerAction } from "../../config/redux/actions";
+import { unauthPage } from "../../middlewares/authPage";
+import { useDispatch, useSelector } from "react-redux";
 import { registerBg } from "../../../public";
 import { Ring } from '@uiball/loaders';
 import { useState } from "react";
+import Router from "next/router";
 import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
-import { useDispatch, useSelector } from "react-redux";
-import { registerAction } from "../../config/redux/actions";
+
+export async function getServerSideProps(context) {
+  await unauthPage(context);
+  return { props: {} };
+}
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -26,6 +33,7 @@ export default function Register() {
     e.preventDefault();
     const formData = { username, email, password };
     await dispatch(registerAction(formData, resetAll));
+    Router.push("/");
   }
 
   return (
