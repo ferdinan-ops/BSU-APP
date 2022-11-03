@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const API = axios.create({
   baseURL: "/api",
@@ -6,11 +7,14 @@ const API = axios.create({
 });
 
 API.interceptors.request.use((req) => {
-  if (localStorage.getItem("profile")) {
-    req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`;
+  const token = Cookies.get("bsuToken");
+  if (token) {
+    req.headers.Authorization = `Bearer ${token}`;
   }
   return req;
 });
 
 export const register = (formData) => API.post("/auth/register", formData);
 export const login = (formData) => API.post("/auth/login", formData);
+export const currentUser = () => API.get("/auth/login");
+export const createPostAPI = (formData) => API.post("/post", formData);

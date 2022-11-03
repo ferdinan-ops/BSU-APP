@@ -1,4 +1,4 @@
-const initialState = { currentUser: null, isLoading: false }
+const initialState = { currentUser: { _id: "", photo: "", username: "" }, isLoading: false }
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
