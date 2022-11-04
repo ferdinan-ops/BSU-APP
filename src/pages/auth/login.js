@@ -55,7 +55,7 @@ export default function Login() {
             <Gap style="h-5" />
             <Input title="Password" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="on" />
             <Gap style="h-[32px]" />
-            <div className="shadow-button h-11 rounded-lg bg-primary font-semibold text-font">
+            <div className={`shadow-button h-11 rounded-lg bg-primary font-semibold text-font ${isLoading && "pointer-events-none bg-opacity-40"}`}>
               <Button type="submit">{isLoading ? (<Ring size={20} lineWeight={5} speed={2} color="#fff" />) : "Masuk"}</Button>
             </div>
             <Gap style="h-5" />

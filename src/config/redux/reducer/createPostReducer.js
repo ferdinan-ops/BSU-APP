@@ -12,6 +12,7 @@ const initialState = {
     images: [],
     userId: "",
   },
+  imgFile: [],
   imgPreview: [],
   isLoading: false,
 };
@@ -27,6 +28,8 @@ const createPostReducer = (state = initialState, action) => {
       return { ...state, isLoading: action.payload };
     case "SET_IMG_PREVIEW":
       return { ...state, imgPreview: action.payload };
+    case "SET_IMG_FILE":
+      return { ...state, imgFile: action.payload };
     default:
       return { ...state };
   }

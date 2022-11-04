@@ -1,11 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { bell, dummyProfile, plus } from "../../../public";
-import { Brand, Button } from "../atoms";
+import { getCurrentUser } from "../../config/redux/actions/authAction";
+import { Brand } from "../atoms";
 import { SearchBar } from "../molecules";
 
 export default function Header() {
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector(state => state.authReducer);
+
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, [dispatch]);
+
+  const { photo } = currentUser;
 
   return (
     <header className="fixed top-0 left-0 right-0 z-20 bg-white px-6 md:px-6 xl:px-0">
@@ -32,7 +42,10 @@ export default function Header() {
           </Link>
           <Link href="/profile/1">
             <a className="relative h-[50px] w-[50px] cursor-pointer overflow-hidden rounded-full">
-              <Image src={dummyProfile} layout="fill" alt="" />
+              {photo ?
+                <Image src={photo} layout="fill" alt="" objectFit="cover" /> :
+                <Image src={dummyProfile} layout="fill" alt="" objectFit="cover" />
+              }
             </a>
           </Link>
         </div>

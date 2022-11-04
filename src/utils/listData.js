@@ -12,15 +12,21 @@ export const allFakultas = [
 ];
 
 export const allSemester = [
-  "1 (Satu)",
-  "2 (Dua)",
-  "3 (Tiga)",
-  "4 (Empat)",
-  "5 (Lima)",
-  "6 (Enam)",
-  "7 (Tujuh)",
-  "8 (Delapan)",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
 ];
+
+export const allCategories = [
+  "Quiz",
+  "UTS",
+  "UAS",
+]
 
 
 export const allLinks = (currentUserId) => {

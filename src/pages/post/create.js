@@ -1,12 +1,11 @@
 import { createPost, imgPreviewHandler, setForm } from "../../config/redux/actions/createPostAction";
 import { Button, Dropdown, Gap, Input, Layout, Upload } from "../../components";
 import { allFakultas, allSemester, allCategories } from "../../utils/listData";
-import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
 import { useDispatch, useSelector } from "react-redux";
 import { authPage } from "../../middlewares/authPage";
-import React, { useEffect, useState } from "react";
-import { storage } from "../../config/firebase";
+import React, { useEffect } from "react";
 import { Ring } from "@uiball/loaders";
+import toast from "react-hot-toast";
 
 export async function getServerSideProps(context) {
   await authPage(context);
@@ -14,13 +13,10 @@ export async function getServerSideProps(context) {
 }
 
 export default function Create() {
-  const [allImages, setAllImages] = useState([]);
-  const [loading, setLoading] = useState(false);
-
   const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.authReducer);
-  const { form, imgPreview } = useSelector(state => state.createPostReducer);
-  const { mataKuliah, fakultas, programStudi, tahunAjaran, semester, kategori, dosen, images, userId, isLoading } = form;
+  const { form, imgPreview, imgFile, isLoading } = useSelector(state => state.createPostReducer);
+  const { mataKuliah, fakultas, programStudi, tahunAjaran, semester, kategori, dosen } = form;
 
   useEffect(() => {
     dispatch(setForm("userId", currentUser._id));
@@ -35,38 +31,14 @@ export default function Create() {
     dispatch(setForm(name, value));
   }
 
-  const uploadImage = () => {
-    return new Promise((resolve, reject) => {
-      if (loading <= 100) {
-        setTimeout(() => {
-          images.map((image) => {
-            const imageRef = ref(storage, `questions/${userId}/${image.name}`);
-            const uploadTask = uploadBytesResumable(imageRef, image, "data_url");
-            uploadTask.on("state_changed", (snapshot) => {
-              const prog = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-              setLoading(prog);
-            }, (err) => console.log(err), async () => {
-              await getDownloadURL(uploadTask.snapshot.ref).then((urls) => {
-                setAllImages((prevState) => [...prevState, urls]);
-              })
-            })
-          });
-          resolve(allImages);
-        }, 5000);
-      } else {
-        reject("salah");
-      }
-    })
-  }
-
   const submitHandler = async (e) => {
     e.preventDefault();
-    const urls = await uploadImage();
-    console.log(urls);
+    if (imgFile.length > 0 && imgPreview.length > 0) {
+      await dispatch(createPost(form, imgFile));
+    } else {
+      toast.error("Mohon upload gambar soal Anda");
+    }
   };
-
-  console.log(loading);
-  console.log(images);
 
   return (
     <Layout title="BSU - Create">
@@ -93,9 +65,9 @@ export default function Create() {
             </div>
           </div>
           <Gap style="h-[30px] md:h-[40px]" />
-          <Upload onChange={(e) => dispatch(imgPreviewHandler(e, imgPreview, images))} images={images} imgPreview={imgPreview} multiple />
+          <Upload onChange={(e) => dispatch(imgPreviewHandler(e, imgPreview, imgFile))} imgFile={imgFile} imgPreview={imgPreview} multiple />
           <Gap style="h-[30px] md:h-[40px]" />
-          <div className="shadow-button ml-auto h-11 w-28 md:w-48 rounded-lg bg-primary font-semibold text-font">
+          <div className={`shadow-button ml-auto h-11 w-28 md:w-48 rounded-lg bg-primary font-semibold text-font ${isLoading && "pointer-events-none bg-opacity-40"}`}>
             <Button type="submit">{isLoading ? (<Ring size={20} lineWeight={5} speed={2} color="#fff" />) : "Kirim"}</Button>
           </div>
         </form>

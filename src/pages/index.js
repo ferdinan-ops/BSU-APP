@@ -1,6 +1,12 @@
 import { CardPost, Filter, Gap, Layout, Promotion } from "../components";
 import { useState } from "react";
 import { dummy } from "../utils/dummy";
+import { authPage } from "../middlewares/authPage";
+
+export async function getServerSideProps(context) {
+  const { token } = await authPage(context);
+  return { props: {} };
+}
 
 export default function Home() {
   const [questions, setQuestions] = useState(dummy);

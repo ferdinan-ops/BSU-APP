@@ -7,6 +7,7 @@ export default function Input({ title, ...rest }) {
       <input
         {...rest}
         className="h-[50px] rounded-lg border border-auth p-4 font-sans text-base font-normal text-font outline-none placeholder:text-black/50"
+        required
       />
     </div>
   );

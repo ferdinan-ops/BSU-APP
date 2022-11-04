@@ -2,7 +2,7 @@
 import loginBg from "./images/login-bg.jpg";
 import registerBg from "./images/register-bg.jpg";
 import logo from "./images/logo.svg";
-import dummyProfile from "./images/profile.jpg";
+import dummyProfile from "./images/profile.png";
 import loginPromote from "./images/login-promote.png";
 import footerLogo from "./images/footer-logo.svg";
 

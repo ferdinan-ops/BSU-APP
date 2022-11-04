@@ -1,6 +1,5 @@
 import Image from "next/image";
-import { logo } from "../../../public";
-import { footerLogo } from "../../../public";
+import { logo, footerLogo } from "../../../public";
 
 export default function Brand({ title, style, isFooter }) {
   return (

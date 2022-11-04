@@ -39,7 +39,7 @@ export const dummy = [
     "user": {
       "id": 1,
       "username": "Maria Novita",
-      "profilePicture": "/images/profile.jpg"
+      "profilePicture": "/images/profile.png"
     }
   },
   {
@@ -66,7 +66,7 @@ export const dummy = [
         "user": {
           "id": 1,
           "username": "Maria Novita",
-          "profilePicture": "/images/profile.jpg"
+          "profilePicture": "/images/profile.png"
         }
       }
     ],
@@ -107,7 +107,7 @@ export const users = [
     "username": "Maria Novita",
     "email": "marianovita@gmail.com",
     "password": "ggbatcok123",
-    "profilePicture": "/images/profile.jpg"
+    "profilePicture": "/images/profile.png"
   },
   {
     "id": 2,
