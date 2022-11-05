@@ -1,4 +1,4 @@
-import { createPost, imgPreviewHandler, setForm } from "../../config/redux/actions/createPostAction";
+import { createQuestion, imgPreviewHandler, setForm } from "../../config/redux/actions/postAction";
 import { Button, Dropdown, Gap, Input, Layout, Upload } from "../../components";
 import { allFakultas, allSemester, allCategories } from "../../utils/listData";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,6 +6,7 @@ import { authPage } from "../../middlewares/authPage";
 import React, { useEffect } from "react";
 import { Ring } from "@uiball/loaders";
 import toast from "react-hot-toast";
+import Router from "next/router";
 
 export async function getServerSideProps(context) {
   await authPage(context);
@@ -15,7 +16,7 @@ export async function getServerSideProps(context) {
 export default function Create() {
   const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.authReducer);
-  const { form, imgPreview, imgFile, isLoading } = useSelector(state => state.createPostReducer);
+  const { form, imgPreview, imgFile, isLoading } = useSelector(state => state.postReducer);
   const { mataKuliah, fakultas, programStudi, tahunAjaran, semester, kategori, dosen } = form;
 
   useEffect(() => {
@@ -27,17 +28,12 @@ export default function Create() {
     dispatch(setForm(name, value));
   }
 
-  const dropdownValue = (name, value) => {
-    dispatch(setForm(name, value));
-  }
+  const dropdownValue = (name, value) => dispatch(setForm(name, value));
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (imgFile.length > 0 && imgPreview.length > 0) {
-      await dispatch(createPost(form, imgFile));
-    } else {
-      toast.error("Mohon upload gambar soal Anda");
-    }
+    if (imgFile.length <= 0 && imgPreview.length <= 0) return toast.error("Mohon upload gambar soal Anda");
+    await dispatch(createQuestion(form, imgFile, Router));
   };
 
   return (

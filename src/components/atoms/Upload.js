@@ -2,7 +2,7 @@ import Image from "next/image";
 import React, { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { cross, image } from "../../../public";
-import { deleteImgPv } from "../../config/redux/actions/createPostAction";
+import { deleteImgPv } from "../../config/redux/actions/postAction";
 import IconWrapper from "./Icon";
 
 export default function Upload({ imgFile, imgPreview, ...rest }) {

@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import * as API from "../../hitApi";
 import { setLoadingAll } from "./globalAction";
 
-export const registerAction = (formData, resetAll) => async (dispatch) => {
+export const registerAction = (formData, resetAll, router) => async (dispatch) => {
   const { username, email, password } = formData;
 
   dispatch(setIsLoading(true));
@@ -13,18 +13,19 @@ export const registerAction = (formData, resetAll) => async (dispatch) => {
   }
 
   try {
-    const { data } = await API.register(formData);
+    const { data } = await API.registerAPI(formData);
     toast.success(data.msg);
     dispatch(setIsLoading(false));
     Cookies.set("bsuToken", data.token);
     resetAll();
+    router.push("/");
   } catch (error) {
     toast.error(error.response.data?.error);
     resetAll();
   }
 }
 
-export const loginAction = (formData, resetAll) => async (dispatch) => {
+export const loginAction = (formData, resetAll, router) => async (dispatch) => {
   const { email, password } = formData;
 
   dispatch(setIsLoading(true));
@@ -34,11 +35,12 @@ export const loginAction = (formData, resetAll) => async (dispatch) => {
   }
 
   try {
-    const { data } = await API.login(formData);
+    const { data } = await API.loginAPI(formData);
     toast.success(data.msg);
     Cookies.set("bsuToken", data.token);
     dispatch(setIsLoading(false));
     resetAll();
+    router.push("/");
   } catch (error) {
     toast.error(error.response.data?.error);
     resetAll();
@@ -48,7 +50,7 @@ export const loginAction = (formData, resetAll) => async (dispatch) => {
 export const getCurrentUser = () => async (dispatch) => {
   try {
     dispatch(setLoadingAll(true));
-    const { data } = await API.currentUser();
+    const { data } = await API.currentUserAPI();
     dispatch({ type: "AUTH", payload: data.data });
     dispatch(setLoadingAll(false));
   } catch (error) {

@@ -5,14 +5,14 @@ import Router from "next/router";
 import React from "react";
 
 export default function CardPost({ post }) {
-  const { id, user, updated_at } = post;
+  const { _id: id, user, updatedAt } = post;
   const linkedCard = (id) => Router.push(`/post/${id}`);
 
 
   return (
     <div className="mb-10 last:mb-0 w-full cursor-pointer rounded-lg border border-[#DCDCDC] text-font hover:bg-slate-50" onClick={() => linkedCard(id)}>
       <div className="flex items-center justify-between border-b border-[#DCDCDC] p-5">
-        <Author user={user} date={updated_at} size="h-[30px] w-[30px] md:h-10 md:w-10" />
+        <Author user={user} date={updatedAt} contentId={id} size="h-[30px] w-[30px] md:h-10 md:w-10" />
       </div>
 
       <div className="card-body p-5">
@@ -32,11 +32,11 @@ export default function CardPost({ post }) {
             <div className="mt-[30px] flex gap-5 text-sm md:mt-auto md:text-base">
               <div className="flex items-center gap-3 font-semibold">
                 <Icon img={liked} style="bg-[#EB5757]/30" />
-                <p>12</p>
+                <p>{post.likesCount}</p>
               </div>
               <div className="flex items-center gap-3 font-semibold">
                 <Icon img={message} style="bg-[#6C5CE7]/30" />
-                <p>{post.comment.length}</p>
+                <p>{post.commentsCount}</p>
               </div>
             </div>
           </div>

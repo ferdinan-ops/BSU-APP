@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setAllQuestions } from "../../config/redux/actions/postAction";
 
-export default function Filter({ setItems, filterItem, menus, all }) {
+export default function Filter({ filterItem, menus, all }) {
   const [filtered, setFiltered] = useState("Semua Soal");
+  const dispatch = useDispatch();
 
   const filterHandler = (e, fakultas) => {
     e.preventDefault();
@@ -18,7 +21,7 @@ export default function Filter({ setItems, filterItem, menus, all }) {
           }`}
         onClick={(e) => {
           filterHandler(e, "Semua Soal");
-          setItems(all);
+          dispatch(setAllQuestions(all));
         }}
       >
         Semua

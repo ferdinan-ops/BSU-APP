@@ -1,33 +1,37 @@
 import { CardPost, Filter, Gap, Layout, Promotion } from "../components";
-import { useState } from "react";
-import { dummy } from "../utils/dummy";
+import { getAllQuestions, setAllQuestions } from "../config/redux/actions/postAction";
+import { useDispatch, useSelector } from "react-redux";
 import { authPage } from "../middlewares/authPage";
+import { useEffect } from "react";
 
 export async function getServerSideProps(context) {
-  const { token } = await authPage(context);
+  await authPage(context);
   return { props: {} };
 }
 
 export default function Home() {
-  const [questions, setQuestions] = useState(dummy);
-  const [filtered, setFiltered] = useState(dummy);
-
+  const dispatch = useDispatch();
+  const { questions, filtered } = useSelector(state => state.postReducer);
   const menus = [...new Set(filtered.map((Val) => Val.fakultas))];
 
+  useEffect(() => {
+    dispatch(getAllQuestions());
+  }, [dispatch]);
+
   const filterItem = (curcat) => {
-    const newItems = dummy.filter((question) => question.fakultas === curcat);
-    setQuestions(newItems);
+    const newItems = filtered.filter((question) => question.fakultas === curcat);
+    dispatch(setAllQuestions(newItems));
   }
 
   return (
     <Layout title="BSU - Home">
       <section>
-        <Filter setItems={setQuestions} filterItem={filterItem} all={dummy} menus={menus} />
+        <Filter filterItem={filterItem} all={filtered} menus={menus} />
         <Gap style="h-10" />
         <section className="flex justify-between gap-[30px]">
           <div className="w-full xl:w-7/12">
             {questions.map((question) => (
-              <CardPost post={question} key={question.id} />
+              <CardPost post={question} key={question._id} />
             ))}
           </div>
           <div className="sticky top-[130px] hidden h-[472px] max-h-[472px] w-4/12 xl:block">

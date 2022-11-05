@@ -14,7 +14,8 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
-export const register = (formData) => API.post("/auth/register", formData);
-export const login = (formData) => API.post("/auth/login", formData);
-export const currentUser = () => API.get("/auth/login");
+export const registerAPI = (formData) => API.post("/auth/register", formData);
+export const loginAPI = (formData) => API.post("/auth/login", formData);
+export const currentUserAPI = () => API.get("/auth/login");
 export const createPostAPI = (formData) => API.post("/post", formData);
+export const getAllPostAPI = () => API.get("/post");

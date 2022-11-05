@@ -20,6 +20,7 @@ import edit from "./icons/edit.svg";
 import image from "./icons/image.svg";
 import cross from "./icons/cross.svg";
 import camera from "./icons/camera.svg";
+import lapor from "./icons/lapor.svg";
 
 export {
   loginBg,
@@ -41,4 +42,5 @@ export {
   footerLogo,
   cross,
   camera,
+  lapor,
 };
