@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     case "GET":
       await getQuestionById(req, res);
       break;
-    case "PATCH":
+    case "PUT":
       await updateQuestion(req, res);
       break;
     case "DELETE":

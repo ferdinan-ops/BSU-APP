@@ -24,7 +24,7 @@ export async function updateQuestion(req, res) {
     const data = await Questions.findByIdAndUpdate(id, formData);
     res.status(200).json({ success: true, msg: "Your question updated successfully", data });
   } catch (error) {
-    res.status(500).json({ success: false, error });
+    res.status(500).json({ success: false, error: "Something wrong with the connections" });
   }
 }
 
@@ -38,7 +38,7 @@ export async function deleteQuestion(req, res) {
     const data = await Questions.findByIdAndDelete(id);
     res.status(200).json({ success: true, msg: "Your question deleted successfully" });
   } catch (error) {
-    res.status(500).json({ success: false, error });
+    res.status(500).json({ success: false, error: "Something wrong with the connections" });
   }
 }
 

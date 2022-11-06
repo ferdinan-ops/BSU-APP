@@ -1,33 +1,16 @@
+import { allCategories, allFakultas, allSemester } from "../../../utils/listData";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { setLoadingAll } from "./globalAction";
 import { storage } from "../../firebase";
 import toast from "react-hot-toast";
 import * as API from "../../hitApi";
-import { allCategories, allFakultas, allSemester } from "../../../utils/listData";
-import { setLoadingAll } from "./globalAction";
+import axios from "axios";
 
-export const setButtonPostLoading = (payload) => {
-  return { type: "SET_BTN_LOADING_POST", payload };
-}
-
-export const setForm = (formType, formValue) => {
-  return { type: "CREATE_QUESTION", formType, formValue };
-};
-
-export const setImgPreview = (payload) => {
-  return { type: "SET_IMG_PREVIEW", payload }
-}
-
-export const setImgFile = (payload) => {
-  return { type: "SET_IMG_FILE", payload };
-}
-
-export const setAllQuestions = (payload) => {
-  return { type: "SET_ALL_QUESTION", payload };
-}
-
-export const setFilteredQuestions = (payload) => {
-  return { type: "SET_FILTERED_QUESTION", payload };
-}
+export const setForm = (formType, formValue) => ({ type: "SET_QUESTION_FORM", formType, formValue });
+export const setButtonPostLoading = (payload) => ({ type: "SET_BTN_LOADING_POST", payload });
+export const setAllQuestions = (payload) => ({ type: "SET_ALL_QUESTION", payload });
+export const setImgPreview = (payload) => ({ type: "SET_IMG_PREVIEW", payload });
+export const setImgFile = (payload) => ({ type: "SET_IMG_FILE", payload });
 
 export const imgPreviewHandler = (e, imgPreview, imgFile) => async (dispatch) => {
   for (let i = 0; i < e.target.files.length; i++) {
@@ -51,6 +34,7 @@ const uploadImageToCloud = async (images, imgFile, userId) => {
     const imageRef = ref(storage, `questions/${userId}/${imgFile[i].name}`);
     await uploadBytes(imageRef, imgFile[i], "data_url");
     const downloadURL = await getDownloadURL(imageRef);
+    console.log(downloadURL);
     images.push(downloadURL);
   }
 }
@@ -77,9 +61,22 @@ export const createQuestion = (formData, imgFile, Router) => async (dispatch) =>
     dispatch(setButtonPostLoading(true));
     await uploadImageToCloud(images, imgFile, userId);
     const { data } = await API.createPostAPI(formData);
-    toast.success(data.msg);
     dispatch(resetAll());
+    toast.success(data.msg);
     Router.push("/");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+export const updateQuestion = (id, formData, imgFile, router) => async (dispatch) => {
+  const { images, userId } = formData;
+  try {
+    dispatch(setButtonPostLoading(true));
+    await uploadImageToCloud(images, imgFile, userId);
+    // // const { data } = await API.updatePostAPI(id, formData);
+    dispatch(setButtonPostLoading(false));
   } catch (error) {
     console.log(error);
   }
@@ -90,7 +87,39 @@ export const getAllQuestions = () => async (dispatch) => {
     dispatch(setLoadingAll(true));
     const { data } = await API.getAllPostAPI();
     dispatch(setAllQuestions(data.data));
-    dispatch(setFilteredQuestions(data.data));
+    dispatch({ type: "SET_FILTERED_QUESTION", payload: data.data });
+    dispatch(setLoadingAll(false));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const getQuestionByIdUpdate = (id) => async (dispatch) => {
+  try {
+    dispatch(setLoadingAll(true));
+    const { data } = await API.getPostByIdAPI(id);
+    dispatch(setForm("mataKuliah", data.data.mataKuliah));
+    dispatch(setForm("fakultas", data.data.fakultas));
+    dispatch(setForm("programStudi", data.data.programStudi));
+    dispatch(setForm("tahunAjaran", data.data.tahunAjaran));
+    dispatch(setForm("semester", data.data.semester));
+    dispatch(setForm("kategori", data.data.kategori));
+    dispatch(setForm("dosen", data.data.dosen));
+    dispatch(setForm("userId", data.data.user._id));
+    dispatch(setForm("images", data.data.images));
+    dispatch(setImgPreview(data.data.images));
+    dispatch(setImgFile(data.data.images));
+    dispatch(setLoadingAll(false));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const getQuestionById = (id) => async (dispatch) => {
+  try {
+    dispatch(setLoadingAll(true));
+    const { data } = await API.getPostByIdAPI(id);
+    dispatch({ type: "SET_DETAIL_QUESTION", payload: data.data });
     dispatch(setLoadingAll(false));
   } catch (error) {
     console.log(error);

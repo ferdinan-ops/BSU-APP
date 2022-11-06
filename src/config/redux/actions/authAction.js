@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import * as API from "../../hitApi";
 import { setLoadingAll } from "./globalAction";
 
-export const registerAction = (formData, resetAll, router) => async (dispatch) => {
+export const registerAction = (formData, resetAll, Router) => async (dispatch) => {
   const { username, email, password } = formData;
 
   dispatch(setIsLoading(true));
@@ -14,18 +14,18 @@ export const registerAction = (formData, resetAll, router) => async (dispatch) =
 
   try {
     const { data } = await API.registerAPI(formData);
-    toast.success(data.msg);
-    dispatch(setIsLoading(false));
     Cookies.set("bsuToken", data.token);
     resetAll();
-    router.push("/");
+    dispatch(setIsLoading(false));
+    toast.success(data.msg);
+    Router.push("/");
   } catch (error) {
     toast.error(error.response.data?.error);
     resetAll();
   }
 }
 
-export const loginAction = (formData, resetAll, router) => async (dispatch) => {
+export const loginAction = (formData, resetAll, Router) => async (dispatch) => {
   const { email, password } = formData;
 
   dispatch(setIsLoading(true));
@@ -36,13 +36,14 @@ export const loginAction = (formData, resetAll, router) => async (dispatch) => {
 
   try {
     const { data } = await API.loginAPI(formData);
-    toast.success(data.msg);
     Cookies.set("bsuToken", data.token);
-    dispatch(setIsLoading(false));
     resetAll();
-    router.push("/");
+    dispatch(setIsLoading(false));
+    toast.success(data.msg);
+    Router.push("/");
   } catch (error) {
     toast.error(error.response.data?.error);
+    dispatch(setIsLoading(false));
     resetAll();
   }
 }

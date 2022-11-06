@@ -19,3 +19,5 @@ export const loginAPI = (formData) => API.post("/auth/login", formData);
 export const currentUserAPI = () => API.get("/auth/login");
 export const createPostAPI = (formData) => API.post("/post", formData);
 export const getAllPostAPI = () => API.get("/post");
+export const getPostByIdAPI = (id) => API.get(`/post/${id}`);
+export const updatePostAPI = (id, formData) => API.get(`/post/${id}`, formData);

@@ -1,3 +1,1 @@
-export const setLoadingAll = (payload) => {
-  return { type: "LOADING_ALL", payload };
-};
+export const setLoadingAll = (payload) => ({ type: "LOADING_ALL", payload });

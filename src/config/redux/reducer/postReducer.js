@@ -2,6 +2,7 @@ import { allCategories, allFakultas, allSemester } from "../../../utils/listData
 
 const initialState = {
   questions: [],
+  question: {},
   filtered: [],
   form: {
     mataKuliah: "",
@@ -21,7 +22,7 @@ const initialState = {
 
 const postReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "CREATE_QUESTION":
+    case "SET_QUESTION_FORM":
       return { ...state, form: { ...state.form, [action.formType]: action.formValue } };
     case "SET_BTN_LOADING_POST":
       return { ...state, isLoading: action.payload };
@@ -33,6 +34,8 @@ const postReducer = (state = initialState, action) => {
       return { ...state, questions: action.payload };
     case "SET_FILTERED_QUESTION":
       return { ...state, filtered: action.payload };
+    case "SET_DETAIL_QUESTION_":
+      return { ...state, question: action.payload };
     default:
       return { ...state };
   }

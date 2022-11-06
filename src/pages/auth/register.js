@@ -4,11 +4,11 @@ import { unauthPage } from "../../middlewares/authPage";
 import { useDispatch, useSelector } from "react-redux";
 import { registerBg } from "../../../public";
 import { Ring } from '@uiball/loaders';
+import Router from "next/router";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
-import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
   await unauthPage(context);
@@ -20,7 +20,6 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const router = useRouter();
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.authReducer);
 
@@ -33,7 +32,7 @@ export default function Register() {
   const submitHandler = async (e) => {
     e.preventDefault();
     const formData = { username, email, password };
-    await dispatch(registerAction(formData, resetAll, router));
+    await dispatch(registerAction(formData, resetAll, Router));
   }
 
   return (

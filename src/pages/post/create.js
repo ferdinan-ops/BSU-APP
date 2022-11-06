@@ -17,7 +17,7 @@ export default function Create() {
   const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.authReducer);
   const { form, imgPreview, imgFile, isLoading } = useSelector(state => state.postReducer);
-  const { mataKuliah, fakultas, programStudi, tahunAjaran, semester, kategori, dosen } = form;
+  const { mataKuliah, fakultas, programStudi, tahunAjaran, semester, kategori, dosen, images } = form;
 
   useEffect(() => {
     dispatch(setForm("userId", currentUser._id));
@@ -35,6 +35,8 @@ export default function Create() {
     if (imgFile.length <= 0 && imgPreview.length <= 0) return toast.error("Mohon upload gambar soal Anda");
     await dispatch(createQuestion(form, imgFile, Router));
   };
+
+  console.log({ images });
 
   return (
     <Layout title="BSU - Create">

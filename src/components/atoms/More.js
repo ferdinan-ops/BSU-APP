@@ -16,7 +16,7 @@ export default function More({ userId, contentId, isComment }) {
 
   const updateHandler = (e) => {
     e.stopPropagation();
-    if (!isComment) return Router.push(`/update/${contentId}`);
+    if (!isComment) return Router.push(`/post/update/${contentId}`);
     alert("masih test comment");
   }
 

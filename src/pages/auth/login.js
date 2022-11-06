@@ -1,14 +1,14 @@
 import { Brand, Button, Gap, Input } from "../../components";
+import { loginAction } from "../../config/redux/actions";
+import { unauthPage } from "../../middlewares/authPage";
+import { useDispatch, useSelector } from "react-redux";
 import { loginBg } from "../../../public";
 import { Ring } from "@uiball/loaders";
+import Router from "next/router";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
-import { useDispatch, useSelector } from "react-redux";
-import { loginAction } from "../../config/redux/actions";
-import { unauthPage } from "../../middlewares/authPage";
-import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
   await unauthPage(context);
@@ -19,7 +19,6 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const router = useRouter();
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.authReducer);
 
@@ -31,7 +30,7 @@ export default function Login() {
   const submitHandler = async (e) => {
     e.preventDefault();
     const formData = { email, password };
-    await dispatch(loginAction(formData, resetAll, router));
+    await dispatch(loginAction(formData, resetAll, Router));
   }
 
   return (
