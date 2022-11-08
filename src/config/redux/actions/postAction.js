@@ -75,7 +75,7 @@ export const updateQuestion = (id, formData, imgFile, router) => async (dispatch
   try {
     dispatch(setButtonPostLoading(true));
     await uploadImageToCloud(images, imgFile, userId);
-    // // const { data } = await API.updatePostAPI(id, formData);
+    // const { data } = await API.updatePostAPI(id, formData);
     dispatch(setButtonPostLoading(false));
   } catch (error) {
     console.log(error);
@@ -106,9 +106,20 @@ export const getQuestionByIdUpdate = (id) => async (dispatch) => {
     dispatch(setForm("kategori", data.data.kategori));
     dispatch(setForm("dosen", data.data.dosen));
     dispatch(setForm("userId", data.data.user._id));
-    dispatch(setForm("images", data.data.images));
+    // dispatch(setForm("images", data.data.images));
     dispatch(setImgPreview(data.data.images));
     dispatch(setImgFile(data.data.images));
+    dispatch(setLoadingAll(false));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const deleteQuestion = (id) => async (dispatch) => {
+  try {
+    dispatch(setLoadingAll(true));
+    const { data } = await API.deletePostAPI(id);
+    dispatch(getAllQuestions());
     dispatch(setLoadingAll(false));
   } catch (error) {
     console.log(error);

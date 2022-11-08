@@ -1,11 +1,13 @@
 import Image from "next/image";
 import Router from "next/router";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleted, edit, lapor, more } from "../../../public";
+import { deleteQuestion } from "../../config/redux/actions/postAction";
 import Icon from "./Icon";
 
 export default function More({ userId, contentId, isComment }) {
+  const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.authReducer);
   const [show, setShow] = useState(false);
 
@@ -24,8 +26,11 @@ export default function More({ userId, contentId, isComment }) {
     e.stopPropagation();
     const ask = confirm("Apakah Anda yakin ingin menghapus?");
     if (ask) {
-      if (!isComment) return alert("masih test hapus post");
-      alert("masih test comment");
+      if (!isComment) {
+        dispatch(deleteQuestion(contentId));
+      } else {
+        alert("masih test koment");
+      }
     }
   }
 
