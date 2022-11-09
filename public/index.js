@@ -21,6 +21,7 @@ import image from "./icons/image.svg";
 import cross from "./icons/cross.svg";
 import camera from "./icons/camera.svg";
 import lapor from "./icons/lapor.svg";
+import bookmark from "./icons/bookmark.svg";
 
 export {
   loginBg,
@@ -43,4 +44,5 @@ export {
   cross,
   camera,
   lapor,
+  bookmark,
 };

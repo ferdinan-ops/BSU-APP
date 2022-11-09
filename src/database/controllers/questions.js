@@ -117,7 +117,7 @@ export async function getQuestionById(req, res) {
         }
       }
     ]);
-    res.status(200).json({ success: true, msg: "Getting all questions successfully", data: data[0] });
+    res.status(200).json({ success: true, msg: "Getting detail questions successfully", data: data[0] });
   } catch (error) {
     res.status(500).json({ success: false, error });
   }

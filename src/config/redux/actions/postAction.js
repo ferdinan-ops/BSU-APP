@@ -54,50 +54,12 @@ export const resetAll = () => async (dispatch) => {
   dispatch(setImgFile([]));
 }
 
-export const createQuestion = (formData, imgFile, Router) => async (dispatch) => {
-  const { images, userId } = formData;
-
-  try {
-    dispatch(setButtonPostLoading(true));
-    await uploadImageToCloud(images, imgFile, userId);
-    const { data } = await API.createPostAPI(formData);
-    dispatch(resetAll());
-    toast.success(data.msg);
-    Router.push("/");
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-
-export const updateQuestion = (id, formData, imgFile, router) => async (dispatch) => {
-  const { images, userId } = formData;
-  try {
-    dispatch(setButtonPostLoading(true));
-    await uploadImageToCloud(images, imgFile, userId);
-    // const { data } = await API.updatePostAPI(id, formData);
-    dispatch(setButtonPostLoading(false));
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-export const getAllQuestions = () => async (dispatch) => {
-  try {
-    dispatch(setLoadingAll(true));
-    const { data } = await API.getAllPostAPI();
-    dispatch(setAllQuestions(data.data));
-    dispatch({ type: "SET_FILTERED_QUESTION", payload: data.data });
-    dispatch(setLoadingAll(false));
-  } catch (error) {
-    console.log(error);
-  }
-}
 
 export const getQuestionByIdUpdate = (id) => async (dispatch) => {
   try {
     dispatch(setLoadingAll(true));
     const { data } = await API.getPostByIdAPI(id);
+    console.log(data);
     dispatch(setForm("mataKuliah", data.data.mataKuliah));
     dispatch(setForm("fakultas", data.data.fakultas));
     dispatch(setForm("programStudi", data.data.programStudi));
@@ -115,6 +77,34 @@ export const getQuestionByIdUpdate = (id) => async (dispatch) => {
   }
 }
 
+// CONNECT TO API
+export const createQuestion = (formData, imgFile, Router) => async (dispatch) => {
+  const { images, userId } = formData;
+
+  try {
+    dispatch(setButtonPostLoading(true));
+    await uploadImageToCloud(images, imgFile, userId);
+    const { data } = await API.createPostAPI(formData);
+    dispatch(resetAll());
+    toast.success(data.msg);
+    Router.push("/");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const updateQuestion = (id, formData, imgFile, router) => async (dispatch) => {
+  const { images, userId } = formData;
+  try {
+    dispatch(setButtonPostLoading(true));
+    await uploadImageToCloud(images, imgFile, userId);
+    // const { data } = await API.updatePostAPI(id, formData);
+    dispatch(setButtonPostLoading(false));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export const deleteQuestion = (id) => async (dispatch) => {
   try {
     dispatch(setLoadingAll(true));
@@ -126,12 +116,24 @@ export const deleteQuestion = (id) => async (dispatch) => {
   }
 }
 
+export const getAllQuestions = () => async (dispatch) => {
+  dispatch(setLoadingAll(true));
+  try {
+    const { data } = await API.getAllPostAPI();
+    dispatch(setAllQuestions(data.data));
+    dispatch({ type: "SET_FILTERED_QUESTION", payload: data.data });
+    dispatch(setLoadingAll(false));
+  } catch (error) {
+    console.log(error);
+    dispatch(setLoadingAll(false));
+  }
+}
+
 export const getQuestionById = (id) => async (dispatch) => {
   try {
     dispatch(setLoadingAll(true));
     const { data } = await API.getPostByIdAPI(id);
-    dispatch({ type: "SET_DETAIL_QUESTION", payload: data.data });
-    dispatch(setLoadingAll(false));
+    console.log(data);
   } catch (error) {
     console.log(error);
   }

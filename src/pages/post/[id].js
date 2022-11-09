@@ -1,47 +1,49 @@
 import Image from "next/image";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Moment from "react-moment";
 import { liked } from "../../../public";
-import { Author, Button, Gap, Info, Layout } from "../../components";
-import { dummy } from "../../utils/dummy";
+import { Author, Button, Info, Layout } from "../../components";
+import { useDispatch, useSelector } from "react-redux";
+import { getQuestionById } from "../../config/redux/actions/postAction";
 import { Ring } from "@uiball/loaders";
 
 export default function Detail() {
-  const [question, setQuestion] = useState({});
   const router = useRouter();
   const { id } = router.query;
 
-  useEffect(() => {
-    const questionById = dummy.filter((quest) => quest.id === parseInt(id));
-    setQuestion(questionById[0]);
-  }, [id]);
+  const dispatch = useDispatch();
+  const { question } = useSelector(state => state.postReducer);
 
-  if (!question?.user) {
-    return (
-      <div className="flex fixed top-0 left-0 right-0 bottom-0 items-center justify-center">
-        <Ring size={50} lineWeight={8} speed={2} color="#FCB900" />
-      </div>
-    )
-  }
+  useEffect(() => {
+    dispatch(getQuestionById(id));
+  }, [dispatch, id]);
+
+  console.log(question);
 
   return (
-    <Layout title="BSU - Detail">
-      {question && (
+    <Layout title={`BSU - ${question.mataKuliah}`}>
+      {/* {question && (
         <section className="mx-auto mt-[35px] w-full md:w-10/12 xl:w-8/12 text-font md:mt-[60px]">
           <div className="mb-10">
             <h1 className="text-center md:text-[32px] font-bold uppercase text-xl">{question.mataKuliah}</h1>
             <div className="flex items-center justify-center gap-4 md:gap-5 mt-10">
-              <img src={question.user.profilePicture} className="md:h-[50px] md:w-[50px] w-8 h-8 rounded-full" alt="" />
+              {question?.user?.photo ?
+                <img src={question?.user?.photo} className="md:h-[50px] md:w-[50px] w-8 h-8 rounded-full object-cover" alt="" /> :
+                <img src="/images/profile.png" className="md:h-[50px] md:w-[50px] w-8 h-8 rounded-full object-cover" alt="" />
+              }
               <div className="flex flex-col font-semibold text-sm md:text-base">
-                {question.user.username}
+                {question?.user?.username}
                 <Moment fromNow className="text-xs text-[#5C5C5C] md:text-sm">{question.updated_at}</Moment>
               </div>
             </div>
           </div>
 
-          <img src={question.image} className="mx-auto w-full rounded-lg shadow-lg" alt="" />
+          {question?.images?.map((image, idx) => (
+            <div key={idx}>
+              <img src={image} className="mx-auto w-full rounded-lg shadow-lg" alt="" />
+            </div>
+          ))}
 
           <table className="mx-auto block w-fit rounded-lg bg-white p-[30px] shadow-lg my-10" cellPadding={5}>
             <tbody className="text-font text-sm md:text-base">
@@ -57,18 +59,18 @@ export default function Detail() {
             <div className="cursor-pointer relative md:w-[30px] md:h-[30px] w-7 h-7">
               <Image src={liked} layout="fill" alt="" />
             </div>
-            <span className="md:text-xl font-bold text-lg">12k</span>
+            <span className="md:text-xl font-bold text-lg">{question?.likes?.length}</span>
           </div>
 
           <div className="comment mb-[100px]">
-            <h1 className="border-b-2 border-[#DCDCDC] pb-5 md:text-2xl font-bold text-xl">{question.comment.length} Komentar</h1>
+            <h1 className="border-b-2 border-[#DCDCDC] pb-5 md:text-2xl font-bold text-xl">{question?.comments?.length} Komentar</h1>
 
-            {question.comment.map(comments => (
-              <div className="py-5 border-b-2 border-[#DCDCDC]" key={comments.id}>
+            {question?.comments?.map((comment) => (
+              <div className="py-5 border-b-2 border-[#DCDCDC]" key={comment.id}>
                 <div className="flex items-center justify-between">
-                  <Author user={comments.user} date={comments.updated_at} size="md:w-[35px] md:h-[35px] w-6 h-6" />
+                  <Author user={comment.user} date={comment.updated_at} size="md:w-[35px] md:h-[35px] w-6 h-6" />
                 </div>
-                <p className="mt-4 leading-relaxed ml-[47px] text-xs md:text-sm">{comments.content}</p>
+                <p className="mt-4 leading-relaxed ml-[47px] text-xs md:text-sm">{comment.content}</p>
               </div>
             ))}
 
@@ -81,7 +83,7 @@ export default function Detail() {
             </form>
           </div>
         </section>
-      )}
+      )} */}
     </Layout>
   );
 }
