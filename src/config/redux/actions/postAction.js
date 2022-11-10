@@ -133,8 +133,10 @@ export const getQuestionById = (id) => async (dispatch) => {
   try {
     dispatch(setLoadingAll(true));
     const { data } = await API.getPostByIdAPI(id);
-    console.log(data);
+    dispatch({ type: "SET_DETAIL_QUESTION", payload: data.data });
+    dispatch(setLoadingAll(false));
   } catch (error) {
     console.log(error);
+    dispatch(setLoadingAll(false));
   }
 }

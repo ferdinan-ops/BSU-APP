@@ -34,7 +34,7 @@ const postReducer = (state = initialState, action) => {
       return { ...state, questions: action.payload };
     case "SET_FILTERED_QUESTION":
       return { ...state, filtered: action.payload };
-    case "SET_DETAIL_QUESTION_":
+    case "SET_DETAIL_QUESTION":
       return { ...state, question: action.payload };
     default:
       return { ...state };
