@@ -58,7 +58,7 @@ export default function Detail() {
                 }
                 <div className="flex flex-col font-semibold text-sm md:text-base">
                   {question?.user?.username}
-                  <Moment fromNow className="text-xs text-[#5C5C5C] md:text-sm">{question.updated_at}</Moment>
+                  <Moment fromNow className="text-xs text-[#5C5C5C] md:text-sm">{question.createdAt}</Moment>
                 </div>
               </div>
             </div>
@@ -105,7 +105,7 @@ export default function Detail() {
               {question?.comments?.map((comment) => (
                 <div className="py-5 border-b-2 border-[#DCDCDC]" key={comment.id}>
                   <div className="flex items-center justify-between">
-                    <Author user={comment.user} date={comment.updated_at} size="md:w-[35px] md:h-[35px] w-6 h-6" />
+                    <Author user={comment.user} date={comment.createdAt} size="md:w-[35px] md:h-[35px] w-6 h-6" />
                   </div>
                   <p className="mt-4 leading-relaxed ml-[47px] text-xs md:text-sm">{comment.content}</p>
                 </div>

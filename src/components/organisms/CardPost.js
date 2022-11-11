@@ -5,14 +5,14 @@ import Router from "next/router";
 import React from "react";
 
 export default function CardPost({ post }) {
-  const { _id: id, user, updatedAt } = post;
+  const { _id: id, user, createdAt } = post;
   const linkedCard = (id) => Router.push(`/post/${id}`);
 
 
   return (
     <div className="mb-10 last:mb-0 w-full cursor-pointer rounded-lg border border-[#DCDCDC] text-font hover:bg-slate-50" onClick={() => linkedCard(id)}>
       <div className="flex items-center justify-between border-b border-[#DCDCDC] p-5">
-        <Author user={user} date={updatedAt} contentId={id} size="h-[30px] w-[30px] md:h-10 md:w-10" />
+        <Author user={user} date={createdAt} contentId={id} size="h-[30px] w-[30px] md:h-10 md:w-10" />
       </div>
 
       <div className="card-body p-5">
