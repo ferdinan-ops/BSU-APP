@@ -22,6 +22,7 @@ import cross from "./icons/cross.svg";
 import camera from "./icons/camera.svg";
 import lapor from "./icons/lapor.svg";
 import bookmark from "./icons/bookmark.svg";
+import bookmarked from "./icons/bookmarked.svg";
 import download from "./icons/download.svg";
 
 export {
@@ -46,5 +47,6 @@ export {
   camera,
   lapor,
   bookmark,
+  bookmarked,
   download,
 };

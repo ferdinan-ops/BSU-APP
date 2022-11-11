@@ -36,8 +36,6 @@ export default function Create() {
     await dispatch(createQuestion(form, imgFile, Router));
   };
 
-  console.log({ images });
-
   return (
     <Layout title="BSU - Create">
       <section className="text-font my-[30px] md:my-[60px] w-full md:w-10/12 xl:w-8/12 mx-auto">

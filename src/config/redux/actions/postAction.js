@@ -4,7 +4,6 @@ import { setLoadingAll } from "./globalAction";
 import { storage } from "../../firebase";
 import toast from "react-hot-toast";
 import * as API from "../../hitApi";
-import axios from "axios";
 
 export const setForm = (formType, formValue) => ({ type: "SET_QUESTION_FORM", formType, formValue });
 export const setButtonPostLoading = (payload) => ({ type: "SET_BTN_LOADING_POST", payload });
@@ -138,5 +137,23 @@ export const getQuestionById = (id) => async (dispatch) => {
   } catch (error) {
     console.log(error);
     dispatch(setLoadingAll(false));
+  }
+}
+
+export const likePost = (postId, userId) => async (dispatch) => {
+  try {
+    const { data } = await API.likePostAPI(postId, userId);
+    dispatch({ type: "SET_DETAIL_QUESTION", payload: data.data });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const savePost = (postId, userId) => async (dispatch) => {
+  try {
+    const { data } = await API.savePostAPI(postId, userId);
+    dispatch({ type: "SET_DETAIL_QUESTION", payload: data.data });
+  } catch (error) {
+    console.log(error);
   }
 }

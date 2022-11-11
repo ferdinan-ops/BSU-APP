@@ -1,26 +1,48 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Moment from "react-moment";
-import { bookmark, download, like, liked } from "../../../public";
-import { Author, Button, Icon, Info, Layout } from "../../components";
+import { bookmark, bookmarked, download, like, liked } from "../../../public";
+import { Author, Button, Info, Layout } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
-import { getQuestionById } from "../../config/redux/actions/postAction";
-import IconWrapper from "../../components/atoms/Icon";
+import { getQuestionById, likePost, savePost } from "../../config/redux/actions/postAction";
+import { authPage } from "../../middlewares/authPage";
+
+export async function getServerSideProps(context) {
+  await authPage(context);
+  return { props: {} }
+}
 
 export default function Detail() {
+  const [isLiked, setIsLiked] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
   const router = useRouter();
   const { id } = router.query;
 
   const dispatch = useDispatch();
   const { question } = useSelector(state => state.postReducer);
   const { currentUser } = useSelector(state => state.authReducer);
+  const { _id: userId } = currentUser;
 
   useEffect(() => {
     dispatch(getQuestionById(id));
   }, [dispatch, id]);
 
-  console.log(question);
+  useEffect(() => {
+    setIsLiked((question?.likes?.findIndex((id) => id === String(userId))) !== -1);
+  }, [question, isLiked, userId]);
+
+  useEffect(() => {
+    setIsSaved((question?.saved?.findIndex((id) => id === String(userId))) !== -1);
+  }, [question, isLiked, userId]);
+
+  const likePostHandler = async () => {
+    await dispatch(likePost(id, { userId }));
+  };
+
+  const savePostHandler = async () => {
+    await dispatch(savePost(id, { userId }));
+  };
 
   return (
     <>
@@ -58,25 +80,20 @@ export default function Detail() {
                 </tbody>
               </table>
               <div className="w-40 h-12 bg-primary text-font mx-auto mt-10 font-semibold text-sm rounded-lg hover:bg-primary/75">
-                <Button>
-                  <div className="relative w-7 h-7 mr-2">
-                    <Image src={download} layout="fill" alt="" />
-                  </div>
-                  Download
-                </Button>
+                <Button><div className="relative w-7 h-7 mr-2">  <Image src={download} layout="fill" alt="" /></div>Download</Button>
               </div>
             </div>
 
             <div className="flex gap-8">
               <div className="flex items-center gap-3 md:gap-5 mb-16">
-                <div className="cursor-pointer relative md:w-[30px] md:h-[30px] w-7 h-7">
-                  {currentUser.id === question?.likes?.userId ? <Image src={like} layout="fill" alt="" /> : <Image src={liked} layout="fill" alt="" />}
+                <div className="cursor-pointer relative md:w-[30px] md:h-[30px] w-7 h-7" onClick={likePostHandler}>
+                  {isLiked ? <Image src={liked} layout="fill" alt="" /> : <Image src={like} layout="fill" alt="" />}
                 </div>
                 <span className="md:text-xl font-bold text-lg">{question?.likes?.length}</span>
               </div>
               <div className="flex items-center gap-3 md:gap-5 mb-16">
-                <div className="cursor-pointer relative md:w-[30px] md:h-[30px] w-7 h-7">
-                  <Image src={bookmark} layout="fill" alt="" />
+                <div className="cursor-pointer relative md:w-[26px] md:h-[26px] w-7 h-7" onClick={savePostHandler}>
+                  {isSaved ? <Image src={bookmarked} layout="fill" alt="" /> : <Image src={bookmark} layout="fill" alt="" />}
                 </div>
                 <span className="md:text-xl font-bold text-lg">{question?.saved?.length}</span>
               </div>
