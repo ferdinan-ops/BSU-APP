@@ -26,5 +26,10 @@ export const deletePostAPI = (postId) => API.delete(`/post/${postId}`);
 export const likePostAPI = (postId, userId) => API.patch(`/post/${postId}/likes`, userId);
 export const savePostAPI = (postId, userId) => API.patch(`/post/${postId}/save`, userId);
 
-export const getNotificationAPI = (userId) => API.get(`notification/${userId}`);
-export const deleteNotificationAPI = (userId) => API.delete(`notification/${userId}`);
+export const getNotificationAPI = (userId) => API.get(`/notification/${userId}`);
+export const deleteNotificationAPI = (userId) => API.delete(`/notification/${userId}`);
+
+export const getAllCommentAPI = (postId) => API.get(`/comment/${postId}`);
+export const createCommentAPI = (postId, formData) => API.post(`/comment/${postId}`, formData);
+export const updateCommentAPI = (commentId, formData) => API.patch(`/comment/${commentId}`, formData);
+export const deleteCommentAPI = (commentId) => API.delete(`/comment/${commentId}`);

@@ -7,6 +7,8 @@ import { Author, Button, Info, Layout } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { getQuestionById, likePost, savePost } from "../../config/redux/actions/postAction";
 import { authPage } from "../../middlewares/authPage";
+import { createComment, getAllComments, setFormComment } from "../../config/redux/actions/commentAction";
+import { Ring } from "@uiball/loaders";
 
 export async function getServerSideProps(context) {
   await authPage(context);
@@ -17,16 +19,17 @@ export default function Detail() {
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const router = useRouter();
-  const { id } = router.query;
 
   const dispatch = useDispatch();
   const { question } = useSelector(state => state.postReducer);
   const { currentUser } = useSelector(state => state.authReducer);
+  const { comments, formComment, isLoading } = useSelector(state => state.commentReducer);
+
+  const { id } = router.query;
   const { _id: userId } = currentUser;
 
-  useEffect(() => {
-    dispatch(getQuestionById(id));
-  }, [dispatch, id]);
+  useEffect(() => { dispatch(getQuestionById(id)) }, [dispatch, id]);
+  useEffect(() => { dispatch(getAllComments(id)) }, [dispatch, id]);
 
   useEffect(() => {
     setIsLiked((question?.likes?.findIndex((id) => id === String(userId))) !== -1);
@@ -36,13 +39,14 @@ export default function Detail() {
     setIsSaved((question?.saved?.findIndex((id) => id === String(userId))) !== -1);
   }, [question, isLiked, userId]);
 
-  const likePostHandler = async () => {
-    await dispatch(likePost(id, { userId }));
-  };
+  const likePostHandler = async () => await dispatch(likePost(id, { userId }));
+  const savePostHandler = async () => await dispatch(savePost(id, { userId }));
 
-  const savePostHandler = async () => {
-    await dispatch(savePost(id, { userId }));
-  };
+  const commentSubmitHandler = async (e) => {
+    e.preventDefault();
+    const formData = { comment: formComment, userId }
+    await dispatch(createComment(id, formData));
+  }
 
   return (
     <>
@@ -100,22 +104,28 @@ export default function Detail() {
             </div>
 
             <div className="comment mb-[100px]">
-              <h1 className="border-b-2 border-[#DCDCDC] pb-5 md:text-2xl font-bold text-xl">{question?.comments?.length} Komentar</h1>
+              <h1 className="border-b-2 border-[#DCDCDC] pb-5 md:text-2xl font-bold text-xl">{comments.length} Komentar</h1>
 
-              {question?.comments?.map((comment) => (
+              {comments.map((comment) => (
                 <div className="py-5 border-b-2 border-[#DCDCDC]" key={comment.id}>
                   <div className="flex items-center justify-between">
                     <Author user={comment.user} date={comment.createdAt} size="md:w-[35px] md:h-[35px] w-6 h-6" />
                   </div>
-                  <p className="mt-4 leading-relaxed ml-[47px] text-xs md:text-sm">{comment.content}</p>
+                  <p className="mt-4 leading-relaxed ml-[47px] text-xs md:text-sm">{comment.comment}</p>
                 </div>
               ))}
 
               <form className="flex flex-col text-font mt-[50px]">
                 <label className="text-base md:text-lg font-semibold">Tulis Komentar:</label>
-                <textarea className="mt-5 h-72 rounded-lg border border-auth p-5 outline-none focus:border-primary text-sm md:text-base" />
-                <div className="shadow-button mt-[30px] ml-auto h-11 md:w-48 w-28 rounded-lg bg-primary font-semibold text-font">
-                  <Button type="submit">Kirim</Button>
+                <textarea
+                  className="mt-5 h-72 rounded-lg border border-auth p-5 outline-none focus:border-primary text-sm md:text-base"
+                  value={formComment}
+                  onChange={(e) => dispatch(setFormComment(e.target.value))}
+                />
+                <div className={`shadow-button mt-[30px] ml-auto h-11 md:w-48 w-28 rounded-lg bg-primary font-semibold text-font ${isLoading && "pointer-events-none bg-opacity-40"}`}>
+                  <Button type="submit" onClick={commentSubmitHandler}>
+                    {isLoading ? (<Ring size={20} lineWeight={5} speed={2} color="#fff" />) : "Kirim"}
+                  </Button>
                 </div>
               </form>
             </div>

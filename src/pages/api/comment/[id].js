@@ -1,5 +1,5 @@
 import connectMongo from "../../../database/connection";
-import { deleteComment, updateComment } from "../../../database/controllers/comments";
+import { createComment, deleteComment, getAllComments, updateComment } from "../../../database/controllers/comments";
 import authorization from "../../../middlewares/authorization";
 
 export default async function handler(req, res) {
@@ -8,6 +8,12 @@ export default async function handler(req, res) {
   const { method } = req;
 
   switch (method) {
+    case "GET":
+      await getAllComments(req, res);
+      break;
+    case "POST":
+      await createComment(req, res);
+      break;
     case "PATCH":
       await updateComment(req, res);
       break;

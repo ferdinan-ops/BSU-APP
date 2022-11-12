@@ -18,7 +18,7 @@ export default function CardPost({ post }) {
       <div className="card-body p-5">
         <div className="flex flex-col md:flex-row md:gap-7">
           <img src={post.image} alt="" className="h-auto w-full md:max-h-[216px] md:w-auto" />
-          <div className="ml-0 flex flex-col md:ml-8">
+          <div className="ml-0 flex flex-col md:ml-8 mt-4 md:mt-0">
             <h1 className="text-xl font-semibold md:text-2xl">{post.mataKuliah}</h1>
             <table className="mt-5 text-sm md:text-base">
               <tbody>

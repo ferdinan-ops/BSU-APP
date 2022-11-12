@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import Questions from "../../models/questionSchema";
 import Users from "../../models/userSchema";
-import { pushNotification } from "./notification";
+import Notification from "../../models/notificationSchema";
+import { deleteActionNotif, pushNotification } from "./notification";
 
 export async function createQuestion(req, res) {
   const formData = req.body;
@@ -128,7 +129,6 @@ export async function getQuestionById(req, res) {
 export async function likeQuestion(req, res) {
   const { id } = req.query;
   const { userId } = req.body;
-  let notif = null;
 
   if (!id && !userId) return res.status(405).json({ success: false, error: "Question not selected" });
   if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
@@ -137,17 +137,19 @@ export async function likeQuestion(req, res) {
     const post = await Questions.findById(id);
     const user = await Users.findById(userId);
     const index = post.likes.findIndex((id) => id === String(userId));
-    const userLike = { username: user.username, photo: user.photo, isAdmin: user.isAdmin };
+    const userLike = { id: user._id, username: user.username, photo: user.photo, isAdmin: user.isAdmin };
+    const notifMsg = `Menyukai Soal ${post.mataKuliah} Anda`;
 
     if (index === -1) {
       post.likes.push(userId);
-      notif = await pushNotification(userLike, post.userId, `Menyukai Soal ${post.mataKuliah} Anda`);
+      await pushNotification(userLike, post.userId, notifMsg, id);
     } else {
       post.likes = post.likes.filter((id) => id !== String(userId));
+      await deleteActionNotif(userId, notifMsg);
     }
 
     const updatePost = await Questions.findByIdAndUpdate(id, post, { new: true });
-    res.status(200).json({ success: true, msg: "Liked the post successfully", data: updatePost, notif });
+    res.status(200).json({ success: true, msg: "Liked the post successfully", data: updatePost });
   } catch (error) {
     res.status(500).json({ success: false, error: "Sorry something wrong..." });
   }

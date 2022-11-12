@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 import Notification from "../../models/notificationSchema";
 
-export async function pushNotification(userAction, userPost, message) {
+export async function pushNotification(userAction, userPost, message, linkId) {
   try {
-    const data = await Notification.create({ userAction, userPost, message });
+    const data = await Notification.create({ userAction, userPost, message, linkId });
     return data;
   } catch (error) {
     return error;
@@ -11,7 +11,7 @@ export async function pushNotification(userAction, userPost, message) {
 }
 
 export async function getNotification(req, res) {
-  const { id: userPost } = req.body;
+  const { id: userPost } = req.query;
   if (!mongoose.Types.ObjectId.isValid(userPost)) return res.status(404).send(`No user with id: ${userPost}`);
 
   try {
@@ -31,5 +31,14 @@ export async function deleteNotification(req, res) {
     res.status(200).json({ success: true, msg: "Notification deleted sucessfully" });
   } catch (error) {
     res.status(500).json({ success: false, error: "Sorry something wrong happened" });
+  }
+}
+
+export async function deleteActionNotif(userId, message) {
+  try {
+    const data = await Notification.deleteOne({ "userAction.id": mongoose.Types.ObjectId(userId), message });
+    return data;
+  } catch (error) {
+    return error;
   }
 }

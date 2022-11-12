@@ -1,6 +1,7 @@
 import React from "react";
 import Moment from "react-moment";
 import { More } from "../atoms";
+import Router from "next/router";
 
 export default function Author({ user, date, contentId, size }) {
   const linkedHandler = (e, id) => {

@@ -3,10 +3,8 @@ import * as API from "../../hitApi";
 
 export const getNotification = (userId) => async (dispatch) => {
   try {
-    dispatch(setLoadingAll(true));
     const { data } = await API.getNotificationAPI(userId);
     dispatch({ type: "GET_NOTIFICATION", payload: data.data });
-    dispatch(setLoadingAll(false));
   } catch (error) {
     console.log(error);
     dispatch(setLoadingAll(false));
