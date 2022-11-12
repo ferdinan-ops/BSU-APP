@@ -3,7 +3,7 @@ import Moment from "react-moment";
 import { More } from "../atoms";
 import Router from "next/router";
 
-export default function Author({ user, date, contentId, size }) {
+export default function Author({ user, date, contentId, size, isComment }) {
   const linkedHandler = (e, id) => {
     e.stopPropagation();
     Router.push(`/profile/${id}`);
@@ -21,7 +21,7 @@ export default function Author({ user, date, contentId, size }) {
           <Moment fromNow className="text-xs md:text-sm font-medium">{date}</Moment>
         </div>
       </div>
-      <More userId={user._id} contentId={contentId} />
+      <More userId={user._id} contentId={contentId} isComment={isComment} />
     </>
   );
 }

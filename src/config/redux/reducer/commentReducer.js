@@ -1,4 +1,10 @@
-const initialState = { comments: [], formComment: "", isLoading: false };
+const initialState = {
+  comments: [],
+  formComment: "",
+  questionId: "",
+  isLoading: false,
+  isEdit: false
+};
 
 const commentReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -8,6 +14,10 @@ const commentReducer = (state = initialState, action) => {
       return { ...state, formComment: action.payload };
     case "SET_BUTTON_COMMENT":
       return { ...state, isLoading: action.payload };
+    case "SET_EDIT":
+      return { ...state, isEdit: action.payload };
+    case "SET_QUESTIONID":
+      return { ...state, questionId: action.payload };
     default:
       return { ...state };
   }

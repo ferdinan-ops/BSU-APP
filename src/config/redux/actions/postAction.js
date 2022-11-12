@@ -116,8 +116,8 @@ export const deleteQuestion = (id) => async (dispatch) => {
 }
 
 export const getAllQuestions = () => async (dispatch) => {
-  dispatch(setLoadingAll(true));
   try {
+    dispatch(setLoadingAll(true));
     const { data } = await API.getAllPostAPI();
     dispatch(setAllQuestions(data.data));
     dispatch({ type: "SET_FILTERED_QUESTION", payload: data.data });

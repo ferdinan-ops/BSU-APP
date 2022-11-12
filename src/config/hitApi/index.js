@@ -33,3 +33,7 @@ export const getAllCommentAPI = (postId) => API.get(`/comment/${postId}`);
 export const createCommentAPI = (postId, formData) => API.post(`/comment/${postId}`, formData);
 export const updateCommentAPI = (commentId, formData) => API.patch(`/comment/${commentId}`, formData);
 export const deleteCommentAPI = (commentId) => API.delete(`/comment/${commentId}`);
+
+export const getProfileAPI = (userId) => API.get(`/user/${userId}`);
+export const getMyQuestionsAPI = (userId) => API.get(`/user/${userId}/myPost`);
+export const getSavedQuestionsAPI = (userId) => API.get(`/user/${userId}/savedPost`);

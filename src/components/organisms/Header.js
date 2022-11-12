@@ -40,7 +40,7 @@ export default function Header() {
               <Image src={plus} layout="fill" alt="" />
             </a>
           </Link>
-          <Link href="/profile/1">
+          <Link href={`/profile/${currentUser._id}`}>
             <a className="relative h-[50px] w-[50px] cursor-pointer overflow-hidden rounded-full">
               {photo ?
                 <Image src={photo} layout="fill" alt="" objectFit="cover" /> :

@@ -3,13 +3,16 @@ import Router from "next/router";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleted, edit, lapor, more } from "../../../public";
+import { deleteComment, setFormComment, setIsEdit } from "../../config/redux/actions/commentAction";
 import { deleteQuestion } from "../../config/redux/actions/postAction";
 import Icon from "./Icon";
 
 export default function More({ userId, contentId, isComment }) {
+  const [show, setShow] = useState(false);
+
   const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.authReducer);
-  const [show, setShow] = useState(false);
+  const { questionId } = useSelector(state => state.commentReducer);
 
   const showHandler = (e) => {
     e.stopPropagation();
@@ -17,20 +20,20 @@ export default function More({ userId, contentId, isComment }) {
   };
 
   const updateHandler = (e) => {
-    e.stopPropagation();
     if (!isComment) return Router.push(`/post/update/${contentId}`);
-    alert("masih test comment");
+    dispatch(setIsEdit(contentId._id));
+    dispatch(setFormComment(contentId.comment));
   }
 
   const deleteHandler = (e) => {
-    e.stopPropagation();
     const ask = confirm("Apakah Anda yakin ingin menghapus?");
     if (ask) {
-      if (!isComment) {
-        dispatch(deleteQuestion(contentId));
-      } else {
-        alert("masih test koment");
-      }
+      // if (!isComment) {
+      //   dispatch(deleteQuestion(contentId));
+      // } else {
+      //   alert("masih test koment");
+      // }
+      if (isComment) return dispatch(deleteComment(questionId, contentId._id));
     }
   }
 

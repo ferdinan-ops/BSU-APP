@@ -1,14 +1,14 @@
-import Image from "next/image";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import Moment from "react-moment";
+import { createComment, getAllComments, setFormComment, setQuestionId, updateComment } from "../../config/redux/actions/commentAction";
+import { getQuestionById, likePost, savePost } from "../../config/redux/actions/postAction";
 import { bookmark, bookmarked, download, like, liked } from "../../../public";
 import { Author, Button, Info, Layout } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
-import { getQuestionById, likePost, savePost } from "../../config/redux/actions/postAction";
 import { authPage } from "../../middlewares/authPage";
-import { createComment, getAllComments, setFormComment } from "../../config/redux/actions/commentAction";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { Ring } from "@uiball/loaders";
+import Moment from "react-moment";
+import Image from "next/image";
 
 export async function getServerSideProps(context) {
   await authPage(context);
@@ -23,29 +23,25 @@ export default function Detail() {
   const dispatch = useDispatch();
   const { question } = useSelector(state => state.postReducer);
   const { currentUser } = useSelector(state => state.authReducer);
-  const { comments, formComment, isLoading } = useSelector(state => state.commentReducer);
+  const { comments, formComment, isLoading, isEdit } = useSelector(state => state.commentReducer);
 
   const { id } = router.query;
   const { _id: userId } = currentUser;
 
   useEffect(() => { dispatch(getQuestionById(id)) }, [dispatch, id]);
   useEffect(() => { dispatch(getAllComments(id)) }, [dispatch, id]);
+  useEffect(() => { dispatch(setQuestionId(id)) }, [dispatch, id]);
+  useEffect(() => { setIsLiked((question?.likes?.findIndex((id) => id === String(userId))) !== -1) }, [question, isLiked, userId]);
+  useEffect(() => { setIsSaved((question?.saved?.findIndex((id) => id === String(userId))) !== -1) }, [question, isLiked, userId]);
 
-  useEffect(() => {
-    setIsLiked((question?.likes?.findIndex((id) => id === String(userId))) !== -1);
-  }, [question, isLiked, userId]);
-
-  useEffect(() => {
-    setIsSaved((question?.saved?.findIndex((id) => id === String(userId))) !== -1);
-  }, [question, isLiked, userId]);
-
-  const likePostHandler = async () => await dispatch(likePost(id, { userId }));
-  const savePostHandler = async () => await dispatch(savePost(id, { userId }));
+  const likePostHandler = async () => dispatch(likePost(id, { userId }));
+  const savePostHandler = async () => dispatch(savePost(id, { userId }));
 
   const commentSubmitHandler = async (e) => {
     e.preventDefault();
+    if (isEdit) return dispatch(updateComment(id, isEdit, { comment: formComment }));
     const formData = { comment: formComment, userId }
-    await dispatch(createComment(id, formData));
+    dispatch(createComment(id, formData));
   }
 
   return (
@@ -107,9 +103,9 @@ export default function Detail() {
               <h1 className="border-b-2 border-[#DCDCDC] pb-5 md:text-2xl font-bold text-xl">{comments.length} Komentar</h1>
 
               {comments.map((comment) => (
-                <div className="py-5 border-b-2 border-[#DCDCDC]" key={comment.id}>
+                <div className="py-5 border-b-2 border-[#DCDCDC]" key={comment._id}>
                   <div className="flex items-center justify-between">
-                    <Author user={comment.user} date={comment.createdAt} size="md:w-[35px] md:h-[35px] w-6 h-6" />
+                    <Author user={comment.user} date={comment.updatedAt} contentId={comment} isComment size="md:w-[35px] md:h-[35px] w-6 h-6" />
                   </div>
                   <p className="mt-4 leading-relaxed ml-[47px] text-xs md:text-sm">{comment.comment}</p>
                 </div>
@@ -124,7 +120,7 @@ export default function Detail() {
                 />
                 <div className={`shadow-button mt-[30px] ml-auto h-11 md:w-48 w-28 rounded-lg bg-primary font-semibold text-font ${isLoading && "pointer-events-none bg-opacity-40"}`}>
                   <Button type="submit" onClick={commentSubmitHandler}>
-                    {isLoading ? (<Ring size={20} lineWeight={5} speed={2} color="#fff" />) : "Kirim"}
+                    {isLoading ? (<Ring size={20} lineWeight={5} speed={2} color="#fff" />) : isEdit ? "Simpan" : "Kirim"}
                   </Button>
                 </div>
               </form>

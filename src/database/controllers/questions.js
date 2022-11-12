@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import Questions from "../../models/questionSchema";
 import Users from "../../models/userSchema";
-import Notification from "../../models/notificationSchema";
 import { deleteActionNotif, pushNotification } from "./notification";
 
 export async function createQuestion(req, res) {
@@ -100,25 +99,6 @@ export async function getQuestionById(req, res) {
         }
       },
       { $set: { user: { $arrayElemAt: ["$user", 0] } } },
-      {
-        $lookup: {
-          from: "comments",
-          let: { questionId: "$_id" },
-          pipeline: [
-            { $match: { $expr: { $eq: ["$questionId", "$$questionId"] } } },
-            {
-              $lookup: {
-                from: "users",
-                localField: "userId",
-                foreignField: "_id",
-                as: "user",
-                pipeline: [{ $project: { _id: 1, username: 1, photo: 1 } }]
-              }
-            },
-          ],
-          as: "comments"
-        }
-      }
     ]);
     res.status(200).json({ success: true, msg: "Getting detail questions successfully", data: data[0] });
   } catch (error) {
