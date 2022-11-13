@@ -21,11 +21,9 @@ export async function getSavedQuestions(req, res) {
   if (!id) return res.status(405).json({ success: false, error: "User not selected" });
   if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No user with id: ${id}`);
 
-  const userId = mongoose.Types.ObjectId(id);
-
   try {
     const data = await Questions.aggregate([
-      { $match: { $expr: { $in: [userId, saved] } } },
+      { $match: { saved: [id] } },
       { $sort: { createdAt: -1 } },
       {
         $lookup: {

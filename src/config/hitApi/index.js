@@ -37,3 +37,4 @@ export const deleteCommentAPI = (commentId) => API.delete(`/comment/${commentId}
 export const getProfileAPI = (userId) => API.get(`/user/${userId}`);
 export const getMyQuestionsAPI = (userId) => API.get(`/user/${userId}/myPost`);
 export const getSavedQuestionsAPI = (userId) => API.get(`/user/${userId}/savedPost`);
+export const updateProfileAPI = (userId, formData) => API.patch(`/user/${userId}`, formData);

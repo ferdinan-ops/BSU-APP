@@ -20,10 +20,14 @@ export default function Profile() {
   const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.authReducer);
   const { profile, myQuestions, savedQuestions } = useSelector(state => state.profileReducer);
+  const { _id: currentId } = currentUser;
+  const { _id: profileId } = profile;
 
   useEffect(() => { dispatch(getProfile(id)) }, [dispatch, id]);
   useEffect(() => { dispatch(getMyQuestions(id)) }, [dispatch, id]);
-  useEffect(() => { dispatch(getSavedQuestions(id)) }, [dispatch, id]);
+  useEffect(() => {
+    if (currentId === profileId) dispatch(getSavedQuestions(id));
+  }, [dispatch, id, currentId, profileId]);
 
   const logoutHandler = (e) => {
     e.preventDefault();
@@ -42,9 +46,9 @@ export default function Profile() {
                 <img src="/images/profile.png" className='w-[120px] h-[120px] md:w-[200px] md:h-[200px] rounded-full mx-auto shadow-profile' alt="" />
               }
               <h1 className='font-bold text-xl md:text-[32px] text-center mt-8'>{profile.username}</h1>
-              {profile._id === currentUser._id && (
+              {currentId === profileId && (
                 <div className='mt-12 flex max-w-[480px] mx-auto gap-5 text-base md:text-lg font-semibold'>
-                  <Modals id={id} />
+                  <Modals />
                   <div className='h-[50px] border border-transparent bg-[#EB5757] text-white rounded-lg w-full'>
                     <Button onClick={logoutHandler}>Keluar</Button>
                   </div>
@@ -54,17 +58,19 @@ export default function Profile() {
 
             <div className='flex font-semibold text-base md:text-xl transition-all duration-300'>
               <button className={`tabs ${activeTab === "tabs1" ? "text-primary" : "text-slate-300"}`} onClick={() => setActiveTab("tabs1")}>
-                Soal Anda
+                Soal {currentId === profileId ? "Anda" : "yang dibuat"}
               </button>
-              <button className={`tabs ${activeTab === "tabs2" ? "text-primary" : "text-slate-300"}`} onClick={() => setActiveTab("tabs2")}>
-                Soal yang Disimpan
-              </button>
+              {currentId === profileId && (
+                <button className={`tabs ${activeTab === "tabs2" ? "text-primary" : "text-slate-300"}`} onClick={() => setActiveTab("tabs2")}>
+                  Soal yang Disimpan
+                </button>
+              )}
             </div>
 
             <div className='w-full mt-6 md:mt-10'>
               {activeTab === "tabs1" ?
                 myQuestions.map((question) => (<CardPost post={question} key={question._id} />)) :
-                savedQuestions.map((question) => (<CardPost post={question} key={question._id} />))
+                currentId === profileId && savedQuestions.map((question) => (<CardPost post={question} key={question._id} />))
               }
             </div>
           </section>
