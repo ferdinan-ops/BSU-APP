@@ -7,7 +7,8 @@ import { RaceBy } from '@uiball/loaders'
 import { useSelector } from "react-redux";
 
 export default function Layout({ title, children }) {
-  const menus = allLinks(1);
+  const { currentUser } = useSelector(state => state.authReducer);
+  const menus = allLinks(currentUser._id);
   const { isLoadingAll } = useSelector(state => state.globalReducer);
 
   return (

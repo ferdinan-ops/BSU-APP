@@ -1,4 +1,4 @@
-import { setFormProfile, setProfileFile, updateProfile } from '../../config/redux/actions/profileAction';
+import { getProfile, setFormProfile, updateProfile } from '../../config/redux/actions/profileAction';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,8 +14,8 @@ export default function Modals() {
   const ref = useRef(null);
   const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.authReducer);
-  const { profile, formProfile, isLoading, imgFile } = useSelector(state => state.profileReducer);
-  const { username, photo } = formProfile;
+  const { profile, formProfile, isLoading } = useSelector(state => state.profileReducer);
+  const { username, photo, file } = formProfile;
 
   useEffect(() => {
     if (profile._id === currentUser._id) {
@@ -25,24 +25,22 @@ export default function Modals() {
   }, [dispatch, profile, currentUser]);
 
   const imagePreviewHandler = (e) => {
-    const file = e.target.files[0];
-    dispatch(setProfileFile(file));
-    dispatch(setFormProfile("photo", URL.createObjectURL(file)));
+    const fileImage = e.target.files[0];
+    dispatch(setFormProfile("file", fileImage));
+    dispatch(setFormProfile("photo", URL.createObjectURL(fileImage)));
   };
 
   const cancelHandler = () => {
     dispatch(setFormProfile("username", currentUser.username));
     dispatch(setFormProfile("photo", currentUser.photo));
+    dispatch(setFormProfile("file", ""));
     setIsOpen(false);
   }
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(updateProfile(currentUser._id, formProfile, imgFile));
+    dispatch(updateProfile(currentUser._id, username, file, photo));
   }
-
-  console.log({ imgFile, photo });
-  console.log(imgFile.name);
 
   return (
     <>

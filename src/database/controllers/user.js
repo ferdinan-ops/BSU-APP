@@ -115,7 +115,7 @@ export async function updateUserProfile(req, res) {
   if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No user with id: ${id}`);
 
   try {
-    const data = await Questions.findByIdAndUpdate({ username, photo });
+    const data = await Users.findByIdAndUpdate(id, { username, photo });
     res.status(200).json({ success: true, msg: "User profile updated successfully", data });
   } catch (error) {
     res.status(500).json({ success: false, error });

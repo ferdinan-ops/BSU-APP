@@ -16,9 +16,9 @@ export default function Author({ user, date, contentId, size, isComment }) {
           <img src={user.photo} className={`rounded-full ${size}`} alt="" /> :
           <img src="/images/profile.png" className={`rounded-full ${size}`} alt="" />
         }
-        <div className="flex gap-1 text-gray-2 items-center">
+        <div className="flex gap-1 text-gray-2 items-center max-w-[211px] md:max-w-none truncate">
           <span className="text-font text-[15px] md:text-base font-semibold">{user.username}</span>&bull;
-          <Moment fromNow className="text-xs md:text-sm font-medium">{date}</Moment>
+          <Moment fromNow className="text-xs md:text-sm font-medium truncate">{date}</Moment>
         </div>
       </div>
       <More userId={user._id} contentId={contentId} isComment={isComment} />

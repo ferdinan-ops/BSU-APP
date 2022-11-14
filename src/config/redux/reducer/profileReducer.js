@@ -5,9 +5,9 @@ const initialState = {
   isLoading: false,
   formProfile: {
     username: "",
-    photo: ""
+    photo: "",
+    file: ""
   },
-  imgFile: ""
 };
 
 const profileReducer = (state = initialState, action) => {
@@ -22,8 +22,6 @@ const profileReducer = (state = initialState, action) => {
       return { ...state, formProfile: { ...state.formProfile, [action.formType]: action.formValue } };
     case "SET_PROFILE_BUTTON":
       return { ...state, isLoading: action.payload };
-    case "SET_PROFILE_FILE":
-      return { ...state, imgFile: action.payload };
     default:
       return { ...state };
   }

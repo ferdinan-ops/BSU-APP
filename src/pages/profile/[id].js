@@ -25,9 +25,7 @@ export default function Profile() {
 
   useEffect(() => { dispatch(getProfile(id)) }, [dispatch, id]);
   useEffect(() => { dispatch(getMyQuestions(id)) }, [dispatch, id]);
-  useEffect(() => {
-    if (currentId === profileId) dispatch(getSavedQuestions(id));
-  }, [dispatch, id, currentId, profileId]);
+  useEffect(() => { if (currentId === profileId) dispatch(getSavedQuestions(id)) }, [dispatch, id, currentId, profileId]);
 
   const logoutHandler = (e) => {
     e.preventDefault();
@@ -42,7 +40,7 @@ export default function Profile() {
           <section className='xl:w-8/12 md:w-10/12 w-full mx-auto mt-[60px] text-font'>
             <div className='mb-[55px] md:mb-[72px]'>
               {profile.photo ?
-                <img src={profile.profilePicture} className='w-[120px] h-[120px] md:w-[200px] md:h-[200px] rounded-full mx-auto shadow-profile' alt="" /> :
+                <img src={profile.photo} className='w-[120px] h-[120px] md:w-[200px] md:h-[200px] rounded-full mx-auto shadow-profile' alt="" /> :
                 <img src="/images/profile.png" className='w-[120px] h-[120px] md:w-[200px] md:h-[200px] rounded-full mx-auto shadow-profile' alt="" />
               }
               <h1 className='font-bold text-xl md:text-[32px] text-center mt-8'>{profile.username}</h1>
