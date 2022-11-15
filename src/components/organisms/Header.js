@@ -1,21 +1,26 @@
+import { getCurrentUser } from "../../config/redux/actions/authAction";
+import { bell, dummyProfile, plus } from "../../../public";
+import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { SearchBar } from "../molecules";
+import Router from "next/router";
+import { Brand } from "../atoms";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { bell, dummyProfile, plus } from "../../../public";
-import { getCurrentUser } from "../../config/redux/actions/authAction";
-import { Brand } from "../atoms";
-import { SearchBar } from "../molecules";
 
 export default function Header() {
+  const [keyword, setKeyword] = useState("");
   const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.authReducer);
 
-  useEffect(() => {
-    dispatch(getCurrentUser());
-  }, [dispatch]);
+  useEffect(() => { dispatch(getCurrentUser()) }, [dispatch]);
+  const { _id, photo } = currentUser;
 
-  const { photo } = currentUser;
+  const searchHandler = (e) => {
+    e.preventDefault();
+    if (!keyword) return Router.push("/");
+    Router.push(`/search/${keyword}`);
+  }
 
   return (
     <header className="fixed top-0 left-0 right-0 z-20 bg-white px-6 md:px-6 xl:px-0">
@@ -26,7 +31,7 @@ export default function Header() {
           </a>
         </Link>
         <div className="relative hidden w-[53.9%] md:flex">
-          <SearchBar />
+          <SearchBar submit={searchHandler} value={keyword} onChange={(e) => setKeyword(e.target.value)} />
         </div>
 
         <div className="hidden w-[170px] items-center justify-between md:flex">
@@ -40,7 +45,7 @@ export default function Header() {
               <Image src={plus} layout="fill" alt="" />
             </a>
           </Link>
-          <Link href={`/profile/${currentUser._id}`}>
+          <Link href={`/profile/${_id}`}>
             <a className="relative h-[50px] w-[50px] cursor-pointer overflow-hidden rounded-full">
               {photo ?
                 <Image src={photo} layout="fill" alt="" objectFit="cover" /> :

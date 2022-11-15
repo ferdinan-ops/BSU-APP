@@ -5,7 +5,12 @@ export async function searchQuestionByKeyword(req, res) {
 
   try {
     const data = await Questions.aggregate([
-      { $match: { $or: [{ mataKuliah: { $regex: keyword } }] } },
+      {
+        $search: {
+          index: 'searchQuestions',
+          compound: { must: [{ autocomplete: { query: keyword, path: 'mataKuliah' } }] }
+        }
+      },
       { $sort: { createdAt: -1 } },
       {
         $lookup: {
@@ -37,7 +42,6 @@ export async function searchQuestionByKeyword(req, res) {
         }
       }
     ]);
-
     res.status(200).json({ success: true, msg: "Get question by keyword sucessfully", data });
   } catch (error) {
     res.status(500).json({ success: false, error });

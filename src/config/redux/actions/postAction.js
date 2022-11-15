@@ -10,6 +10,7 @@ export const setButtonPostLoading = (payload) => ({ type: "SET_BTN_LOADING_POST"
 export const setAllQuestions = (payload) => ({ type: "SET_ALL_QUESTION", payload });
 export const setImgPreview = (payload) => ({ type: "SET_IMG_PREVIEW", payload });
 export const setImgFile = (payload) => ({ type: "SET_IMG_FILE", payload });
+export const setFilterMenu = (payload) => ({ type: "SET_FILTERED_QUESTION", payload });
 
 export const imgPreviewHandler = (e, imgPreview, imgFile) => async (dispatch) => {
   for (let i = 0; i < e.target.files.length; i++) {
@@ -120,7 +121,7 @@ export const getAllQuestions = () => async (dispatch) => {
     dispatch(setLoadingAll(true));
     const { data } = await API.getAllPostAPI();
     dispatch(setAllQuestions(data.data));
-    dispatch({ type: "SET_FILTERED_QUESTION", payload: data.data });
+    dispatch(setFilterMenu(data.data));
     dispatch(setLoadingAll(false));
   } catch (error) {
     console.log(error);
@@ -153,6 +154,18 @@ export const savePost = (postId, userId) => async (dispatch) => {
   try {
     const { data } = await API.savePostAPI(postId, userId);
     dispatch({ type: "SET_DETAIL_QUESTION", payload: data.data });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const searchQuestions = (keyword) => async (dispatch) => {
+  try {
+    dispatch(setLoadingAll(true));
+    const { data } = await API.searchQuestionsAPI(keyword);
+    dispatch(setAllQuestions(data.data));
+    dispatch(setFilterMenu(data.data));
+    dispatch(setLoadingAll(false));
   } catch (error) {
     console.log(error);
   }

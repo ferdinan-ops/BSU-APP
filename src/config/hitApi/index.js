@@ -25,6 +25,7 @@ export const updatePostAPI = (postId, formData) => API.put(`/post/${postId}`, fo
 export const deletePostAPI = (postId) => API.delete(`/post/${postId}`);
 export const likePostAPI = (postId, userId) => API.patch(`/post/${postId}/likes`, userId);
 export const savePostAPI = (postId, userId) => API.patch(`/post/${postId}/save`, userId);
+export const searchQuestionsAPI = (keyword) => API.get(`/search/${keyword}`);
 
 export const getNotificationAPI = (userId) => API.get(`/notification/${userId}`);
 export const deleteNotificationAPI = (userId) => API.delete(`/notification/${userId}`);

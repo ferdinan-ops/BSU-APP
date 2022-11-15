@@ -20,17 +20,22 @@ export default function Profile() {
   const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.authReducer);
   const { profile, myQuestions, savedQuestions } = useSelector(state => state.profileReducer);
+
   const { _id: currentId } = currentUser;
   const { _id: profileId } = profile;
 
+  useEffect(() => setActiveTab("tabs1"), [id]);
   useEffect(() => { dispatch(getProfile(id)) }, [dispatch, id]);
   useEffect(() => { dispatch(getMyQuestions(id)) }, [dispatch, id]);
   useEffect(() => { if (currentId === profileId) dispatch(getSavedQuestions(id)) }, [dispatch, id, currentId, profileId]);
 
   const logoutHandler = (e) => {
     e.preventDefault();
-    Cookies.remove("bsuToken");
-    router.push("/auth/login");
+    const ask = confirm("Anda yakin ingin keluar dari aplikasi?");
+    if (ask) {
+      Cookies.remove("bsuToken");
+      router.push("/auth/login");
+    }
   }
 
   return (

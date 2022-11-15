@@ -3,15 +3,18 @@ import { Brand } from '../atoms';
 
 function Footer() {
   return (
-    <footer className='w-full h-[293px] flex flex-col gap-8 justify-center items-center bg-primary mt-[100px] md:mt-[170px]'>
-      <div className='font-bold text-5xl flex flex-col items-center gap-5'>
-        <Brand style="w-20 h-20" title="BSU" isFooter />
+    <footer className='w-full text-font bg-primary py-4 mt-[100px] md:mt-[170px]'>
+      <div className='flex justify-between container mx-auto px-6 md:px-6 items-center'>
+        <div className='font-bold flex gap-3 items-center text-lg'>
+          <Brand style="w-7 h-7" title="BSU" isFooter />
+        </div>
+        <span className='font-medium text-sm'>
+          Created by {" "}
+          <a href='https://github.com/ferdinan-ops' className='font-bold' target="_blank" rel="noreferrer">
+            Ferdinan Imanuel Tumanggor
+          </a>
+        </span>
       </div>
-      <span className='-mb-5 text-xs md:text-base'>
-        Copyright © 2022 Made with {" "}
-        <span className='animate-pulse'>❤️</span> {" "}
-        <span className='font-semibold cursor-pointer'>Ferdinan Imanuel Tumanggor</span>
-      </span>
     </footer>
   )
 }
