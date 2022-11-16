@@ -37,6 +37,8 @@ export default function Update() {
     await dispatch(updateQuestion(form, imgFile, router));
   };
 
+  console.log(imgFile);
+
 
   return (
     <Layout title={`BSU - Ubah Soal : ${mataKuliah}`}>

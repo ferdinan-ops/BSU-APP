@@ -49,6 +49,6 @@ export async function currentUser(req, res) {
     const data = await Users.findById(auth.id, { _id: 1, username: 1, photo: 1 });
     return res.status(200).json({ success: true, msg: "Get current user successfully", data });
   } catch (err) {
-    return res.status(400).json({ success: false, error: "Agak laen" });
+    return res.status(400).json({ success: false, err });;
   }
 }
