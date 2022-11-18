@@ -1,9 +1,9 @@
-import { createQuestion, getQuestionByIdUpdate, imgPreviewHandler, setForm, updateQuestion } from "../../../config/redux/actions/postAction";
+import { getQuestionByIdUpdate, setForm, setIsLoading, updateQuestion, uploadUpdated } from "../../../config/redux/actions/postAction";
 import { Button, Dropdown, Gap, Input, Layout, Upload } from "../../../components";
 import { allFakultas, allSemester, allCategories } from "../../../utils/listData";
 import { useDispatch, useSelector } from "react-redux";
 import { authPage } from "../../../middlewares/authPage";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Ring } from "@uiball/loaders";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
@@ -14,36 +14,47 @@ export async function getServerSideProps(context) {
 }
 
 export default function Update() {
+  const [files, setFiles] = useState([]);
+
   const router = useRouter();
-  const dispatch = useDispatch();
-  const { form, imgPreview, imgFile, isLoading } = useSelector(state => state.postReducer);
-  const { mataKuliah, fakultas, programStudi, tahunAjaran, semester, kategori, dosen, images } = form;
   const { id } = router.query;
 
-  useEffect(() => {
-    dispatch(getQuestionByIdUpdate(id));
-  }, [dispatch, id]);
+  const dispatch = useDispatch();
+  const { form, isLoading } = useSelector((state) => state.postReducer);
+  const { mataKuliah, fakultas, programStudi, tahunAjaran, semester, kategori, dosen, images, userId, imgUpdated } = form;
 
-  const textFieldHandler = (e) => {
-    const { name, value } = e.target;
-    dispatch(setForm(name, value));
-  }
+  useEffect(() => { dispatch(getQuestionByIdUpdate(id)) }, [dispatch, id]);
+  useEffect(() => { if (imgUpdated) setFiles(imgUpdated) }, [imgUpdated]);
 
+  const textFieldHandler = (e) => dispatch(setForm(e.target.name, e.target.value))
   const dropdownValue = (name, value) => dispatch(setForm(name, value));
+
+  const imageHandler = (e) => {
+    const files = Array.from(e.target.files);
+    files.forEach((file) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setFiles((oldArr) => [...oldArr, reader.result]);
+      }
+    });
+  }
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (imgFile.length <= 0 && imgPreview.length <= 0) return toast.error("Mohon upload gambar soal Anda");
-    await dispatch(updateQuestion(form, imgFile, router));
+    if (images.length < 0) return toast.error("Mohon upload gambar soal Anda");
+    dispatch(setIsLoading(true));
+    await uploadUpdated(images, files, userId, mataKuliah, imgUpdated);
+    console.log({ images });
+    dispatch(setIsLoading(false));
+    await dispatch(updateQuestion(id, form, router));
+    console.log("gagal");
   };
 
-  console.log(imgFile);
-
-
   return (
-    <Layout title={`BSU - Ubah Soal : ${mataKuliah}`}>
+    <Layout title="BSU - Ubah Soal">
       <section className="text-font my-[30px] md:my-[60px] w-full md:w-10/12 xl:w-8/12 mx-auto">
-        <h1 className="text-center text-xl md:text-[32px] font-bold uppercase">Ubah SOAL: {mataKuliah}</h1>
+        <h1 className="text-center text-xl md:text-[32px] font-bold uppercase">Ubah Soal</h1>
         <form className="mt-[30px] md:mt-[60px]" onSubmit={submitHandler}>
           <Input value={mataKuliah} title="Mata Kuliah" placeholder="Matematika Diskrit" name="mataKuliah" onChange={textFieldHandler} />
           <Gap style="h-[30px] md:h-[40px]" />
@@ -65,13 +76,13 @@ export default function Update() {
             </div>
           </div>
           <Gap style="h-[30px] md:h-[40px]" />
-          <Upload onChange={(e) => dispatch(imgPreviewHandler(e, imgPreview, imgFile))} imgFile={imgFile} imgPreview={imgPreview} multiple />
+          <Upload onChange={imageHandler} files={files} setFiles={setFiles} multiple />
           <Gap style="h-[30px] md:h-[40px]" />
           <div className={`shadow-button ml-auto h-11 w-28 md:w-48 rounded-lg bg-primary font-semibold text-font ${isLoading && "pointer-events-none bg-opacity-40"}`}>
             <Button type="submit">{isLoading ? (<Ring size={20} lineWeight={5} speed={2} color="#fff" />) : "Kirim"}</Button>
           </div>
         </form>
       </section>
-    </Layout>
+    </Layout >
   );
 }

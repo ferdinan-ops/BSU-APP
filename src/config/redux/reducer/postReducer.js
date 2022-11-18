@@ -13,10 +13,9 @@ const initialState = {
     kategori: allCategories[2],
     dosen: "",
     images: [],
+    imgUpdated: [],
     userId: "",
   },
-  imgFile: [],
-  imgPreview: [],
   isLoading: false,
 };
 
@@ -26,10 +25,6 @@ const postReducer = (state = initialState, action) => {
       return { ...state, form: { ...state.form, [action.formType]: action.formValue } };
     case "SET_BTN_LOADING_POST":
       return { ...state, isLoading: action.payload };
-    case "SET_IMG_PREVIEW":
-      return { ...state, imgPreview: action.payload };
-    case "SET_IMG_FILE":
-      return { ...state, imgFile: action.payload };
     case "SET_ALL_QUESTION":
       return { ...state, questions: action.payload };
     case "SET_FILTERED_QUESTION":

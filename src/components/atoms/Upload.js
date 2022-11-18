@@ -1,25 +1,27 @@
 import Image from "next/image";
 import React, { useRef } from "react";
-import { useDispatch } from "react-redux";
 import { cross, image } from "../../../public";
-import { deleteImgPv } from "../../config/redux/actions/postAction";
 import IconWrapper from "./Icon";
 
-export default function Upload({ imgFile, imgPreview, ...rest }) {
+export default function Upload({ files, setFiles, ...rest }) {
   const ref = useRef(null);
-  const dispatch = useDispatch();
+
+  const deleteHandler = (id) => {
+    const newImages = files.filter((item, index) => index !== id);
+    setFiles(newImages);
+  }
 
   return (
     <div>
       <label className="text-sm font-semibold text-font">Upload Gambar</label>
       <div className="mt-2 rounded-lg border-2 border-dashed border-auth p-4">
-        {imgPreview.length > 0 ?
+        {files.length > 0 ?
           (
             <div className="flex gap-5">
-              {imgPreview.map((image, id) => (
+              {files.map((image, id) => (
                 <div key={id} className="relative">
                   <img src={image} alt="" className="w-full rounded-lg shadow-lg" />
-                  <IconWrapper img={cross} style="bg-[#EB5757] p-2 cursor-pointer absolute -top-3 -right-3" onClick={() => dispatch(deleteImgPv(id, imgPreview, imgFile))} />
+                  <IconWrapper img={cross} style="bg-[#EB5757] p-2 cursor-pointer absolute -top-3 -right-3" onClick={deleteHandler.bind(this, id)} />
                 </div>
               ))}
               <div className="w-full flex items-center justify-center rounded-lg shadow cursor-pointer bg-font" onClick={() => ref.current.click()}>

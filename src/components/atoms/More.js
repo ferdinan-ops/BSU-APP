@@ -19,21 +19,17 @@ export default function More({ userId, contentId, isComment }) {
     setShow(!show);
   };
 
-  const updateHandler = (e) => {
+  const updateHandler = () => {
     if (!isComment) return Router.push(`/post/update/${contentId}`);
     dispatch(setIsEdit(contentId._id));
     dispatch(setFormComment(contentId.comment));
   }
 
-  const deleteHandler = (e) => {
+  const deleteHandler = () => {
     const ask = confirm("Apakah Anda yakin ingin menghapus?");
     if (ask) {
-      // if (!isComment) {
-      //   dispatch(deleteQuestion(contentId));
-      // } else {
-      //   alert("masih test koment");
-      // }
-      if (isComment) return dispatch(deleteComment(questionId, contentId._id));
+      if (!isComment) return dispatch(deleteQuestion(contentId));
+      dispatch(deleteComment(questionId, contentId._id));
     }
   }
 
@@ -54,7 +50,7 @@ export default function More({ userId, contentId, isComment }) {
                 </div>
               </>
             ) : (
-              <div className="flex w-full items-center py-2 pl-2.5 hover:bg-gray/10">
+              <div className="flex w-full items-center py-2 pl-2.5 hover:bg-gray/10" onClick={() => Router.push("/report")}>
                 <Image src={lapor} alt="" width={15} height={15} />
                 <span className="pl-2">Lapor</span>
               </div>

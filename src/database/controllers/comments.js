@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import Comments from "../../models/commentSchema";
+import Questions from "../../models/questionSchema";
+import { deleteActionNotif, pushNotification } from "./notification";
 
 export async function createComment(req, res) {
   const { id: questionId } = req.query;
@@ -10,6 +12,9 @@ export async function createComment(req, res) {
 
   try {
     const data = await Comments.create({ questionId, userId, comment });
+    const post = await Questions.findById(questionId);
+    const notifMsg = `Mengomentari Soal ${post.mataKuliah} Anda`;
+    await pushNotification(userId, questionId, notifMsg, questionId);
     res.status(200).json({ success: true, msg: "Comment created successfully", data });
   } catch (error) {
     res.status(500).json({ success: false, error });
@@ -35,6 +40,12 @@ export async function deleteComment(req, res) {
   if (!id) return res.status(405).json({ success: false, error: "Comment not selected" });
 
   try {
+    const comment = await Comments.findById(id);
+    const post = await Questions.findById(comment.questionId);
+
+    const notifMsg = `Mengomentari Soal ${post.mataKuliah} Anda`;
+    await deleteActionNotif(comment.userId, notifMsg);
+
     await Comments.findByIdAndDelete(id);
     res.status(200).json({ success: true, msg: "Comment deleted successfully" });
   } catch (error) {

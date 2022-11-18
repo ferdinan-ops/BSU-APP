@@ -24,6 +24,7 @@ export default function Notification() {
 
   const deleteHandler = async (id, e) => {
     e.preventDefault();
+    e.stopPropagation();
     await dispatch(deleteNotification(id, userId));
   }
 

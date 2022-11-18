@@ -14,7 +14,6 @@ export const getNotification = (userId) => async (dispatch) => {
 export const deleteNotification = (notifId, userId) => async (dispatch) => {
   try {
     const { data } = await API.deleteNotificationAPI(notifId);
-    console.log(data);
     dispatch(getNotification(userId));
   } catch (error) {
     console.log(error);

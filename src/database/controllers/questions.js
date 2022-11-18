@@ -115,14 +115,12 @@ export async function likeQuestion(req, res) {
 
   try {
     const post = await Questions.findById(id);
-    const user = await Users.findById(userId);
     const index = post.likes.findIndex((id) => id === String(userId));
-    const userLike = { id: user._id, username: user.username, photo: user.photo, isAdmin: user.isAdmin };
     const notifMsg = `Menyukai Soal ${post.mataKuliah} Anda`;
 
     if (index === -1) {
       post.likes.push(userId);
-      await pushNotification(userLike, post.userId, notifMsg, id);
+      await pushNotification(userId, post.userId, notifMsg, id);
     } else {
       post.likes = post.likes.filter((id) => id !== String(userId));
       await deleteActionNotif(userId, notifMsg);

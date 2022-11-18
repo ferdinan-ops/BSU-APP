@@ -51,7 +51,7 @@ export default function SearchBar({ isMobile, style }) {
       </form>
 
       {autoComplete.length !== 0 && (
-        <ul className='absolute top-full mt-1 bg-[#EFEFEF] rounded-lg w-full shadow-lg font-semibold text-font p-2'>
+        <ul className='absolute top-full mt-1 bg-white rounded-lg w-full shadow-lg font-semibold text-font p-2'>
           {autoComplete.slice(0, 5).map((value, key) => (
             <li
               className='py-4 px-6 hover:bg-primary hover:text-white rounded-sm cursor-pointer'

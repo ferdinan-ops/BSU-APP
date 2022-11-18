@@ -8,8 +8,8 @@ function Footer() {
         <div className='font-bold flex gap-3 items-center text-lg'>
           <Brand style="w-7 h-7" title="BSU" isFooter />
         </div>
-        <span className='font-medium text-sm'>
-          Created by {" "}
+        <span className='font-medium md:text-sm text-xs'>
+          <span className='md:inline hidden'>Created{" "}</span> by {" "}
           <a href='https://github.com/ferdinan-ops' className='font-bold' target="_blank" rel="noreferrer">
             Ferdinan Imanuel Tumanggor
           </a>

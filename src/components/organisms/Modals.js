@@ -59,7 +59,7 @@ export default function Modals() {
               <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95">
                 <Dialog.Panel className="w-[569px] transform overflow-hidden rounded-lg bg-white shadow-xl transition-all">
                   <div className='flex items-center px-[15px] py-4 border-b border-auth'>
-                    <IconWrapper img={cross} style="bg-[#EB5757]/30 p-2 cursor-pointer" onClick={cancelHandler} />
+                    <IconWrapper img={cross} style={`bg-[#EB5757]/30 p-2 cursor-pointer ${isLoading && "pointer-events-none bg-opacity-40"}`} onClick={cancelHandler} />
                     <p className='font-semibold text-xl ml-6'>Ubah Profil</p>
                     <div
                       className={`ml-auto w-[100px] bg-primary text-font text-[15px] font-semibold h-[35px] rounded-[30px] hover:bg-[#EEAF00] 

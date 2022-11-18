@@ -11,11 +11,20 @@ export async function pushNotification(userAction, userPost, message, linkId) {
 }
 
 export async function getNotification(req, res) {
-  const { id: userPost } = req.query;
-  if (!mongoose.Types.ObjectId.isValid(userPost)) return res.status(404).send(`No user with id: ${userPost}`);
+  const { id } = req.query;
+  if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No user with id: ${id}`);
 
   try {
-    const data = await Notification.find({ userPost });
+    const data = await Notification.aggregate([
+      { $match: { userAction: mongoose.Types.ObjectId(id) } },
+      {
+        $lookup: {
+          from: "users", localField: "userAction", foreignField: "_id", as: "userAction",
+          pipeline: [{ $project: { _id: 1, username: 1, photo: 1 } }]
+        }
+      },
+      { $set: { userAction: { $arrayElemAt: ["$userAction", 0] } } },
+    ]);
     res.status(200).json({ success: true, msg: "Get notification successfully", data });
   } catch (error) {
     res.status(500).json({ success: false, error: "Sorry something wrong happened" });
@@ -36,7 +45,7 @@ export async function deleteNotification(req, res) {
 
 export async function deleteActionNotif(userId, message) {
   try {
-    const data = await Notification.deleteOne({ "userAction.id": mongoose.Types.ObjectId(userId), message });
+    const data = await Notification.deleteOne({ "userAction": mongoose.Types.ObjectId(userId), message });
     return data;
   } catch (error) {
     return error;

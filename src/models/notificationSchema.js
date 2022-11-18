@@ -2,13 +2,8 @@ import mongoose, { Schema, models, model } from "mongoose";
 
 const notificationSchema = Schema({
   userAction: {
-    type: Object,
-    default: {
-      id: "",
-      username: "Admin",
-      photo: "https://firebasestorage.googleapis.com/v0/b/bsu-app-26671.appspot.com/o/admin%2Flogo.svg?alt=media&token=34fa2c9a-e7bb-428f-9759-fa9e03556f2f",
-      isAdmin: true
-    }
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user"
   },
   userPost: {
     type: mongoose.Schema.Types.ObjectId,

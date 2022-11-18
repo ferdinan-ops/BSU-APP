@@ -37,6 +37,7 @@ export const updateComment = (questionId, commentId, formData) => async (dispatc
     dispatch(getAllComments(questionId));
     dispatch(setIsLoading(false));
     dispatch(setFormComment(""));
+    dispatch(setIsEdit(false));
     toast.success(data.msg);
   } catch (error) {
     toast.error(error.response.data?.error);

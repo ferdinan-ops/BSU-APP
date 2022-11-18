@@ -71,10 +71,20 @@ export default function Profile() {
             </div>
 
             <div className='w-full mt-6 md:mt-10'>
-              {activeTab === "tabs1" ?
-                myQuestions.map((question) => (<CardPost post={question} key={question._id} />)) :
-                currentId === profileId && savedQuestions.map((question) => (<CardPost post={question} key={question._id} />))
-              }
+              {activeTab === "tabs1" ? (
+                myQuestions.length > 0 ? (
+                  myQuestions.map((question) => (<CardPost post={question} key={question._id} />))
+                ) : (
+                  <p className="text-slate-400 font-semibold text-center text-sm md:text-base">Anda belum memiliki soal...</p>
+                )
+              ) : (
+                currentId === profileId &&
+                  savedQuestions.length > 0 ? (
+                  savedQuestions.map((question) => (<CardPost post={question} key={question._id} />))
+                ) : (
+                  <p className="text-slate-400 font-semibold text-center text-sm md:text-base">Anda belum memiliki soal yang disimpan...</p>
+                )
+              )}
             </div>
           </section>
         </Layout>

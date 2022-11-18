@@ -1,9 +1,9 @@
-import { createQuestion, imgPreviewHandler, setForm } from "../../config/redux/actions/postAction";
+import { createQuestion, resetAll, setIsLoading, setForm, uploadHandler } from "../../config/redux/actions/postAction";
 import { Button, Dropdown, Gap, Input, Layout, Upload } from "../../components";
 import { allFakultas, allSemester, allCategories } from "../../utils/listData";
 import { useDispatch, useSelector } from "react-redux";
 import { authPage } from "../../middlewares/authPage";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Ring } from "@uiball/loaders";
 import toast from "react-hot-toast";
 import Router from "next/router";
@@ -14,26 +14,36 @@ export async function getServerSideProps(context) {
 }
 
 export default function Create() {
+  const [files, setFiles] = useState([]);
+
   const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.authReducer);
-  const { form, imgPreview, imgFile, isLoading } = useSelector(state => state.postReducer);
-  const { mataKuliah, fakultas, programStudi, tahunAjaran, semester, kategori, dosen, images } = form;
+  const { form, isLoading } = useSelector(state => state.postReducer);
+  const { mataKuliah, fakultas, programStudi, tahunAjaran, semester, kategori, dosen, images, userId } = form;
 
-  useEffect(() => {
-    dispatch(setForm("userId", currentUser._id));
-  }, [dispatch, currentUser]);
+  useEffect(() => { dispatch(resetAll()) }, []);
+  useEffect(() => { dispatch(setForm("userId", currentUser._id)) }, [dispatch, currentUser]);
 
-  const textFieldHandler = (e) => {
-    const { name, value } = e.target;
-    dispatch(setForm(name, value));
-  }
-
+  const textFieldHandler = (e) => dispatch(setForm(e.target.name, e.target.value));
   const dropdownValue = (name, value) => dispatch(setForm(name, value));
+
+  const imageHandler = (e) => {
+    const files = Array.from(e.target.files);
+    files.forEach((file) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setFiles((oldArr) => [...oldArr, reader.result]);
+      }
+    });
+  }
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (imgFile.length <= 0 && imgPreview.length <= 0) return toast.error("Mohon upload gambar soal Anda");
-    await dispatch(createQuestion(form, imgFile, Router));
+    if (images.length < 0) return toast.error("Mohon upload gambar soal Anda");
+    dispatch(setIsLoading(true));
+    await uploadHandler(images, files, userId, mataKuliah);
+    await dispatch(createQuestion(form, Router));
   };
 
   return (
@@ -61,7 +71,7 @@ export default function Create() {
             </div>
           </div>
           <Gap style="h-[30px] md:h-[40px]" />
-          <Upload onChange={(e) => dispatch(imgPreviewHandler(e, imgPreview, imgFile))} imgFile={imgFile} imgPreview={imgPreview} multiple />
+          <Upload onChange={imageHandler} files={files} setFiles={setFiles} multiple />
           <Gap style="h-[30px] md:h-[40px]" />
           <div className={`shadow-button ml-auto h-11 w-28 md:w-48 rounded-lg bg-primary font-semibold text-font ${isLoading && "pointer-events-none bg-opacity-40"}`}>
             <Button type="submit">{isLoading ? (<Ring size={20} lineWeight={5} speed={2} color="#fff" />) : "Kirim"}</Button>
