@@ -5,6 +5,8 @@ import { authPage } from "../../middlewares/authPage";
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Cookies from "js-cookie";
+import Image from "next/image";
+import { dummyProfile } from "../../../public";
 
 export async function getServerSideProps(context) {
   await authPage(context);
@@ -44,10 +46,12 @@ export default function Profile() {
         <Layout title={`Profile - ${profile.username}`}>
           <section className='xl:w-8/12 md:w-10/12 w-full mx-auto mt-[60px] text-font'>
             <div className='mb-[55px] md:mb-[72px]'>
-              {profile.photo ?
-                <img src={profile.photo} className='w-[120px] h-[120px] md:w-[200px] md:h-[200px] rounded-full mx-auto shadow-profile' alt="" /> :
-                <img src="/images/profile.png" className='w-[120px] h-[120px] md:w-[200px] md:h-[200px] rounded-full mx-auto shadow-profile' alt="" />
-              }
+              <div className="relative w-[120px] h-[120px] md:w-[200px] md:h-[200px] rounded-full mx-auto shadow-profile overflow-hidden">
+                {profile.photo ?
+                  <Image src={profile.photo} layout="fill" objectFit="cover" alt="" /> :
+                  <Image src={dummyProfile} layout="fill" objectFit="cover" alt="" />
+                }
+              </div>
               <h1 className='font-bold text-xl md:text-[32px] text-center mt-8'>{profile.username}</h1>
               {currentId === profileId && (
                 <div className='mt-12 flex max-w-[480px] mx-auto gap-5 text-base md:text-lg font-semibold'>

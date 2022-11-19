@@ -50,7 +50,7 @@ export default function More({ userId, contentId, isComment }) {
                 </div>
               </>
             ) : (
-              <div className="flex w-full items-center py-2 pl-2.5 hover:bg-gray/10" onClick={() => Router.push("/report")}>
+              <div className="flex w-full items-center py-2 pl-2.5 hover:bg-gray/10" onClick={() => Router.push(`/report/${userId}`)}>
                 <Image src={lapor} alt="" width={15} height={15} />
                 <span className="pl-2">Lapor</span>
               </div>
