@@ -5,23 +5,28 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { Ring } from '@uiball/loaders';
 import toast from 'react-hot-toast';
+import { useEffect } from 'react';
 
 export default function Report() {
-  const [message, setMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
   const router = useRouter();
-  const { userGet } = router.query;
+  const { questionId } = router.query;
 
   const { currentUser } = useSelector((state) => state.authReducer);
-  const { _id: userSend } = currentUser;
+  const { _id: userSendId } = currentUser;
+
+  useEffect(() => {
+    if (questionId === userSendId) router.push("/");
+  }, [questionId, userSendId, router]);
+
+  const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const submitHandler = async (e) => {
     e.preventDefault();
 
     try {
       setIsLoading(true);
-      const { data } = await sendReportAPI({ userSend, userGet, message });
+      const { data } = await sendReportAPI({ userSendId, questionId, message });
       setMessage("");
       setIsLoading(false);
       toast.success(data.msg);

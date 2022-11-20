@@ -1,11 +1,11 @@
 import mongoose, { Schema, model, models } from "mongoose";
 
 const reportsSchema = Schema({
-  userSend: {
+  userSendId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "users"
   },
-  userGet: {
+  questionId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "users"
   },
