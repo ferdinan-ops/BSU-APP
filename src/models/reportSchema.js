@@ -9,6 +9,10 @@ const reportsSchema = Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "users"
   },
+  commentId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "comments"
+  },
   message: {
     type: String,
     required: true

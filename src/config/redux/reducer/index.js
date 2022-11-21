@@ -5,6 +5,7 @@ import postReducer from "./postReducer";
 import notifReducer from "./notifReducer";
 import commentReducer from "./commentReducer";
 import profileReducer from "./profileReducer";
+import reportReducer from "./reportReducer";
 
 const reducer = combineReducers({
   authReducer,
@@ -13,6 +14,7 @@ const reducer = combineReducers({
   notifReducer,
   commentReducer,
   profileReducer,
+  reportReducer,
 });
 
 export default reducer;

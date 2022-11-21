@@ -1,10 +1,10 @@
-import Image from "next/image";
-import Router from "next/router";
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { deleted, edit, lapor, more } from "../../../public";
 import { deleteComment, setFormComment, setIsEdit } from "../../config/redux/actions/commentAction";
 import { deleteQuestion } from "../../config/redux/actions/postAction";
+import { deleted, edit, lapor, more } from "../../../public";
+import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import Router from "next/router";
+import Image from "next/image";
 import Icon from "./Icon";
 
 export default function More({ userId, contentId, isComment }) {
@@ -33,6 +33,11 @@ export default function More({ userId, contentId, isComment }) {
     }
   }
 
+  const reportHandler = () => {
+    if (!isComment) return Router.push(`/report/question/${contentId}`);
+    Router.push(`/report/comment/${contentId._id}`);
+  }
+
   return (
     <div className="cursor-pointer" onClick={showHandler}>
       <Icon img={more} style="relative transition-all hover:bg-gray/20">
@@ -50,7 +55,7 @@ export default function More({ userId, contentId, isComment }) {
                 </div>
               </>
             ) : (
-              <div className="flex w-full items-center py-2 pl-2.5 hover:bg-gray/10" onClick={() => Router.push(`/report/${userId}`)}>
+              <div className="flex w-full items-center py-2 pl-2.5 hover:bg-gray/10" onClick={reportHandler}>
                 <Image src={lapor} alt="" width={15} height={15} />
                 <span className="pl-2">Lapor</span>
               </div>

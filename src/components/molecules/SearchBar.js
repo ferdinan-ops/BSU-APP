@@ -15,7 +15,7 @@ export default function SearchBar({ isMobile, style }) {
 
   const searchHandler = (e) => {
     e.preventDefault();
-    if (!keyword) return Router.push("/search");
+    if (!keyword) return Router.push("/");
     Router.push(`/search/${keyword}`);
   }
 

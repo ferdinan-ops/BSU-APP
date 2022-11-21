@@ -2,8 +2,8 @@ import { liked, message } from "../../../public";
 import { Author } from "../molecules";
 import { Info, Icon } from "../atoms";
 import Router from "next/router";
-import React from "react";
 import Image from "next/image";
+import React from "react";
 
 export default function CardPost({ post }) {
   const { _id: id, user, createdAt } = post;
@@ -17,10 +17,9 @@ export default function CardPost({ post }) {
 
       <div className="card-body p-5">
         <div className="flex flex-col md:flex-row md:gap-7">
-          <img src={post.image} alt="" className="h-auto w-full md:max-h-[216px] md:w-auto" />
-          {/* <div className="relative h-auto w-full md:max-h-[216px] md:w-[167px]">
-            <Image src={post.image} layout="fill" alt="" />
-          </div> */}
+          <div className="relative w-full md:h-[216px] h-[200px] md:w-[167px]">
+            <Image src={post.image} layout="fill" objectFit="cover" alt="" />
+          </div>
           <div className="ml-0 flex flex-col md:ml-8 mt-4 md:mt-0">
             <h1 className="text-xl font-semibold md:text-2xl capitalize">{post.mataKuliah}</h1>
             <table className="mt-5 text-sm md:text-base">

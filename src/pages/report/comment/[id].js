@@ -1,0 +1,55 @@
+import { sendReport, setMessage } from '../../../config/redux/actions/reportAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Layout } from '../../../components';
+import { useRouter } from 'next/router';
+import { Ring } from '@uiball/loaders';
+import React from 'react';
+
+export default function ReportComment() {
+  const router = useRouter();
+  const { id: commentId } = router.query;
+
+  const dispatch = useDispatch();
+  const { message, isLoading } = useSelector((state) => state.reportReducer);
+  const { currentUser } = useSelector((state) => state.authReducer);
+  const { id: userSentId } = currentUser;
+
+  useEffect(() => {
+    dispatch(setMessage(""));
+  }, [])
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    const questionId = null;
+    dispatch(sendReport({ userSentId, questionId, commentId, message }));
+  }
+
+  return (
+    <Layout title="BSU - Lapor">
+      <section className="text-font my-[30px] md:my-[60px] w-full md:w-10/12 xl:w-8/12 mx-auto">
+        <h1 className="text-center text-xl md:text-[32px] font-bold uppercase">laporkan Komentar ⚠️</h1>
+        <div className='mt-[30px] md:mt-[60px] font-medium leading-relaxed'>
+          <p>
+            Kami menanggapi laporan dengan serius. Jika kami menemukan pelanggaran terhadap peraturan, kami akan meminta pembuat komentar untuk menghapus komentar tersebut atau mengunci atau menangguhkan akun tersebut.
+          </p>
+          <p className='mt-4'>
+            Jika ada bahaya langsung, selain membuat laporan, hubungi juga layanan darurat setempat.
+          </p>
+        </div>
+        <form className="flex flex-col text-font mt-[50px]" onSubmit={submitHandler}>
+          <label className="text-base md:text-lg font-semibold">Alasan Laporan:</label>
+          <textarea
+            value={message}
+            onChange={(e) => dispatch(setMessage(e.target.value))}
+            className="mt-5 h-48 rounded-lg border border-auth p-5 outline-none focus:border-primary text-sm md:text-base"
+          />
+          <div className={`shadow-button mt-[30px] ml-auto h-11 md:w-48 w-28 rounded-lg bg-primary font-semibold text-font`}>
+            <Button type="submit">
+              {isLoading ? (<Ring size={20} lineWeight={5} speed={2} color="#fff" />) : "Kirim"}
+            </Button>
+          </div>
+        </form>
+      </section>
+    </Layout>
+  )
+}
