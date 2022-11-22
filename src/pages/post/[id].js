@@ -4,10 +4,12 @@ import { bookmark, bookmarked, download, like, liked } from "../../../public";
 import { Author, Button, Info, Layout } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { authPage } from "../../middlewares/authPage";
+import { slickSettings } from "../../utils/listData";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Ring } from "@uiball/loaders";
 import Moment from "react-moment";
+import Slider from "react-slick";
 import Image from "next/image";
 
 export async function getServerSideProps(context) {
@@ -63,11 +65,14 @@ export default function Detail() {
               </div>
             </div>
 
-            {question?.images?.map((image, idx) => (
-              <div key={idx}>
-                <img src={image} className="mx-auto w-full rounded-lg shadow-lg" alt="" />
-              </div>
-            ))}
+            <div className="w-full">
+              <Slider {...slickSettings}>
+                {question?.images?.map((image, idx) => (
+                  <img src={image} className="mx-auto rounded-lg" key={idx} alt="" />
+                ))}
+              </Slider>
+            </div>
+
 
             <div className="mx-auto block w-fit rounded-lg bg-white p-6 shadow-lg my-10">
               <table cellPadding={5}>

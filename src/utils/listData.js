@@ -38,3 +38,12 @@ export const allLinks = (currentUserId) => {
     { href: `/profile/${currentUserId}`, Icons: UserIcon },
   ]
 }
+
+export const slickSettings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  arrows: false
+}
