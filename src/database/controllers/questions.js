@@ -45,8 +45,12 @@ export async function deleteQuestion(req, res) {
 }
 
 export async function getAllQuestions(req, res) {
+  const page = parseInt(req.query.page);
+  const limit = parseInt(req.query.limit);
+
   try {
     const data = await Questions.aggregate([
+      // { $skip: page },
       { $sort: { createdAt: -1 } },
       {
         $lookup: {
@@ -120,7 +124,7 @@ export async function likeQuestion(req, res) {
 
     if (index === -1) {
       post.likes.push(userId);
-      await pushNotification(userId, post.userId, notifMsg, id);
+      if (userId === post.userId) await pushNotification(userId, post.userId, notifMsg, id);
     } else {
       post.likes = post.likes.filter((id) => id !== String(userId));
       await deleteActionNotif(userId, notifMsg);

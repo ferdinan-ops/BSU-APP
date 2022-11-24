@@ -8,6 +8,7 @@ import { slickSettings } from "../../utils/listData";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Ring } from "@uiball/loaders";
+import { saveAs } from "file-saver";
 import Moment from "react-moment";
 import Slider from "react-slick";
 import Image from "next/image";
@@ -46,6 +47,13 @@ export default function Detail() {
     dispatch(createComment(id, formData));
   }
 
+  const downloadHandler = async (e) => {
+    e.preventDefault();
+    for (const allImages of question?.images) {
+      saveAs(allImages, `${question?.mataKuliah} - ${Date.now()}`);
+    }
+  }
+
   return (
     <>
       {question && (
@@ -73,7 +81,6 @@ export default function Detail() {
               </Slider>
             </div>
 
-
             <div className="mx-auto block w-fit rounded-lg bg-white p-6 shadow-lg my-10">
               <table cellPadding={5}>
                 <tbody className="text-font text-sm md:text-base">
@@ -85,7 +92,10 @@ export default function Detail() {
                 </tbody>
               </table>
               <div className="w-40 h-12 bg-primary text-font mx-auto mt-10 font-semibold text-sm rounded-lg hover:bg-primary/75">
-                <Button><div className="relative w-7 h-7 mr-2">  <Image src={download} layout="fill" alt="" /></div>Download</Button>
+                <Button onClick={downloadHandler}>
+                  <div className="relative w-7 h-7 mr-2"><Image src={download} layout="fill" alt="" /></div>
+                  <span>Download</span>
+                </Button>
               </div>
             </div>
 

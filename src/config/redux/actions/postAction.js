@@ -93,11 +93,9 @@ export const updateQuestion = (id, formData, router) => async (dispatch) => {
 
 export const deleteQuestion = (id) => async (dispatch) => {
   try {
-    dispatch(setLoadingAll(true));
     const { data } = await API.deletePostAPI(id);
     dispatch(getAllQuestions());
     toast.success(data.msg);
-    dispatch(setLoadingAll(false));
   } catch (error) {
     console.log(error);
   }
@@ -116,10 +114,8 @@ export const getAllQuestions = () => async (dispatch) => {
 
 export const getQuestionById = (id) => async (dispatch) => {
   try {
-    dispatch(setLoadingAll(true));
     const { data } = await API.getPostByIdAPI(id);
     dispatch({ type: "SET_DETAIL_QUESTION", payload: data.data });
-    dispatch(setLoadingAll(false));
   } catch (error) {
     console.log(error);
     dispatch(setLoadingAll(false));
@@ -130,6 +126,7 @@ export const likePost = (postId, userId) => async (dispatch) => {
   try {
     const { data } = await API.likePostAPI(postId, userId);
     dispatch({ type: "SET_DETAIL_QUESTION", payload: data.data });
+    dispatch(getQuestionById(postId));
   } catch (error) {
     console.log(error);
   }
@@ -139,6 +136,7 @@ export const savePost = (postId, userId) => async (dispatch) => {
   try {
     const { data } = await API.savePostAPI(postId, userId);
     dispatch({ type: "SET_DETAIL_QUESTION", payload: data.data });
+    dispatch(getQuestionById(postId));
   } catch (error) {
     console.log(error);
   }

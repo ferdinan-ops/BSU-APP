@@ -14,7 +14,7 @@ export async function createComment(req, res) {
     const data = await Comments.create({ questionId, userId, comment });
     const post = await Questions.findById(questionId);
     const notifMsg = `Mengomentari Soal ${post.mataKuliah} Anda`;
-    await pushNotification(userId, questionId, notifMsg, questionId);
+    if (userId !== post.userId) await pushNotification(userId, post.userId, notifMsg, questionId);
     res.status(200).json({ success: true, msg: "Comment created successfully", data });
   } catch (error) {
     res.status(500).json({ success: false, error });

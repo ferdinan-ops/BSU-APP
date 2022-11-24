@@ -16,7 +16,7 @@ export async function getNotification(req, res) {
 
   try {
     const data = await Notification.aggregate([
-      { $match: { userAction: mongoose.Types.ObjectId(id) } },
+      { $match: { userPost: mongoose.Types.ObjectId(id) } },
       {
         $lookup: {
           from: "users", localField: "userAction", foreignField: "_id", as: "userAction",

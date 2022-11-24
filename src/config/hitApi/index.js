@@ -19,7 +19,7 @@ export const loginAPI = (formData) => API.post("/auth/login", formData);
 export const currentUserAPI = () => API.get("/auth/login");
 
 export const createPostAPI = (formData) => API.post("/post", formData);
-export const getAllPostAPI = () => API.get("/post");
+export const getAllPostAPI = () => API.get(`/post`);
 export const getPostByIdAPI = (postId) => API.get(`/post/${postId}`);
 export const updatePostAPI = (postId, formData) => API.put(`/post/${postId}`, formData);
 export const deletePostAPI = (postId) => API.delete(`/post/${postId}`);
