@@ -3,7 +3,7 @@ import React from "react";
 import { Footer, Header, MenuBar } from "../organisms";
 import { Gap } from "../atoms";
 import { allLinks } from "../../utils/listData";
-import { RaceBy } from '@uiball/loaders'
+import { Ring } from '@uiball/loaders'
 import { useSelector } from "react-redux";
 
 export default function Layout({ title, children }) {
@@ -27,7 +27,7 @@ export default function Layout({ title, children }) {
       <Footer />
       {isLoadingAll &&
         <div className="fixed top-0 left-0 bottom-0 right-0 z-50 bg-white flex items-center justify-center">
-          <RaceBy size={350} lineWeight={10} speed={1.4} color="#FCB900" />
+          <Ring size={100} lineWeight={5} speed={1.4} color="#FCB900" />
         </div>
       }
     </>

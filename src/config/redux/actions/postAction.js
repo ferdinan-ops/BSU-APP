@@ -101,11 +101,11 @@ export const deleteQuestion = (id) => async (dispatch) => {
   }
 }
 
-export const getAllQuestions = () => async (dispatch) => {
+export const getAllQuestions = (page) => async (dispatch) => {
   try {
-    const { data } = await API.getAllPostAPI();
+    const { data } = await API.getAllPostAPI(page);
     dispatch(setAllQuestions(data.data));
-    dispatch(setFilterMenu(data.data));
+    // dispatch(setFilterMenu(data.data));
   } catch (error) {
     console.log(error);
     dispatch(setLoadingAll(false));

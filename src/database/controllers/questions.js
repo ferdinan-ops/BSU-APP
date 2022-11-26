@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import Questions from "../../models/questionSchema";
-import Users from "../../models/userSchema";
 import { deleteActionNotif, pushNotification } from "./notification";
 
 export async function createQuestion(req, res) {
@@ -45,12 +44,10 @@ export async function deleteQuestion(req, res) {
 }
 
 export async function getAllQuestions(req, res) {
-  const page = parseInt(req.query.page);
-  const limit = parseInt(req.query.limit);
+  const { page } = req.query;
 
   try {
-    const data = await Questions.aggregate([
-      // { $skip: page },
+    let data = await Questions.aggregate([
       { $sort: { createdAt: -1 } },
       {
         $lookup: {
@@ -82,7 +79,10 @@ export async function getAllQuestions(req, res) {
         }
       }
     ]);
-    res.status(200).json({ success: true, msg: "Getting all questions successfully", data });
+
+    const allCount = data.length;
+    data = data.slice(0, parseInt(page));
+    res.status(200).json({ success: true, msg: "Getting all questions successfully", data, page, allCount });
   } catch (error) {
     res.status(500).json({ success: false, error });
   }
@@ -105,6 +105,60 @@ export async function getQuestionById(req, res) {
       { $set: { user: { $arrayElemAt: ["$user", 0] } } },
     ]);
     res.status(200).json({ success: true, msg: "Getting detail questions successfully", data: data[0] });
+  } catch (error) {
+    res.status(500).json({ success: false, error });
+  }
+}
+
+export async function getAllFakultas(req, res) {
+  try {
+    const data = await Questions.distinct("fakultas");
+    res.status(200).json({ success: true, msg: "Get all fakultas successfully", data });
+  } catch (error) {
+    res.status(500).json({ success: false, error });
+  }
+}
+
+export async function filterByFakultas(req, res) {
+  const { fakultas, page } = req.query;
+  try {
+    let data = await Questions.aggregate([
+      { $match: { fakultas } },
+      { $sort: { createdAt: -1 } },
+      {
+        $lookup: {
+          from: "users", localField: "userId", foreignField: "_id", as: "user",
+          pipeline: [{ $project: { _id: 1, username: 1, photo: 1 } }]
+        }
+      },
+      { $set: { user: { $arrayElemAt: ["$user", 0] } } },
+      {
+        $lookup: {
+          from: "comments", let: { questionId: "$_id" },
+          pipeline: [{ $match: { $expr: { $eq: ["$questionId", "$$questionId"] } } }],
+          as: "comments"
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          mataKuliah: 1,
+          fakultas: 1,
+          programStudi: 1,
+          semester: 1,
+          kategori: 1,
+          image: { $arrayElemAt: ["$images", 0] },
+          likesCount: { $size: "$likes" },
+          commentsCount: { $size: "$comments" },
+          createdAt: 1,
+          user: 1
+        }
+      }
+    ]);
+
+    const allCount = data.length;
+    data = data.slice(0, parseInt(page));
+    res.status(200).json({ success: true, msg: "Filter by fakultas successfully", data, allCount });
   } catch (error) {
     res.status(500).json({ success: false, error });
   }
