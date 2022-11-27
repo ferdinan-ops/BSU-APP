@@ -1,7 +1,11 @@
 import { allCategories, allFakultas, allSemester } from "../../../utils/listData";
 
 const initialState = {
-  questions: [],
+  questions: {
+    data: [],
+    counts: "",
+    isLoading: false,
+  },
   question: {},
   filtered: [],
   form: {
@@ -25,8 +29,8 @@ const postReducer = (state = initialState, action) => {
       return { ...state, form: { ...state.form, [action.formType]: action.formValue } };
     case "SET_BTN_LOADING_POST":
       return { ...state, isLoading: action.payload };
-    case "SET_ALL_QUESTION":
-      return { ...state, questions: action.payload };
+    case "SET_QUESTION":
+      return { ...state, questions: { ...state.questions, [action.questionsType]: action.questionsValue } };
     case "SET_FILTERED_QUESTION":
       return { ...state, filtered: action.payload };
     case "SET_DETAIL_QUESTION":

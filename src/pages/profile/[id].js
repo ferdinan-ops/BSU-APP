@@ -3,10 +3,11 @@ import { Button, CardPost, Layout, Modals } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { authPage } from "../../middlewares/authPage";
 import React, { useEffect, useState } from 'react';
+import { dummyProfile } from "../../../public";
 import { useRouter } from 'next/router';
 import Cookies from "js-cookie";
 import Image from "next/image";
-import { dummyProfile } from "../../../public";
+import { Ring } from "@uiball/loaders";
 
 export async function getServerSideProps(context) {
   await authPage(context);
@@ -15,6 +16,7 @@ export async function getServerSideProps(context) {
 
 export default function Profile() {
   const [activeTab, setActiveTab] = useState("tabs1");
+  const [page, setPage] = useState(3);
 
   const router = useRouter();
   const { id } = router.query;
@@ -25,11 +27,26 @@ export default function Profile() {
 
   const { _id: currentId } = currentUser;
   const { _id: profileId } = profile;
+  const { data: myData, isLoading: myIsLoading, counts: myCounts } = myQuestions;
+  const { data: savedData, isLoading: savedIsLoading, counts: savedCounts } = savedQuestions;
 
   useEffect(() => setActiveTab("tabs1"), [id]);
   useEffect(() => { dispatch(getProfile(id)) }, [dispatch, id]);
-  useEffect(() => { dispatch(getMyQuestions(id)) }, [dispatch, id]);
-  useEffect(() => { if (currentId === profileId) dispatch(getSavedQuestions(id)) }, [dispatch, id, currentId, profileId]);
+  useEffect(() => { dispatch(getMyQuestions(id, page)) }, [dispatch, id, page]);
+  useEffect(() => { if (currentId === profileId) dispatch(getSavedQuestions(id, page)) }, [dispatch, id, currentId, profileId, page]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleScroll = async () => {
+    const { scrollTop, scrollHeight } = document.documentElement;
+    if (window.innerHeight + scrollTop + 1 >= scrollHeight) {
+      dispatch(setQuestions("isLoading", true));
+      setPage((prev) => prev + 3);
+    }
+  };
 
   const logoutHandler = (e) => {
     e.preventDefault();
@@ -76,15 +93,39 @@ export default function Profile() {
 
             <div className='w-full mt-6 md:mt-10'>
               {activeTab === "tabs1" ? (
-                myQuestions.length > 0 ? (
-                  myQuestions.map((question) => (<CardPost post={question} key={question._id} />))
+                myData.length > 0 ? (
+                  <>
+                    {myData.map((question) => (<CardPost post={question} key={question._id} />))}
+                    {myIsLoading && (
+                      <div className="flex items-center justify-center">
+                        <Ring size={20} lineWeight={5} speed={2} color="#FCB900" />
+                      </div>
+                    )}
+                    {myCounts === myData?.length && (
+                      <p className="mx-auto text-font font-medium border-2 border-primary border-dashed px-4 py-2 rounded w-fit">
+                        Anda telah melihat semuanya 🙂
+                      </p>
+                    )}
+                  </>
                 ) : (
                   <p className="text-slate-400 font-semibold text-center text-sm md:text-base">Anda belum memiliki soal...</p>
                 )
               ) : (
                 currentId === profileId &&
-                  savedQuestions.length > 0 ? (
-                  savedQuestions.map((question) => (<CardPost post={question} key={question._id} />))
+                  savedData.length > 0 ? (
+                  <>
+                    {savedData.map((question) => (<CardPost post={question} key={question._id} />))}
+                    {savedIsLoading && (
+                      <div className="flex items-center justify-center">
+                        <Ring size={20} lineWeight={5} speed={2} color="#FCB900" />
+                      </div>
+                    )}
+                    {savedCounts === savedData?.length && (
+                      <p className="mx-auto text-font font-medium border-2 border-primary border-dashed px-4 py-2 rounded w-fit">
+                        Anda telah melihat semuanya 🙂
+                      </p>
+                    )}
+                  </>
                 ) : (
                   <p className="text-slate-400 font-semibold text-center text-sm md:text-base">Anda belum memiliki soal yang disimpan...</p>
                 )

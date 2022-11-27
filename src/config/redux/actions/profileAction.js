@@ -1,12 +1,14 @@
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import toast from "react-hot-toast";
-import { storage } from "../../firebase";
-import * as API from "../../hitApi";
-import { getCurrentUser } from "./authAction";
 import { setLoadingAll } from "./globalAction";
+import { getCurrentUser } from "./authAction";
+import { storage } from "../../firebase";
+import toast from "react-hot-toast";
+import * as API from "../../hitApi";
 
 export const setFormProfile = (formType, formValue) => ({ type: "SET_PROFILE_FORM", formType, formValue });
 export const setIsLoading = (payload) => ({ type: "SET_PROFILE_BUTTON", payload });
+export const setMyQuestions = (type, value) => ({ type: "SET_MY_QUESTIONS", type, value });
+export const setSavedQuestions = (type, value) => ({ type: "SET_SAVED_QUESTIONS", type, value });
 
 export const uploadProfileImage = async (file, userId) => {
   const imageRef = ref(storage, `profile/${userId}/${file.name}`);
@@ -14,7 +16,6 @@ export const uploadProfileImage = async (file, userId) => {
   const downloadURL = await getDownloadURL(imageRef);
   return downloadURL;
 }
-
 
 export const updateProfile = (userId, username, file, photo) => async (dispatch) => {
   let formData = { username, photo };
@@ -50,11 +51,13 @@ export const getProfile = (userId) => async (dispatch) => {
   }
 }
 
-export const getMyQuestions = (userId) => async (dispatch) => {
+export const getMyQuestions = (userId, page) => async (dispatch) => {
   try {
     dispatch(setLoadingAll(true));
-    const { data } = await API.getMyQuestionsAPI(userId);
-    dispatch({ type: "SET_MY_QUESTIONS", payload: data.data });
+    const { data } = await API.getMyQuestionsAPI(userId, page);
+    dispatch(setMyQuestions("data", data.data));
+    dispatch(setMyQuestions("counts", data.counts));
+    dispatch(setMyQuestions("isLoading", data.isLoading));
     dispatch(setLoadingAll(false));
   } catch (error) {
     console.log(error);
@@ -62,11 +65,13 @@ export const getMyQuestions = (userId) => async (dispatch) => {
   }
 }
 
-export const getSavedQuestions = (userId) => async (dispatch) => {
+export const getSavedQuestions = (userId, page) => async (dispatch) => {
   try {
     dispatch(setLoadingAll(true));
-    const { data } = await API.getSavedQuestionsAPI(userId);
-    dispatch({ type: "SET_SAVED_QUESTIONS", payload: data.data });
+    const { data } = await API.getSavedQuestionsAPI(userId, page);
+    dispatch(setSavedQuestions("data", data.data));
+    dispatch(setSavedQuestions("counts", data.counts));
+    dispatch(setSavedQuestions("isLoading", data.isLoading));
     dispatch(setLoadingAll(false));
   } catch (error) {
     console.log(error);

@@ -39,8 +39,8 @@ export const updateCommentAPI = (commentId, formData) => API.patch(`/comment/${c
 export const deleteCommentAPI = (commentId) => API.delete(`/comment/${commentId}`);
 
 export const getProfileAPI = (userId) => API.get(`/user/${userId}`);
-export const getMyQuestionsAPI = (userId) => API.get(`/user/${userId}/myPost`);
-export const getSavedQuestionsAPI = (userId) => API.get(`/user/${userId}/savedPost`);
+export const getMyQuestionsAPI = (userId, page) => API.get(`/user/${userId}/myPost?${page}`);
+export const getSavedQuestionsAPI = (userId, page) => API.get(`/user/${userId}/savedPost?page=${page}`);
 export const updateProfileAPI = (userId, formData) => API.patch(`/user/${userId}`, formData);
 
 export const sendReportAPI = (formData) => API.post("/report/", formData);

@@ -80,9 +80,9 @@ export async function getAllQuestions(req, res) {
       }
     ]);
 
-    const allCount = data.length;
+    const counts = data.length;
     data = data.slice(0, parseInt(page));
-    res.status(200).json({ success: true, msg: "Getting all questions successfully", data, page, allCount });
+    res.status(200).json({ success: true, msg: "Getting all questions successfully", data, page, counts });
   } catch (error) {
     res.status(500).json({ success: false, error });
   }
@@ -156,9 +156,9 @@ export async function filterByFakultas(req, res) {
       }
     ]);
 
-    const allCount = data.length;
+    const counts = data.length;
     data = data.slice(0, parseInt(page));
-    res.status(200).json({ success: true, msg: "Filter by fakultas successfully", data, allCount });
+    res.status(200).json({ success: true, msg: "Filter by fakultas successfully", data, counts });
   } catch (error) {
     res.status(500).json({ success: false, error });
   }

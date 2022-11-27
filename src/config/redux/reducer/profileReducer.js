@@ -1,7 +1,15 @@
 const initialState = {
   profile: {},
-  myQuestions: [],
-  savedQuestions: [],
+  myQuestions: {
+    data: [],
+    counts: "",
+    isLoading: false,
+  },
+  savedQuestions: {
+    data: [],
+    counts: "",
+    isLoading: false,
+  },
   isLoading: false,
   formProfile: {
     username: "",
@@ -15,9 +23,9 @@ const profileReducer = (state = initialState, action) => {
     case "SET_PROFILE":
       return { ...state, profile: action.payload };
     case "SET_MY_QUESTIONS":
-      return { ...state, myQuestions: action.payload };
+      return { ...state, myQuestions: { ...state.myQuestions, [action.type]: action.value } };
     case "SET_SAVED_QUESTIONS":
-      return { ...state, savedQuestions: action.payload };
+      return { ...state, savedQuestions: { ...state.savedQuestions, [action.type]: action.value } };
     case "SET_PROFILE_FORM":
       return { ...state, formProfile: { ...state.formProfile, [action.formType]: action.formValue } };
     case "SET_PROFILE_BUTTON":

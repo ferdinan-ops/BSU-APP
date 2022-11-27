@@ -1,10 +1,17 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { setAllQuestions } from "../../config/redux/actions/postAction";
+import React, { useEffect, useState } from "react";
+import { getAllFakultasAPI } from "../../config/hitApi";
 
-export default function Filter({ filterItem, menus }) {
+export default function Filter({ filterItem }) {
+  const [menus, setMenus] = useState([]);
   const [filtered, setFiltered] = useState("Semua Soal");
-  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const getFakultas = async () => {
+      const { data } = await getAllFakultasAPI();
+      setMenus(data.data);
+    }
+    getFakultas();
+  }, []);
 
   const filterHandler = (e, fakultas) => {
     e.preventDefault();
@@ -21,7 +28,7 @@ export default function Filter({ filterItem, menus }) {
           }`}
         onClick={(e) => {
           filterHandler(e, "Semua Soal");
-          // dispatch(setAllQuestions(all));
+          filterItem("");
         }}
       >
         Semua
@@ -45,3 +52,4 @@ export default function Filter({ filterItem, menus }) {
     </div>
   );
 }
+

@@ -55,14 +55,17 @@ export async function getSavedQuestions(req, res) {
         }
       }
     ]);
-    res.status(200).json({ success: true, msg: "Get saved questions successfully", data });
+
+    const counts = data.length;
+    data = data.slice(0, parseInt(page));
+    res.status(200).json({ success: true, msg: "Get saved questions successfully", data, counts });
   } catch (error) {
     res.status(500).json({ success: false, error });
   }
 }
 
 export async function getMyQuestions(req, res) {
-  const { id } = req.query;
+  const { id, page } = req.query;
 
   if (!id) return res.status(405).json({ success: false, error: "User not selected" });
   if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No user with id: ${id}`);
@@ -101,7 +104,10 @@ export async function getMyQuestions(req, res) {
         }
       }
     ]);
-    res.status(200).json({ success: true, msg: "Get my questions successfully", data });
+
+    const counts = data.length;
+    data = data.slice(0, parseInt(page));
+    res.status(200).json({ success: true, msg: "Get my questions successfully", data, counts });
   } catch (error) {
     res.status(500).json({ success: false, error });
   }

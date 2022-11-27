@@ -15,17 +15,17 @@ export default function Author({ user, date, contentId, size, isComment }) {
     <>
       <div className="flex cursor-pointer items-center gap-4" onClick={(e) => linkedHandler(e, user._id)}>
         <div className={`relative rounded-full overflow-hidden ${size}`}>
-          {user.photo ?
-            <Image src={user.photo} layout="fill" objectFit="cover" alt="profile" /> :
+          {user?.photo ?
+            <Image src={user?.photo} layout="fill" objectFit="cover" alt="profile" /> :
             <Image src={dummyProfile} layout="fill" objectFit="cover" alt="profile" />
           }
         </div>
         <div className="flex gap-1 text-gray-2 items-center max-w-[211px] md:max-w-none truncate">
-          <span className="text-font text-[15px] md:text-base font-semibold">{user.username}</span>&bull;
+          <span className="text-font text-[15px] md:text-base font-semibold">{user?.username}</span>&bull;
           <Moment fromNow className="text-xs md:text-sm font-medium truncate">{date}</Moment>
         </div>
       </div>
-      <More userId={user._id} contentId={contentId} isComment={isComment} />
+      <More userId={user?._id} contentId={contentId} isComment={isComment} />
     </>
   );
 }

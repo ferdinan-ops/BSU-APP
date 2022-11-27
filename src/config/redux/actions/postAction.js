@@ -9,6 +9,8 @@ export const setForm = (formType, formValue) => ({ type: "SET_QUESTION_FORM", fo
 export const setIsLoading = (payload) => ({ type: "SET_BTN_LOADING_POST", payload });
 export const setFilterMenu = (payload) => ({ type: "SET_FILTERED_QUESTION", payload });
 export const setAllQuestions = (payload) => ({ type: "SET_ALL_QUESTION", payload });
+export const homeCardLoading = (payload) => ({ type: "SET_CARD_HOME_LOADING", payload });
+export const setQuestions = (questionsType, questionsValue) => ({ type: "SET_QUESTION", questionsType, questionsValue });
 
 export const uploadHandler = async (images, files, userId, mataKuliah) => {
   for (const imgUpload of files) {
@@ -101,14 +103,21 @@ export const deleteQuestion = (id) => async (dispatch) => {
   }
 }
 
-export const getAllQuestions = (page) => async (dispatch) => {
+export const getAllQuestions = (filter, page) => async (dispatch) => {
   try {
-    const { data } = await API.getAllPostAPI(page);
-    dispatch(setAllQuestions(data.data));
-    // dispatch(setFilterMenu(data.data));
+    let allData = {};
+    if (!filter) {
+      const { data } = await API.getAllPostAPI(page);
+      allData = data;
+    } else {
+      const { data } = await API.filterByFakultasAPI(filter, page);
+      allData = data;
+    }
+    dispatch(setQuestions("data", allData.data));
+    dispatch(setQuestions("counts", allData.counts));
+    dispatch(setQuestions("isLoading", false));
   } catch (error) {
     console.log(error);
-    dispatch(setLoadingAll(false));
   }
 }
 
