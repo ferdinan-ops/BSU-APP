@@ -16,13 +16,13 @@ export async function getProfileData(req, res) {
 }
 
 export async function getSavedQuestions(req, res) {
-  const { id } = req.query;
+  const { id, page } = req.query;
 
   if (!id) return res.status(405).json({ success: false, error: "User not selected" });
   if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No user with id: ${id}`);
 
   try {
-    const data = await Questions.aggregate([
+    let data = await Questions.aggregate([
       { $match: { saved: [id] } },
       { $sort: { createdAt: -1 } },
       {
@@ -71,7 +71,7 @@ export async function getMyQuestions(req, res) {
   if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No user with id: ${id}`);
 
   try {
-    const data = await Questions.aggregate([
+    let data = await Questions.aggregate([
       { $match: { userId: mongoose.Types.ObjectId(id) } },
       { $sort: { createdAt: -1 } },
       {

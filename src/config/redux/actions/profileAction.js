@@ -6,9 +6,8 @@ import toast from "react-hot-toast";
 import * as API from "../../hitApi";
 
 export const setFormProfile = (formType, formValue) => ({ type: "SET_PROFILE_FORM", formType, formValue });
+export const setProfileQuestions = (questType, questValue) => ({ type: "SET_PROFILE_QUESTIONS", questType, questValue });
 export const setIsLoading = (payload) => ({ type: "SET_PROFILE_BUTTON", payload });
-export const setMyQuestions = (type, value) => ({ type: "SET_MY_QUESTIONS", type, value });
-export const setSavedQuestions = (type, value) => ({ type: "SET_SAVED_QUESTIONS", type, value });
 
 export const uploadProfileImage = async (file, userId) => {
   const imageRef = ref(storage, `profile/${userId}/${file.name}`);
@@ -51,30 +50,20 @@ export const getProfile = (userId) => async (dispatch) => {
   }
 }
 
-export const getMyQuestions = (userId, page) => async (dispatch) => {
+export const getProfileQuestions = (userId, page, filter) => async (dispatch) => {
   try {
-    dispatch(setLoadingAll(true));
-    const { data } = await API.getMyQuestionsAPI(userId, page);
-    dispatch(setMyQuestions("data", data.data));
-    dispatch(setMyQuestions("counts", data.counts));
-    dispatch(setMyQuestions("isLoading", data.isLoading));
-    dispatch(setLoadingAll(false));
+    let allData = {};
+    if (filter === "tabs1") {
+      const { data } = await API.getMyQuestionsAPI(userId, page);
+      allData = data;
+    } else {
+      const { data } = await API.getSavedQuestionsAPI(userId, page);
+      allData = data;
+    }
+    dispatch(setProfileQuestions("data", allData.data));
+    dispatch(setProfileQuestions("counts", allData.counts));
+    dispatch(setProfileQuestions("isLoading", false));
   } catch (error) {
     console.log(error);
-    dispatch(setLoadingAll(false));
-  }
-}
-
-export const getSavedQuestions = (userId, page) => async (dispatch) => {
-  try {
-    dispatch(setLoadingAll(true));
-    const { data } = await API.getSavedQuestionsAPI(userId, page);
-    dispatch(setSavedQuestions("data", data.data));
-    dispatch(setSavedQuestions("counts", data.counts));
-    dispatch(setSavedQuestions("isLoading", data.isLoading));
-    dispatch(setLoadingAll(false));
-  } catch (error) {
-    console.log(error);
-    dispatch(setLoadingAll(false));
   }
 }

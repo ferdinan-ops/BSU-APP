@@ -1,13 +1,8 @@
 const initialState = {
   profile: {},
-  myQuestions: {
+  profileQuestions: {
     data: [],
-    counts: "",
-    isLoading: false,
-  },
-  savedQuestions: {
-    data: [],
-    counts: "",
+    counts: 0,
     isLoading: false,
   },
   isLoading: false,
@@ -22,10 +17,8 @@ const profileReducer = (state = initialState, action) => {
   switch (action.type) {
     case "SET_PROFILE":
       return { ...state, profile: action.payload };
-    case "SET_MY_QUESTIONS":
-      return { ...state, myQuestions: { ...state.myQuestions, [action.type]: action.value } };
-    case "SET_SAVED_QUESTIONS":
-      return { ...state, savedQuestions: { ...state.savedQuestions, [action.type]: action.value } };
+    case "SET_PROFILE_QUESTIONS":
+      return { ...state, profileQuestions: { ...state.profileQuestions, [action.questType]: action.questValue } };
     case "SET_PROFILE_FORM":
       return { ...state, formProfile: { ...state.formProfile, [action.formType]: action.formValue } };
     case "SET_PROFILE_BUTTON":

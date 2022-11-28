@@ -1,5 +1,5 @@
-import { getMyQuestions, getProfile, getSavedQuestions } from "../../config/redux/actions/profileAction";
-import { Button, CardPost, Layout, Modals } from "../../components";
+import { getProfile, getProfileQuestions, setProfileQuestions } from "../../config/redux/actions/profileAction";
+import { Button, CardPost, InfiniteScroll, Layout, Modals } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { authPage } from "../../middlewares/authPage";
 import React, { useEffect, useState } from 'react';
@@ -23,30 +23,26 @@ export default function Profile() {
 
   const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.authReducer);
-  const { profile, myQuestions, savedQuestions } = useSelector(state => state.profileReducer);
+  const { profile, profileQuestions } = useSelector(state => state.profileReducer);
 
   const { _id: currentId } = currentUser;
   const { _id: profileId } = profile;
-  const { data: myData, isLoading: myIsLoading, counts: myCounts } = myQuestions;
-  const { data: savedData, isLoading: savedIsLoading, counts: savedCounts } = savedQuestions;
+  const { data, isLoading, counts } = profileQuestions;
 
-  useEffect(() => setActiveTab("tabs1"), [id]);
+  useEffect(() => { setActiveTab("tabs1") }, []);
   useEffect(() => { dispatch(getProfile(id)) }, [dispatch, id]);
-  useEffect(() => { dispatch(getMyQuestions(id, page)) }, [dispatch, id, page]);
-  useEffect(() => { if (currentId === profileId) dispatch(getSavedQuestions(id, page)) }, [dispatch, id, currentId, profileId, page]);
+  useEffect(() => { dispatch(getProfileQuestions(id, page, activeTab)) }, [dispatch, id, page, activeTab]);
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const tabsHandler = (tabs) => {
+    setActiveTab(tabs);
+    setPage(3);
+  }
 
-  const handleScroll = async () => {
-    const { scrollTop, scrollHeight } = document.documentElement;
-    if (window.innerHeight + scrollTop + 1 >= scrollHeight) {
-      dispatch(setQuestions("isLoading", true));
-      setPage((prev) => prev + 3);
-    }
-  };
+  const loadMoreHandler = (e) => {
+    e.preventDefault();
+    dispatch(setProfileQuestions("isLoading", true));
+    setPage(page + 3);
+  }
 
   const logoutHandler = (e) => {
     e.preventDefault();
@@ -81,55 +77,29 @@ export default function Profile() {
             </div>
 
             <div className='flex font-semibold text-base md:text-xl transition-all duration-300'>
-              <button className={`tabs ${activeTab === "tabs1" ? "text-primary" : "text-slate-300"}`} onClick={() => setActiveTab("tabs1")}>
+              <button className={`tabs ${activeTab === "tabs1" ? "text-primary" : "text-slate-300"}`} onClick={() => tabsHandler("tabs1")}>
                 Soal {currentId === profileId ? "Anda" : "yang dibuat"}
               </button>
               {currentId === profileId && (
-                <button className={`tabs ${activeTab === "tabs2" ? "text-primary" : "text-slate-300"}`} onClick={() => setActiveTab("tabs2")}>
+                <button className={`tabs ${activeTab !== "tabs1" ? "text-primary" : "text-slate-300"}`} onClick={() => tabsHandler("tabs2")}>
                   Soal yang Disimpan
                 </button>
               )}
             </div>
 
             <div className='w-full mt-6 md:mt-10'>
-              {activeTab === "tabs1" ? (
-                myData.length > 0 ? (
+              <>
+                {data.length > 0 ? (
                   <>
-                    {myData.map((question) => (<CardPost post={question} key={question._id} />))}
-                    {myIsLoading && (
-                      <div className="flex items-center justify-center">
-                        <Ring size={20} lineWeight={5} speed={2} color="#FCB900" />
-                      </div>
-                    )}
-                    {myCounts === myData?.length && (
-                      <p className="mx-auto text-font font-medium border-2 border-primary border-dashed px-4 py-2 rounded w-fit">
-                        Anda telah melihat semuanya 🙂
-                      </p>
-                    )}
+                    {data.map((question) => <CardPost post={question} key={question._id} />)}
+                    <InfiniteScroll counts={counts} dataLength={data.length} isLoading={isLoading} loadMoreHandler={loadMoreHandler} />
                   </>
                 ) : (
-                  <p className="text-slate-400 font-semibold text-center text-sm md:text-base">Anda belum memiliki soal...</p>
-                )
-              ) : (
-                currentId === profileId &&
-                  savedData.length > 0 ? (
-                  <>
-                    {savedData.map((question) => (<CardPost post={question} key={question._id} />))}
-                    {savedIsLoading && (
-                      <div className="flex items-center justify-center">
-                        <Ring size={20} lineWeight={5} speed={2} color="#FCB900" />
-                      </div>
-                    )}
-                    {savedCounts === savedData?.length && (
-                      <p className="mx-auto text-font font-medium border-2 border-primary border-dashed px-4 py-2 rounded w-fit">
-                        Anda telah melihat semuanya 🙂
-                      </p>
-                    )}
-                  </>
-                ) : (
-                  <p className="text-slate-400 font-semibold text-center text-sm md:text-base">Anda belum memiliki soal yang disimpan...</p>
-                )
-              )}
+                  activeTab === "tabs1" ? (
+                    <p className="text-font font-medium text-center text-sm md:text-base">Anda belum memiliki soal 😔</p>) : (
+                    <p className="text-font font-medium text-center text-sm md:text-base">Anda belum memiliki soal yang disimpan 😔</p>)
+                )}
+              </>
             </div>
           </section>
         </Layout>
