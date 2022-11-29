@@ -54,10 +54,10 @@ export async function deleteComment(req, res) {
 }
 
 export async function getAllComments(req, res) {
-  const { id } = req.query;
+  const { id, page } = req.query;
 
   try {
-    const data = await Comments.aggregate([
+    let data = await Comments.aggregate([
       { $match: { questionId: mongoose.Types.ObjectId(id) } },
       {
         $lookup: {
@@ -76,7 +76,10 @@ export async function getAllComments(req, res) {
         }
       }
     ]);
-    res.status(200).json({ success: true, msg: "Get all comments successfully", data });
+
+    const counts = data.length;
+    data = data.slice(0, parseInt(page));
+    res.status(200).json({ success: true, msg: "Get all comments successfully", data, counts });
   } catch (error) {
     res.status(500).json({ success: false, error });
   }

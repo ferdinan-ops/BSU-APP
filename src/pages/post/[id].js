@@ -1,7 +1,7 @@
-import { createComment, getAllComments, setFormComment, setQuestionId, updateComment } from "../../config/redux/actions/commentAction";
+import { createComment, getAllComments, setComment, setFormComment, setQuestionId, updateComment } from "../../config/redux/actions/commentAction";
 import { getQuestionById, likePost, savePost } from "../../config/redux/actions/postAction";
 import { bookmark, bookmarked, download, like, liked } from "../../../public";
-import { Author, Button, Info, Layout } from "../../components";
+import { Author, Button, Gap, InfiniteScroll, Info, Layout } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { authPage } from "../../middlewares/authPage";
 import { slickSettings } from "../../utils/listData";
@@ -21,18 +21,21 @@ export async function getServerSideProps(context) {
 export default function Detail() {
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [page, setPage] = useState(3);
+
   const router = useRouter();
+  const { id } = router.query;
 
   const dispatch = useDispatch();
   const { question } = useSelector(state => state.postReducer);
   const { currentUser } = useSelector(state => state.authReducer);
   const { comments, formComment, isLoading, isEdit } = useSelector(state => state.commentReducer);
 
-  const { id } = router.query;
   const { _id: userId } = currentUser;
+  const { data, isLoadingCard, counts } = comments;
 
   useEffect(() => { dispatch(getQuestionById(id)) }, [dispatch, id]);
-  useEffect(() => { dispatch(getAllComments(id)) }, [dispatch, id]);
+  useEffect(() => { dispatch(getAllComments(id, page)) }, [dispatch, id, page]);
   useEffect(() => { dispatch(setQuestionId(id)) }, [dispatch, id]);
   useEffect(() => { setIsLiked((question?.likes?.findIndex((id) => id === String(userId))) !== -1) }, [question, isLiked, userId]);
   useEffect(() => { setIsSaved((question?.saved?.findIndex((id) => id === String(userId))) !== -1) }, [question, isLiked, userId]);
@@ -40,11 +43,17 @@ export default function Detail() {
   const likePostHandler = async () => dispatch(likePost(id, { userId }));
   const savePostHandler = async () => dispatch(savePost(id, { userId }));
 
+  const loadMoreHandler = (e) => {
+    e.preventDefault();
+    dispatch(setComment("isLoadinCard", true));
+    setPage(page + 3);
+  }
+
   const commentSubmitHandler = async (e) => {
     e.preventDefault();
-    if (isEdit) return dispatch(updateComment(id, isEdit, { comment: formComment }));
+    if (isEdit) return dispatch(updateComment(id, isEdit, { comment: formComment }, page));
     const formData = { comment: formComment, userId }
-    dispatch(createComment(id, formData));
+    dispatch(createComment(id, formData, page));
   }
 
   const downloadHandler = async (e) => {
@@ -87,8 +96,10 @@ export default function Detail() {
                   <Info title="Mata Kuliah" content={question.mataKuliah} />
                   <Info title="Fakultas" content={question.fakultas} />
                   <Info title="Program Studi" content={question.programStudi} />
+                  <Info title="Tahun Ajaran" content={question.tahunAjaran} />
                   <Info title="Semester" content={question.semester} />
                   <Info title="Kategori" content={question.kategori} />
+                  <Info title="Dosen" content={question.dosen} />
                 </tbody>
               </table>
               <div className="w-40 h-12 bg-primary text-font mx-auto mt-10 font-semibold text-sm rounded-lg hover:bg-primary/75">
@@ -115,16 +126,21 @@ export default function Detail() {
             </div>
 
             <div className="comment mb-[100px]">
-              <h1 className="border-b-2 border-[#DCDCDC] pb-5 md:text-2xl font-bold text-xl">{comments.length} Komentar</h1>
-
-              {comments.map((comment) => (
-                <div className="py-5 border-b-2 border-[#DCDCDC]" key={comment._id}>
-                  <div className="flex items-center justify-between">
-                    <Author user={comment.user} date={comment.updatedAt} contentId={comment} isComment size="md:w-[35px] md:h-[35px] w-6 h-6" />
-                  </div>
-                  <p className="mt-4 leading-relaxed ml-[47px] text-xs md:text-sm">{comment.comment}</p>
-                </div>
-              ))}
+              <h1 className="border-b-2 border-[#DCDCDC] pb-5 md:text-2xl font-bold text-xl">{data.length} Komentar</h1>
+              {data.length > 0 && (
+                <>
+                  {data.map((comment) => (
+                    <div className="py-5 border-b-2 border-[#DCDCDC]" key={comment._id}>
+                      <div className="flex items-center justify-between">
+                        <Author user={comment.user} date={comment.updatedAt} contentId={comment} isComment size="md:w-[35px] md:h-[35px] w-6 h-6" />
+                      </div>
+                      <p className="mt-4 leading-relaxed ml-[47px] text-xs md:text-sm">{comment.comment}</p>
+                    </div>
+                  ))}
+                  <Gap style="h-[30px]" />
+                  {data.length > 3 && <InfiniteScroll counts={counts} dataLength={data.length} isLoading={isLoadingCard} loadMoreHandler={loadMoreHandler} />}
+                </>
+              )}
 
               <form className="flex flex-col text-font mt-[50px]">
                 <label className="text-base md:text-lg font-semibold">Tulis Komentar:</label>

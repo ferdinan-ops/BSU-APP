@@ -1,9 +1,9 @@
-import { getAllQuestions, setQuestions } from "../config/redux/actions/postAction";
-import { Button, CardPost, Filter, Gap, InfiniteScroll, Layout, Promotion } from "../components";
+import { CardPost, Filter, Gap, InfiniteScroll, Layout, Promotion } from "../components";
+import { getAllQuestions, searchQuestions, setQuestions } from "../config/redux/actions/postAction";
 import { useDispatch, useSelector } from "react-redux";
 import { authPage } from "../middlewares/authPage";
 import { useEffect, useState } from "react";
-import { Ring } from "@uiball/loaders";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
   await authPage(context);
@@ -13,6 +13,9 @@ export async function getServerSideProps(context) {
 export default function Home() {
   const [page, setPage] = useState(3);
   const [filter, setFilter] = useState("");
+
+  const router = useRouter();
+  const { keyword } = router.query;
 
   const dispatch = useDispatch();
   const { questions } = useSelector((state) => state.postReducer);
@@ -42,7 +45,7 @@ export default function Home() {
           {data.map((question, idx) => (
             <CardPost post={question} key={idx} />
           ))}
-          <InfiniteScroll counts={counts} dataLength={data.length} isLoading={isLoading} loadMoreHandler={loadMoreHandler} />
+          {data.length > 3 && <InfiniteScroll counts={counts} dataLength={data.length} isLoading={isLoading} loadMoreHandler={loadMoreHandler} />}
         </div>
         <div className="sticky top-[130px] hidden h-[472px] max-h-[472px] w-4/12 xl:block">
           <Promotion />

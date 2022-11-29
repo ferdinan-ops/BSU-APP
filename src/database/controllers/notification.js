@@ -11,11 +11,12 @@ export async function pushNotification(userAction, userPost, message, linkId) {
 }
 
 export async function getNotification(req, res) {
-  const { id } = req.query;
+  const { id, page } = req.query;
   if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No user with id: ${id}`);
+  console.log(page);
 
   try {
-    const data = await Notification.aggregate([
+    let data = await Notification.aggregate([
       { $match: { userPost: mongoose.Types.ObjectId(id) } },
       {
         $lookup: {
@@ -25,7 +26,10 @@ export async function getNotification(req, res) {
       },
       { $set: { userAction: { $arrayElemAt: ["$userAction", 0] } } },
     ]);
-    res.status(200).json({ success: true, msg: "Get notification successfully", data });
+
+    const counts = data.length;
+    data = data.slice(0, parseInt(page));
+    res.status(200).json({ success: true, msg: "Get notification successfully", data, counts });
   } catch (error) {
     res.status(500).json({ success: false, error: "Sorry something wrong happened" });
   }

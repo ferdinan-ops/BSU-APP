@@ -1,25 +1,28 @@
 import toast from "react-hot-toast";
 import * as API from "../../hitApi";
 
+export const setComment = (commentsType, commentsValue) => ({ type: "SET_COMMENTS", commentsType, commentsValue });
 export const setIsLoading = (payload) => ({ type: "SET_BUTTON_COMMENT", payload });
+export const setQuestionId = (payload) => ({ type: "SET_QUESTIONID", payload });
 export const setFormComment = (payload) => ({ type: "FORM_COMMENT", payload });
 export const setIsEdit = (payload) => ({ type: "SET_EDIT", payload });
-export const setQuestionId = (payload) => ({ type: "SET_QUESTIONID", payload });
 
-export const getAllComments = (questionId) => async (dispatch) => {
+export const getAllComments = (questionId, page) => async (dispatch) => {
   try {
-    const { data } = await API.getAllCommentAPI(questionId);
-    dispatch(({ type: "SET_ALL_COMMENTS", payload: data.data }));
+    const { data } = await API.getAllCommentAPI(questionId, page);
+    dispatch(setComment("data", data.data));
+    dispatch(setComment("isLoadingCard", false));
+    dispatch(setComment("counts", data.counts));
   } catch (error) {
     console.log(error);
   }
 }
 
-export const createComment = (questionId, formData) => async (dispatch) => {
+export const createComment = (questionId, formData, page) => async (dispatch) => {
   try {
     dispatch(setIsLoading(true));
     const { data } = await API.createCommentAPI(questionId, formData);
-    dispatch(getAllComments(questionId));
+    dispatch(getAllComments(questionId, page));
     dispatch(setIsLoading(false));
     dispatch(setFormComment(""));
     toast.success(data.msg);
@@ -30,11 +33,11 @@ export const createComment = (questionId, formData) => async (dispatch) => {
   }
 }
 
-export const updateComment = (questionId, commentId, formData) => async (dispatch) => {
+export const updateComment = (questionId, commentId, formData, page) => async (dispatch) => {
   try {
     dispatch(setIsLoading(true));
     const { data } = await API.updateCommentAPI(commentId, formData);
-    dispatch(getAllComments(questionId));
+    dispatch(getAllComments(questionId, page));
     dispatch(setIsLoading(false));
     dispatch(setFormComment(""));
     dispatch(setIsEdit(false));
@@ -46,11 +49,11 @@ export const updateComment = (questionId, commentId, formData) => async (dispatc
   }
 }
 
-export const deleteComment = (questionId, commentId) => async (dispatch) => {
+export const deleteComment = (questionId, commentId, page) => async (dispatch) => {
   try {
     dispatch(setFormComment(""));
     const { data } = await API.deleteCommentAPI(commentId);
-    dispatch(getAllComments(questionId));
+    dispatch(getAllComments(questionId, page));
     toast.success(data.msg);
   } catch (error) {
     console.log(error);

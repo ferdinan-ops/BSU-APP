@@ -20,6 +20,7 @@ const initialState = {
     imgUpdated: [],
     userId: "",
   },
+  allMataKuliah: [],
   isLoading: false,
 };
 
@@ -35,6 +36,8 @@ const postReducer = (state = initialState, action) => {
       return { ...state, filtered: action.payload };
     case "SET_DETAIL_QUESTION":
       return { ...state, question: action.payload };
+    case "SET_MATAKULIAH":
+      return { ...state, allMataKuliah: action.payload };
     default:
       return { ...state };
   }

@@ -1,10 +1,10 @@
 import Questions from "../../models/questionSchema";
 
 export async function searchQuestionByKeyword(req, res) {
-  const { keyword } = req.query;
+  const { keyword, page } = req.query;
 
   try {
-    const data = await Questions.aggregate([
+    let data = await Questions.aggregate([
       {
         $search: {
           index: 'searchQuestions',
@@ -42,7 +42,25 @@ export async function searchQuestionByKeyword(req, res) {
         }
       }
     ]);
-    res.status(200).json({ success: true, msg: "Get question by keyword sucessfully", data });
+
+    const counts = data.length;
+    data = data.slice(0, parseInt(page));
+    res.status(200).json({ success: true, msg: "Get question by keyword sucessfully", data, counts });
+  } catch (error) {
+    res.status(500).json({ success: false, error });
+  }
+}
+
+export const getMataKuliah = async (req, res) => {
+  try {
+    let result = []
+    const data = await Questions.find({}, { mataKuliah: 1, _id: 0 });
+    data.forEach((u) => result.push(u.mataKuliah));
+
+    const setArray = new Set(result);
+    const newData = [...setArray];
+
+    res.status(200).json({ success: true, msg: "Getting questions successfully", data: newData });
   } catch (error) {
     res.status(500).json({ success: false, error });
   }

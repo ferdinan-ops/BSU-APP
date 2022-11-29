@@ -7,7 +7,6 @@ import { dummyProfile } from "../../../public";
 import { useRouter } from 'next/router';
 import Cookies from "js-cookie";
 import Image from "next/image";
-import { Ring } from "@uiball/loaders";
 
 export async function getServerSideProps(context) {
   await authPage(context);
@@ -92,7 +91,7 @@ export default function Profile() {
                 {data.length > 0 ? (
                   <>
                     {data.map((question) => <CardPost post={question} key={question._id} />)}
-                    <InfiniteScroll counts={counts} dataLength={data.length} isLoading={isLoading} loadMoreHandler={loadMoreHandler} />
+                    {data.length > 3 && <InfiniteScroll counts={counts} dataLength={data.length} isLoading={isLoading} loadMoreHandler={loadMoreHandler} />}
                   </>
                 ) : (
                   activeTab === "tabs1" ? (

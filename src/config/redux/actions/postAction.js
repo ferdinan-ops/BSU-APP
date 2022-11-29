@@ -7,9 +7,6 @@ import * as API from "../../hitApi";
 
 export const setForm = (formType, formValue) => ({ type: "SET_QUESTION_FORM", formType, formValue });
 export const setIsLoading = (payload) => ({ type: "SET_BTN_LOADING_POST", payload });
-export const setFilterMenu = (payload) => ({ type: "SET_FILTERED_QUESTION", payload });
-export const setAllQuestions = (payload) => ({ type: "SET_ALL_QUESTION", payload });
-export const homeCardLoading = (payload) => ({ type: "SET_CARD_HOME_LOADING", payload });
 export const setQuestions = (questionsType, questionsValue) => ({ type: "SET_QUESTION", questionsType, questionsValue });
 
 export const uploadHandler = async (images, files, userId, mataKuliah) => {
@@ -33,7 +30,6 @@ export const uploadUpdated = async (images, files, userId, mataKuliah, imgUpdate
       fileNotUpload.push(downloadURL);
     });
   }
-
   for (const allImages of fileNotUpload) images.push(allImages);
 }
 
@@ -151,13 +147,29 @@ export const savePost = (postId, userId) => async (dispatch) => {
   }
 }
 
-export const searchQuestions = (keyword) => async (dispatch) => {
+export const searchQuestions = (keyword, filter, page) => async (dispatch) => {
   try {
-    dispatch(setLoadingAll(true));
-    const { data } = await API.searchQuestionsAPI(keyword);
-    dispatch(setAllQuestions(data.data));
-    dispatch(setFilterMenu(data.data));
-    dispatch(setLoadingAll(false));
+    let allData = {};
+    if (!filter) {
+      const { data } = await API.searchQuestionsAPI(keyword, page);
+      allData = data;
+    } else {
+      const { data } = await API.filterByFakultasAPI(filter, page);
+      allData = data;
+    }
+    console.log({ allData });
+    dispatch(setQuestions("data", allData.data));
+    dispatch(setQuestions("counts", allData.counts));
+    dispatch(setQuestions("isLoading", false));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const getMataKuliah = () => async (dispatch) => {
+  try {
+    const { data } = await API.getMataKuliahAPI();
+    dispatch({ type: "SET_MATAKULIAH", payload: data.data });
   } catch (error) {
     console.log(error);
   }

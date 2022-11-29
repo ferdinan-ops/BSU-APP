@@ -25,15 +25,16 @@ export const updatePostAPI = (postId, formData) => API.put(`/post/${postId}`, fo
 export const deletePostAPI = (postId) => API.delete(`/post/${postId}`);
 export const likePostAPI = (postId, userId) => API.patch(`/post/${postId}/likes`, userId);
 export const savePostAPI = (postId, userId) => API.patch(`/post/${postId}/save`, userId);
-export const searchQuestionsAPI = (keyword) => API.get(`/search/${keyword}`);
+export const searchQuestionsAPI = (keyword, page) => API.get(`/search/${keyword}?page=${page}`);
+export const getMataKuliahAPI = () => API.get("/search/");
 
 export const getAllFakultasAPI = () => API.get("/post/fakultas");
 export const filterByFakultasAPI = (fakultas, page) => API.get(`/post/fakultas/${fakultas}?page=${page}`);
 
-export const getNotificationAPI = (userId) => API.get(`/notification/${userId}`);
+export const getNotificationAPI = (userId, page) => API.get(`/notification?page=${page}/${userId}`);
 export const deleteNotificationAPI = (userId) => API.delete(`/notification/${userId}`);
 
-export const getAllCommentAPI = (postId) => API.get(`/comment/${postId}`);
+export const getAllCommentAPI = (postId, page) => API.get(`/comment/${postId}?page=${page}`);
 export const createCommentAPI = (postId, formData) => API.post(`/comment/${postId}`, formData);
 export const updateCommentAPI = (commentId, formData) => API.patch(`/comment/${commentId}`, formData);
 export const deleteCommentAPI = (commentId) => API.delete(`/comment/${commentId}`);

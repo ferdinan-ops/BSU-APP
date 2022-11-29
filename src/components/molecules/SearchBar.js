@@ -1,4 +1,4 @@
-import { getAllQuestions } from "../../config/redux/actions/postAction";
+import { getMataKuliah } from "../../config/redux/actions/postAction";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
 import { search } from "../../../public";
@@ -10,8 +10,8 @@ export default function SearchBar({ isMobile, style }) {
   const [autoComplete, setAutoComplete] = useState([]);
 
   const dispatch = useDispatch();
-  const { questions } = useSelector((state) => state.postReducer);
-  useEffect(() => { dispatch(getAllQuestions()) }, [dispatch]);
+  const { allMataKuliah } = useSelector((state) => state.postReducer);
+  useEffect(() => { dispatch(getMataKuliah()) }, [dispatch]);
 
   const searchHandler = (e) => {
     e.preventDefault();
@@ -22,8 +22,8 @@ export default function SearchBar({ isMobile, style }) {
   const handleFilter = (e) => {
     const searchWord = e.target.value;
     setKeyword(searchWord);
-    const newFilter = questions.filter((value) => {
-      return value.mataKuliah.toLowerCase().includes(searchWord.toLowerCase());
+    const newFilter = allMataKuliah.filter((value) => {
+      return value.toLowerCase().includes(searchWord.toLowerCase());
     });
 
     if (searchWord === "") {
@@ -43,8 +43,8 @@ export default function SearchBar({ isMobile, style }) {
           <Image width={24} height={24} alt="" src={search} />
         </div>
         <input
-          placeholder="Cari Soal..."
-          className="bg-transparent w-full text-lg font-semibold outline-none placeholder:text-[#BBBBBB]"
+          placeholder="Cari soal berdasarkan mata kuliah"
+          className="bg-transparent w-full text-lg font-medium outline-none placeholder:text-[#BBBBBB]"
           value={keyword}
           onChange={handleFilter}
         />
@@ -56,9 +56,9 @@ export default function SearchBar({ isMobile, style }) {
             <li
               className='py-4 px-6 hover:bg-primary hover:text-white rounded-sm cursor-pointer'
               key={key}
-              onClick={() => Router.push(`/search/${value.mataKuliah}`)}
+              onClick={() => Router.push(`/search/${value}`)}
             >
-              {value.mataKuliah}
+              {value}
             </li>
           ))}
         </ul>

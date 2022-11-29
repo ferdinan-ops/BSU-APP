@@ -1,5 +1,9 @@
 const initialState = {
-  comments: [],
+  comments: {
+    data: [],
+    isLoadingCard: false,
+    counts: 0
+  },
   formComment: "",
   questionId: "",
   isLoading: false,
@@ -8,8 +12,8 @@ const initialState = {
 
 const commentReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "SET_ALL_COMMENTS":
-      return { ...state, comments: action.payload };
+    case "SET_COMMENTS":
+      return { ...state, comments: { ...state.comments, [action.commentsType]: action.commentsValue } };
     case "FORM_COMMENT":
       return { ...state, formComment: action.payload };
     case "SET_BUTTON_COMMENT":
