@@ -31,7 +31,7 @@ export const getMataKuliahAPI = () => API.get("/search/");
 export const getAllFakultasAPI = () => API.get("/post/fakultas");
 export const filterByFakultasAPI = (fakultas, page) => API.get(`/post/fakultas/${fakultas}?page=${page}`);
 
-export const getNotificationAPI = (userId, page) => API.get(`/notification?page=${page}/${userId}`);
+export const getNotificationAPI = (userId, page) => API.get(`notification/${userId}?page=${page}`);
 export const deleteNotificationAPI = (userId) => API.delete(`/notification/${userId}`);
 
 export const getAllCommentAPI = (postId, page) => API.get(`/comment/${postId}?page=${page}`);

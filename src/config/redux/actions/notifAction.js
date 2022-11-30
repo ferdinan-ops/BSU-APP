@@ -8,11 +8,12 @@ export const getNotification = (userId, page) => async (dispatch) => {
   try {
     dispatch(setLoadingAll(true));
     const { data } = await API.getNotificationAPI(userId, page);
+    console.log(data);
     dispatch(setNotif("data", data.data));
     dispatch(setNotif("counts", data.counts));
     dispatch(setNotif("isLoading", false));
+    dispatch(setLoadingAll(false));
   } catch (error) {
-    console.log(error);
     dispatch(setLoadingAll(false));
   }
 }

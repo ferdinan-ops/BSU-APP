@@ -13,7 +13,6 @@ export async function pushNotification(userAction, userPost, message, linkId) {
 export async function getNotification(req, res) {
   const { id, page } = req.query;
   if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No user with id: ${id}`);
-  console.log(page);
 
   try {
     let data = await Notification.aggregate([

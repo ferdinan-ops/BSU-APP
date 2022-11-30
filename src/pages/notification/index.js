@@ -23,7 +23,8 @@ export default function Notification() {
   const { data, isLoading, counts } = notif;
 
   useEffect(() => {
-    dispatch(getNotification(userId, page));
+    if (userId)
+      dispatch(getNotification(userId, page));
   }, [dispatch, userId, page]);
 
   const loadMoreHandler = (e) => {
@@ -42,18 +43,16 @@ export default function Notification() {
     if (!isAdmin) Router.push(`/post/${linkId}`);
   }
 
-  console.log(userId);
   return (
     <Layout title="BSU - Notification">
       <section className='mx-auto mt-[35px] w-full md:w-10/12 xl:w-8/12 text-font md:mt-[60px]'>
         <h1 className="text-center md:text-[32px] font-bold uppercase text-xl mb-[60px]">notifikasi</h1>
         {data.length > 0 ?
           data.map((notif) => (
-            <>
+            <div key={notif._id}>
               <div
                 className={`p-5 cursor-pointer flex gap-2 bg-primary/20 mb-5 rounded-lg flex-col relative ${notif.isAdmin ? "md:flex-col" : "md:flex-row md:items-center md:gap-5"}`}
                 onClick={routerHandler.bind(this, notif.linkId, notif.isAdmin)}
-                key={notif._id}
               >
                 <div className='flex gap-[10px] md:gap-4 items-center'>
                   {notif.userAction.photo ?
@@ -70,7 +69,7 @@ export default function Notification() {
                 />
               </div>
               {data.length > 3 && <InfiniteScroll counts={counts} dataLength={data.length} isLoading={isLoading} loadMoreHandler={loadMoreHandler} />}
-            </>
+            </div>
           )
           ) : (
             <div className='flex justify-center items-center text-slate-500'>
