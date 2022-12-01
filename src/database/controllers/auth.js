@@ -21,7 +21,7 @@ export async function register(req, res) {
 
     res.status(200).json({ success: true, msg: "Register successfully", data, token });
   } catch (error) {
-    return res.status(400).json({ success: false, error: "Maaf ada kesalahan koneksi, Mohon coba lagi" });
+    return res.status(400).json({ success: false, error: "Mohon coba lagi" });
   }
 }
 
@@ -39,7 +39,7 @@ export async function login(req, res) {
     const token = jwt.sign({ id: checkUser._id }, process.env.JWT_SECRET);
     res.status(200).json({ success: true, msg: "Login successfully", data: checkUser, token });
   } catch (error) {
-    return res.status(400).json({ success: false, error: "Maaf ada kesalahan koneksi, Mohon coba lagi" });
+    return res.status(400).json({ success: false, error: "Mohon coba lagi" });
   }
 }
 

@@ -157,7 +157,6 @@ export const searchQuestions = (keyword, filter, page) => async (dispatch) => {
       const { data } = await API.filterByFakultasAPI(filter, page);
       allData = data;
     }
-    console.log({ allData });
     dispatch(setQuestions("data", allData.data));
     dispatch(setQuestions("counts", allData.counts));
     dispatch(setQuestions("isLoading", false));

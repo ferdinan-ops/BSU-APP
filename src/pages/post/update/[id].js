@@ -45,10 +45,8 @@ export default function Update() {
     if (images.length < 0) return toast.error("Mohon upload gambar soal Anda");
     dispatch(setIsLoading(true));
     await uploadUpdated(images, files, userId, mataKuliah, imgUpdated);
-    console.log({ images });
     dispatch(setIsLoading(false));
     await dispatch(updateQuestion(id, form, router));
-    console.log("gagal");
   };
 
   return (

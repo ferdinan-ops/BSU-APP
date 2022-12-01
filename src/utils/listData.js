@@ -11,22 +11,8 @@ export const allFakultas = [
   "Keguruan & Ilmu Pendidikan",
 ];
 
-export const allSemester = [
-  "1",
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-  "7",
-  "8",
-];
-
-export const allCategories = [
-  "Quiz",
-  "UTS",
-  "UAS",
-]
+export const allSemester = ["1", "2", "3", "4", "5", "6", "7", "8",];
+export const allCategories = ["Quiz", "UTS", "UAS",]
 
 
 export const allLinks = (currentUserId) => {

@@ -4,7 +4,7 @@ import authorization from "../../../middlewares/authorization";
 
 export default async function handler(req, res) {
   connectMongo().catch(() => res.status(500).json({ success: false, error: "Error in connection" }));
-  const auth = await authorization(req, res);
+  await authorization(req, res);
   const { method } = req;
 
   switch (method) {
