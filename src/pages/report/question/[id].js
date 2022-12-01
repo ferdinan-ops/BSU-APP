@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Layout } from '../../../components';
 import { useRouter } from 'next/router';
 import { Ring } from '@uiball/loaders';
-import React from 'react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 export default function ReportQuestion() {
   const router = useRouter();
