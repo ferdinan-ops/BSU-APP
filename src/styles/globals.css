@@ -8,9 +8,9 @@ body {
 }
 
 @layer components {
-  .shadow-button {
+  .primary-button {
     box-shadow: 0px 10px 25px rgba(252, 185, 0, 0.3);
-    @apply hover:bg-[#EEAF00];
+    @apply h-10 rounded-lg bg-primary text-sm font-semibold text-font hover:bg-[#EEAF00] md:h-11 md:text-base;
   }
 
   .card-shadow {

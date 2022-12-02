@@ -23,8 +23,7 @@ export default function Notification() {
   const { data, isLoading, counts } = notif;
 
   useEffect(() => {
-    if (userId)
-      dispatch(getNotification(userId, page));
+    dispatch(getNotification(userId, page));
   }, [dispatch, userId, page]);
 
   const loadMoreHandler = (e) => {
@@ -42,6 +41,8 @@ export default function Notification() {
   const routerHandler = (linkId, isAdmin) => {
     if (!isAdmin) Router.push(`/post/${linkId}`);
   }
+
+  console.log({ notif });
 
   return (
     <Layout title="BSU - Notification">

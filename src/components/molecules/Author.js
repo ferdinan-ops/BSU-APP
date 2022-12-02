@@ -20,7 +20,7 @@ export default function Author({ user, date, contentId, size, isComment }) {
             <Image src={dummyProfile} layout="fill" objectFit="cover" alt="profile" />
           }
         </div>
-        <div className="flex gap-1 text-gray-2 items-center max-w-[211px] md:max-w-none truncate">
+        <div className="flex gap-1 text-gray-2 items-center max-w-[200px] md:max-w-none truncate">
           <span className="text-font text-[15px] md:text-base font-semibold">{user?.username}</span>&bull;
           <Moment fromNow className="text-xs md:text-sm font-medium truncate">{date}</Moment>
         </div>

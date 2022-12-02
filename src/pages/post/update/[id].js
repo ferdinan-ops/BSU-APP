@@ -76,7 +76,7 @@ export default function Update() {
           <Gap style="h-[30px] md:h-[40px]" />
           <Upload onChange={imageHandler} files={files} setFiles={setFiles} multiple />
           <Gap style="h-[30px] md:h-[40px]" />
-          <div className={`shadow-button ml-auto h-11 w-28 md:w-48 rounded-lg bg-primary font-semibold text-font ${isLoading && "pointer-events-none bg-opacity-40"}`}>
+          <div className={`primary-button ml-auto w-28 md:w-48 ${isLoading && "pointer-events-none bg-opacity-40"}`}>
             <Button type="submit">{isLoading ? (<Ring size={20} lineWeight={5} speed={2} color="#fff" />) : "Kirim"}</Button>
           </div>
         </form>

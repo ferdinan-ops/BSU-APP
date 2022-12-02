@@ -40,7 +40,7 @@ export async function deleteNotification(req, res) {
 
   try {
     await Notification.findByIdAndDelete(id);
-    res.status(200).json({ success: true, msg: "Notification deleted sucessfully" });
+    res.status(200).json({ success: true, msg: "Notifikasi berhasil di hapus" });
   } catch (error) {
     res.status(500).json({ success: false, error: "Sorry something wrong happened" });
   }

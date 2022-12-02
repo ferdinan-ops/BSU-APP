@@ -41,29 +41,29 @@ export default function Register() {
         <title>BSU - Daftar</title>
       </Head>
       <div className="relative m-auto flex flex-1 flex-col xl:m-0">
-        <div className="top-0 left-0 mb-14 flex flex-col items-center gap-3 font-semibold text-font xl:absolute xl:mb-0 xl:flex-row">
+        <div className="top-0 left-0 mb-14 flex flex-col items-center gap-3 font-semibold text-font text-sm md:text-base xl:absolute xl:mb-0 xl:flex-row">
           <Brand title="BSU (Bank Soal UNIKA)" style="h-8 w-8" />
         </div>
 
         <div className="xl:m-auto">
-          <h1 className="text-[40px] font-bold text-font">Daftar</h1>
-          <p className="text-base leading-6 text-gray">
+          <h1 className="text-4xl md:text-[40px] font-bold text-font">Daftar</h1>
+          <p className="text-sm md:text-base leading-6 text-gray">
             Silahkan isi data anda untuk membuat akun Anda
           </p>
 
-          <form className="mt-14" onSubmit={submitHandler}>
+          <form className="mt-12 md:mt-14" onSubmit={submitHandler}>
             <Input title="Username" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
             <Gap style="h-5" />
             <Input title="Email" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
             <Gap style="h-5" />
             <Input title="Password" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="on" />
             <Gap style="h-[32px]" />
-            <div className={`shadow-button h-11 rounded-lg bg-primary font-semibold text-font ${isLoading && "pointer-events-none bg-opacity-40"}`}>
+            <div className={`primary-button ${isLoading && "pointer-events-none bg-opacity-40"}`}>
               <Button type="submit">{isLoading ? (<Ring size={20} lineWeight={5} speed={2} color="#fff" />) : "Daftar"}</Button>
             </div>
           </form>
 
-          <p className="mt-5 text-center text-gray">
+          <p className="mt-5 text-sm md:text-base text-center text-gray">
             Sudah punya akun?{" "}
             <Link href="/auth/login">
               <a className="text-primary">Masuk</a>

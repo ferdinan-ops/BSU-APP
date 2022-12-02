@@ -17,12 +17,12 @@ export default function Dropdown({ title, listData, selected, setSelected }) {
 
   return (
     <div className="flex flex-col font-sans">
-      <p className="mb-2 text-sm font-semibold text-font">{title}</p>
+      <p className="mb-2 text-xs md:text-sm font-semibold text-font">{title}</p>
       <Combobox value={selected} onChange={setSelected}>
         <div className="relative mt-1">
           <div className="relative flex h-[50px] w-full cursor-default items-center justify-center overflow-hidden rounded-lg border border-auth text-base">
             <Combobox.Input
-              className="w-full py-2 pl-3 pr-10 text-base font-medium leading-5 text-font outline-none"
+              className="w-full py-2 pl-3 pr-10 text-sm md:text-base font-medium leading-5 text-font outline-none"
               displayValue={(data) => data}
               onChange={(event) => setQuery(event.target.value)}
             />

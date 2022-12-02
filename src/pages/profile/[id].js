@@ -66,16 +66,16 @@ export default function Profile() {
               </div>
               <h1 className='font-bold text-xl md:text-[32px] text-center mt-8'>{profile.username}</h1>
               {currentId === profileId && (
-                <div className='mt-12 flex max-w-[480px] mx-auto gap-5 text-base md:text-lg font-semibold'>
+                <div className='mt-12 flex max-w-[480px] mx-auto gap-5 text-sm md:text-lg font-semibold'>
                   <Modals />
-                  <div className='h-[50px] border border-transparent bg-[#EB5757] text-white rounded-lg w-full'>
+                  <div className='h-10 md:h-[50px] border border-transparent bg-[#EB5757] text-white rounded-lg w-full'>
                     <Button onClick={logoutHandler}>Keluar</Button>
                   </div>
                 </div>
               )}
             </div>
 
-            <div className='flex font-semibold text-base md:text-xl transition-all duration-300'>
+            <div className='flex font-semibold text-[15px] md:text-xl transition-all duration-300'>
               <button className={`tabs ${activeTab === "tabs1" ? "text-primary" : "text-slate-300"}`} onClick={() => tabsHandler("tabs1")}>
                 Soal {currentId === profileId ? "Anda" : "yang dibuat"}
               </button>

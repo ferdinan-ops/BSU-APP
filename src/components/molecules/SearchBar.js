@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { search } from "../../../public";
 import Router from "next/router";
 import Image from "next/image";
+import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 
 export default function SearchBar({ isMobile, style }) {
   const [keyword, setKeyword] = useState("");
@@ -36,14 +37,14 @@ export default function SearchBar({ isMobile, style }) {
   return (
     <div className={`relative ${style} `}>
       <form
-        className={`flex h-[50px] w-full items-center gap-5 ${autoComplete.length === 0 ? "rounded-full bg-[#EFEFEF]" : "rounded-lg bg-white border-primary border-2"} ${isMobile && "shadow-lg"}`}
+        className={`flex h-[50px] w-full items-center gap-5 ${autoComplete.length === 0 ? !isMobile && "rounded-full bg-[#EFEFEF]" : "rounded-lg bg-white border-primary border-2"}`}
         onSubmit={searchHandler}
       >
         <div className="ml-[18px] flex items-center">
           <Image width={24} height={24} alt="" src={search} />
         </div>
         <input
-          placeholder="Cari soal berdasarkan mata kuliah"
+          placeholder="Cari soal"
           className="bg-transparent w-full text-lg font-medium outline-none placeholder:text-[#BBBBBB]"
           value={keyword}
           onChange={handleFilter}
@@ -51,13 +52,14 @@ export default function SearchBar({ isMobile, style }) {
       </form>
 
       {autoComplete.length !== 0 && (
-        <ul className='absolute top-full mt-1 bg-white rounded-lg w-full shadow-lg font-semibold text-font p-2'>
+        <ul className={`absolute text-sm md:text-base top-full mt-1 bg-white w-full font-semibold text-font ${!isMobile && "p-2 shadow-lg rounded-lg "}`}>
           {autoComplete.slice(0, 5).map((value, key) => (
             <li
-              className='py-4 px-6 hover:bg-primary hover:text-white rounded-sm cursor-pointer'
+              className="group px-6 py-3 md:py-4 md:px-6 hover:bg-primary hover:text-white rounded cursor-pointer flex gap-5"
               key={key}
               onClick={() => Router.push(`/search/${value}`)}
             >
+              <MagnifyingGlassIcon className="w-4 md:w-5 text-font group-hover:text-white" />
               {value}
             </li>
           ))}

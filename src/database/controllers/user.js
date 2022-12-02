@@ -122,7 +122,7 @@ export async function updateUserProfile(req, res) {
 
   try {
     const data = await Users.findByIdAndUpdate(id, { username, photo });
-    res.status(200).json({ success: true, msg: "User profile updated successfully", data });
+    res.status(200).json({ success: true, msg: "Profil anda berhasil di ubah", data });
   } catch (error) {
     res.status(500).json({ success: false, error });
   }

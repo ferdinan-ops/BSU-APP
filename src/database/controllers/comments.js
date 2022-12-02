@@ -8,14 +8,14 @@ export async function createComment(req, res) {
   const { userId, comment } = req.body;
 
   if (!questionId && !userId && !comment)
-    return res.status(405).json({ success: false, error: "Form data not provided..." });
+    return res.status(405).json({ success: false, error: "Mohon isi komentar" });
 
   try {
     const data = await Comments.create({ questionId, userId, comment });
     const post = await Questions.findById(questionId);
     const notifMsg = `Mengomentari Soal ${post.mataKuliah} Anda`;
     if (userId !== post.userId) await pushNotification(userId, post.userId, notifMsg, questionId);
-    res.status(200).json({ success: true, msg: "Comment created successfully", data });
+    res.status(200).json({ success: true, msg: "Komentar anda berhasil di kirim", data });
   } catch (error) {
     res.status(500).json({ success: false, error });
   }
@@ -29,7 +29,7 @@ export async function updateComment(req, res) {
 
   try {
     const data = await Comments.findByIdAndUpdate(id, { comment });
-    res.status(200).json({ success: true, msg: "Comment updated successfully", data });
+    res.status(200).json({ success: true, msg: "Komentar anda berhasil di ubah", data });
   } catch (error) {
     res.status(500).json({ success: false, error });
   }
@@ -47,7 +47,7 @@ export async function deleteComment(req, res) {
     await deleteActionNotif(comment.userId, notifMsg);
 
     await Comments.findByIdAndDelete(id);
-    res.status(200).json({ success: true, msg: "Comment deleted successfully" });
+    res.status(200).json({ success: true, msg: "Komentar anda berhasil dihapus" });
   } catch (error) {
     res.status(500).json({ success: false, error });
   }

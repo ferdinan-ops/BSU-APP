@@ -92,7 +92,7 @@ export default function Detail() {
 
             <div className="mx-auto block w-fit rounded-lg bg-white p-6 shadow-lg my-10">
               <table cellPadding={5}>
-                <tbody className="text-font text-sm md:text-base">
+                <tbody className="text-font text-xs md:text-base">
                   <Info title="Mata Kuliah" content={question.mataKuliah} />
                   <Info title="Fakultas" content={question.fakultas} />
                   <Info title="Program Studi" content={question.programStudi} />
@@ -102,9 +102,9 @@ export default function Detail() {
                   <Info title="Dosen" content={question.dosen} />
                 </tbody>
               </table>
-              <div className="w-40 h-12 bg-primary text-font mx-auto mt-10 font-semibold text-sm rounded-lg hover:bg-primary/75">
+              <div className="w-36 md:w-40 h-11 md:h-12 bg-primary text-font mx-auto mt-8 md:mt-10 font-semibold text-xs md:text-sm rounded-lg hover:bg-primary/75">
                 <Button onClick={downloadHandler}>
-                  <div className="relative w-7 h-7 mr-2"><Image src={download} layout="fill" alt="" /></div>
+                  <div className="relative w-6 h-6 md:w-7 md:h-7 mr-2"><Image src={download} layout="fill" alt="" /></div>
                   <span>Download</span>
                 </Button>
               </div>
@@ -149,7 +149,7 @@ export default function Detail() {
                   value={formComment}
                   onChange={(e) => dispatch(setFormComment(e.target.value))}
                 />
-                <div className={`shadow-button mt-[30px] ml-auto h-11 md:w-48 w-28 rounded-lg bg-primary font-semibold text-font ${isLoading && "pointer-events-none bg-opacity-40"}`}>
+                <div className={`primary-button mt-[30px] ml-auto md:w-48 w-28 ${isLoading && "pointer-events-none bg-opacity-40"}`}>
                   <Button type="submit" onClick={commentSubmitHandler}>
                     {isLoading ? (<Ring size={20} lineWeight={5} speed={2} color="#fff" />) : isEdit ? "Simpan" : "Kirim"}
                   </Button>

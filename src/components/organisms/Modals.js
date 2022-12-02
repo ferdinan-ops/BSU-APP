@@ -1,4 +1,4 @@
-import { getProfile, setFormProfile, updateProfile } from '../../config/redux/actions/profileAction';
+import { setFormProfile, updateProfile } from '../../config/redux/actions/profileAction';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -44,7 +44,7 @@ export default function Modals() {
 
   return (
     <>
-      <div className='h-[50px] border border-[#C2C9D1] rounded-lg w-full'>
+      <div className='h-10 md:h-[50px] border border-[#C2C9D1] rounded-lg w-full'>
         <Button onClick={() => setIsOpen(true)}>Ubah Profil</Button>
       </div>
 

@@ -4,11 +4,11 @@ import { deleteActionNotif, pushNotification } from "./notification";
 
 export async function createQuestion(req, res) {
   const formData = req.body;
-  if (!formData) return res.status(405).json({ success: false, error: "Form data not provided..." });
+  if (!formData) return res.status(405).json({ success: false, error: "Mohon isi seluruh data" });
 
   try {
     const data = await Questions.create(formData);
-    res.status(200).json({ success: true, msg: "Your question created successfully", data });
+    res.status(200).json({ success: true, msg: "Soal Anda berhasil di kirim", data });
   } catch (error) {
     res.status(500).json({ success: false, error });
   }
@@ -23,7 +23,7 @@ export async function updateQuestion(req, res) {
 
   try {
     const data = await Questions.findByIdAndUpdate(id, formData);
-    res.status(200).json({ success: true, msg: "Your question updated successfully", data });
+    res.status(200).json({ success: true, msg: "Soal anda berhasil di ubah", data });
   } catch (error) {
     res.status(500).json({ success: false, error: "Something wrong with the connections" });
   }
@@ -37,7 +37,7 @@ export async function deleteQuestion(req, res) {
 
   try {
     const data = await Questions.findByIdAndDelete(id);
-    res.status(200).json({ success: true, msg: "Your question deleted successfully" });
+    res.status(200).json({ success: true, msg: "Soal anda berhasil di hapus" });
   } catch (error) {
     res.status(500).json({ success: false, error: "Something wrong with the connections" });
   }
@@ -175,10 +175,11 @@ export async function likeQuestion(req, res) {
     const post = await Questions.findById(id);
     const index = post.likes.findIndex((id) => id === String(userId));
     const notifMsg = `Menyukai Soal ${post.mataKuliah} Anda`;
+    const postUser = post.userId.toString().replace(/ObjectId\("(.*)"\)/, "$1");
 
     if (index === -1) {
       post.likes.push(userId);
-      if (userId === post.userId) await pushNotification(userId, post.userId, notifMsg, id);
+      if (userId !== postUser) await pushNotification(userId, post.userId, notifMsg, id);
     } else {
       post.likes = post.likes.filter((id) => id !== String(userId));
       await deleteActionNotif(userId, notifMsg);
@@ -209,7 +210,7 @@ export async function saveQuestion(req, res) {
     }
 
     const updatePost = await Questions.findByIdAndUpdate(id, post, { new: true });
-    res.status(200).json({ success: true, msg: "Saved the post successfully", data: updatePost });
+    res.status(200).json({ success: true, msg: "Soal berhasil di simpan", data: updatePost });
   } catch (error) {
     res.status(500).json({ success: false, error });
   }

@@ -42,7 +42,7 @@ export default function More({ userId, contentId, isComment }) {
     <div className="cursor-pointer" onClick={showHandler}>
       <Icon img={more} style="relative transition-all hover:bg-gray/20">
         {show && (
-          <div className="absolute right-0 top-8 flex w-24 flex-col overflow-hidden rounded bg-white shadow-md">
+          <div className="absolute z-[999] right-0 top-8 flex w-24 flex-col overflow-hidden rounded bg-white shadow-md">
             {userId === currentUser._id ? (
               <>
                 <div className="flex w-full items-center py-2 pl-2.5 hover:bg-gray/10" onClick={updateHandler}>

@@ -1,6 +1,6 @@
 import Head from "next/head";
 import React from "react";
-import { Footer, Header, MenuBar } from "../organisms";
+import { Footer, Header } from "../organisms";
 import { Gap } from "../atoms";
 import { allLinks } from "../../utils/listData";
 import { Ring } from '@uiball/loaders'
@@ -18,11 +18,8 @@ export default function Layout({ title, children }) {
       </Head>
       <section className="container mx-auto px-6 md:px-6 xl:px-0 min-h-[calc(100vh-60px-100px)] md:min-h-[calc(100vh-130px-100px)]">
         <Header />
-        <Gap style="h-24" />
+        <Gap style="h-20 md:h-24" />
         {children}
-        <div className="fixed bottom-10 z-20 left-6 right-6 block md:hidden">
-          <MenuBar menus={menus} />
-        </div>
       </section>
       <Footer />
       {isLoadingAll &&
