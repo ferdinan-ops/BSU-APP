@@ -10,7 +10,7 @@ export async function register(req, res) {
   try {
     // checked user is registered
     const checkUser = await Users.findOne({ email });
-    if (checkUser) return res.status(402).json({ success: false, error: "Akun anda telah terdaftar" });
+    if (checkUser) return res.status(402).json({ success: false, error: "Akun Anda telah terdaftar" });
 
     // hashing password
     const salt = bcrypt.genSaltSync(10);
@@ -31,13 +31,13 @@ export async function login(req, res) {
 
   try {
     const checkUser = await Users.findOne({ email });
-    if (!checkUser) return res.status(402).json({ success: false, error: "Email anda salah" });
+    if (!checkUser) return res.status(402).json({ success: false, error: "Email Anda salah" });
 
     const checkPassword = await bcrypt.compare(password, checkUser.password);
-    if (!checkPassword) return res.status(402).json({ success: false, error: "Password anda salah" });
+    if (!checkPassword) return res.status(402).json({ success: false, error: "Password Anda salah" });
 
     const token = jwt.sign({ id: checkUser._id }, process.env.JWT_SECRET);
-    res.status(200).json({ success: true, msg: "Selamat, anda berhasil masuk", data: checkUser, token });
+    res.status(200).json({ success: true, msg: "Selamat, Anda berhasil masuk", data: checkUser, token });
   } catch (error) {
     return res.status(400).json({ success: false, error: "Mohon coba lagi" });
   }
