@@ -14,7 +14,7 @@ export const registerAction = (formData, resetAll, Router) => async (dispatch) =
 
   try {
     const { data } = await API.registerAPI(formData);
-    Cookies.set("bsuToken", data.token);
+    Cookies.set("bsuToken", data.token, { expires: 7 });
     resetAll();
     dispatch(setIsLoading(false));
     toast.success(data.msg);
@@ -36,7 +36,7 @@ export const loginAction = (formData, resetAll, Router) => async (dispatch) => {
 
   try {
     const { data } = await API.loginAPI(formData);
-    Cookies.set("bsuToken", data.token);
+    Cookies.set("bsuToken", data.token, { expires: 7 });
     resetAll();
     dispatch(setIsLoading(false));
     toast.success(data.msg);

@@ -48,7 +48,7 @@ export default function SearchPage() {
           {data.map((question, idx) => (
             <CardPost post={question} key={idx} />
           ))}
-          <InfiniteScroll counts={counts} dataLength={data.length} isLoading={isLoading} loadMoreHandler={loadMoreHandler} />
+          {data.length > 3 && <InfiniteScroll counts={counts} dataLength={data.length} isLoading={isLoading} loadMoreHandler={loadMoreHandler} />}
         </div>
         <div className="sticky top-[130px] hidden h-[472px] max-h-[472px] w-4/12 xl:block">
           <Promotion />
