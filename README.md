@@ -55,7 +55,7 @@ Install dependencies
   yarn install
 ```
 
-Start the server
+Start the app
 
 ```bash
   npm run dev
