@@ -3,7 +3,7 @@
 
 Website-based software which is one of the services that accommodates questions at the Catholic University of Santo Thomas, Medan.
 
-# Description
+## Description
 BSU (Bank Soal Unika) is a website-based application service that provides all questions that already exist and have been made at the Catholic University of Santo Thomas Medan from year to year.
 
 This BSU was created because Santo Thomas Catholic University did not yet have a question bank service and with the aim of helping students of Medan's Santo Thomas Catholic University in finding references to questions as material or their learning materials both before facing exams or not.
@@ -63,9 +63,7 @@ Start the app
   yarn run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Open [http://localhost:3000](http://localhost:3009) with your browser to see the result.
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
