@@ -52,7 +52,7 @@ Install dependencies
 ```bash
   npm install
   # or
-  yarn install
+  yarn
 ```
 
 Start the app
@@ -60,7 +60,7 @@ Start the app
 ```bash
   npm run dev
   # or
-  yarn run dev
+  yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3009) with your browser to see the result.
