@@ -3,8 +3,8 @@ const QuestionService = require('../services/question.service')
 const { logger } = require('../utils/logger')
 
 exports.createQuestion = async (req, res) => {
-  const { path, body, method } = req
-  const { value, error } = questionValidation(body)
+  const { path, body, method, userId } = req
+  const { value, error } = questionValidation({ userId, ...body })
 
   if (error) {
     logger.error(`${method}:/questions${path}\t${error.details[0].message}`)
@@ -95,11 +95,17 @@ exports.updateQuestion = async (req, res) => {
 
 exports.deleteQuestion = async (req, res) => {
   const { path, method, params } = req
+  const { questionId } = params
 
   try {
-    await QuestionService.deleteQuestionById(params.questionId)
+    const question = QuestionService.getQuestionById(questionId)
+    if (!question) {
+      logger.error(`${method}:/questions${path}\tTidak dapat menemukan soal`)
+      return res.status(404).json({ error: `Tidak dapat menemukan soal dengan ID ${questionId}` })
+    }
+    await QuestionService.deleteQuestionById(questionId)
     logger.info(`${method}:/questions${path}\tSukses menghapus soal`)
-    return res.status(200).json({ message: `Berhasil menghapus soal dengan ID ${params.questionId}` })
+    return res.status(200).json({ message: `Berhasil menghapus soal dengan ID ${questionId}` })
   } catch (error) {
     return res.status(400).json({ error })
   }

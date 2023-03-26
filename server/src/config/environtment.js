@@ -1,4 +1,6 @@
-require('dotenv').config()
+// require('dotenv').config()
+import 'dotenv/config'
+
 const CONFIG = {
   port: process.env.PORT,
   db: process.env.DB_URI,
@@ -7,4 +9,5 @@ const CONFIG = {
   googleClientId: process.env.GOOGLE_CLIENT_ID
 }
 
-module.exports = { CONFIG }
+export default CONFIG
+// module.exports = { CONFIG }

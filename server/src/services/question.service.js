@@ -1,4 +1,5 @@
 const Question = require('../models/question.model')
+const Comment = require('../models/comment.model')
 
 const questionsQuery = [
   {
@@ -63,6 +64,7 @@ exports.updateQuestionById = async (questionId, payload) => {
 }
 
 exports.deleteQuestionById = async (questionId) => {
+  await Comment.deleteMany({ questionId })
   return await Question.findByIdAndDelete(questionId)
 }
 
