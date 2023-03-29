@@ -2,10 +2,10 @@ const { getNotifications, markAsRead, markAllAsRead } = require('../controllers/
 const verifyJwt = require('../middleware/verifyJwt')
 const express = require('express')
 
-const notificationRouter = express.Router()
+const notificationRoute = express.Router()
 
-notificationRouter.get('/', verifyJwt, getNotifications)
-notificationRouter.put('/mark/:notifId', verifyJwt, markAsRead)
-notificationRouter.put('/mark-all', verifyJwt, markAllAsRead)
+notificationRoute.get('/', verifyJwt, getNotifications)
+notificationRoute.put('/mark/:notifId', verifyJwt, markAsRead)
+notificationRoute.put('/mark-all', verifyJwt, markAllAsRead)
 
-module.exports = { notificationRouter }
+module.exports = { notificationRoute }

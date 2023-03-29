@@ -2,7 +2,7 @@ const { questionValidation } = require('../validations/question.validation')
 const QuestionService = require('../services/question.service')
 const { logger } = require('../utils/logger')
 
-exports.createQuestion = async (req, res) => {
+const createQuestion = async (req, res) => {
   const { path, body, method, userId } = req
   const { value, error } = questionValidation({ userId, ...body })
 
@@ -21,7 +21,7 @@ exports.createQuestion = async (req, res) => {
   }
 }
 
-exports.getQuestions = async (req, res) => {
+const getQuestions = async (req, res) => {
   const { path, method, query } = req
   const { fakultas, search } = query
 
@@ -56,7 +56,7 @@ exports.getQuestions = async (req, res) => {
   }
 }
 
-exports.getQuestion = async (req, res) => {
+const getQuestion = async (req, res) => {
   const { path, method, params } = req
   const { questionId } = params
 
@@ -74,10 +74,10 @@ exports.getQuestion = async (req, res) => {
   }
 }
 
-exports.updateQuestion = async (req, res) => {
-  const { body, path, method, params } = req
+const updateQuestion = async (req, res) => {
+  const { body, path, method, params, userId } = req
   const { questionId } = params
-  const { value, error } = questionValidation(body)
+  const { value, error } = questionValidation({ userId, ...body })
 
   if (error) {
     logger.error(`${method}:/questions${path}\t${error.details[0].message}`)
@@ -93,7 +93,7 @@ exports.updateQuestion = async (req, res) => {
   }
 }
 
-exports.deleteQuestion = async (req, res) => {
+const deleteQuestion = async (req, res) => {
   const { path, method, params } = req
   const { questionId } = params
 
@@ -111,7 +111,7 @@ exports.deleteQuestion = async (req, res) => {
   }
 }
 
-exports.likeQuestion = async (req, res) => {
+const likeQuestion = async (req, res) => {
   const { path, method, params, userId } = req
   const { questionId } = params
 
@@ -124,7 +124,7 @@ exports.likeQuestion = async (req, res) => {
   }
 }
 
-exports.saveQuestion = async (req, res) => {
+const saveQuestion = async (req, res) => {
   const { path, method, params, userId } = req
   const { questionId } = params
 
@@ -135,4 +135,14 @@ exports.saveQuestion = async (req, res) => {
   } catch (error) {
     return res.status(400).json({ error })
   }
+}
+
+module.exports = {
+  getQuestions,
+  getQuestion,
+  createQuestion,
+  updateQuestion,
+  deleteQuestion,
+  likeQuestion,
+  saveQuestion
 }

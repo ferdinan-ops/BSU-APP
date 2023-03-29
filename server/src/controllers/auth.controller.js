@@ -5,7 +5,7 @@ const { CONFIG } = require('../config/environtment')
 const { logger } = require('../utils/logger')
 const jwt = require('jsonwebtoken')
 
-exports.register = async (req, res) => {
+const register = async (req, res) => {
   const { body, path, method } = req
   const { value, error } = registerValidation(body)
   if (error) {
@@ -29,7 +29,7 @@ exports.register = async (req, res) => {
   }
 }
 
-exports.login = async (req, res) => {
+const login = async (req, res) => {
   const { body, path, method } = req
   const { value, error } = loginValidation(body)
 
@@ -69,7 +69,7 @@ exports.login = async (req, res) => {
   }
 }
 
-exports.loginWithGoogle = async (req, res) => {
+const loginWithGoogle = async (req, res) => {
   const { body, path, method } = req
   const client = new OAuth2Client(CONFIG.googleClientId)
 
@@ -104,7 +104,7 @@ exports.loginWithGoogle = async (req, res) => {
   }
 }
 
-exports.refresh = (req, res) => {
+const refresh = (req, res) => {
   const cookies = req.cookies
   if (!cookies?.jwt) {
     logger.error(`${req.method}:/auth${req.path}\tTidak ada cookie jwt atau cookie secure`)
@@ -132,7 +132,7 @@ exports.refresh = (req, res) => {
   })
 }
 
-exports.logout = (req, res) => {
+const logout = (req, res) => {
   const { cookies } = req
   if (!cookies?.jwt) {
     logger.error(`${req.method}:/auth${req.path}\tTidak ada cookie jwt atau cookie secure`)
@@ -143,3 +143,5 @@ exports.logout = (req, res) => {
   logger.info(`${req.method}:/auth${req.path}\tBerhasil menghapus token`)
   res.status(200).json({ message: 'Cookie cleared' })
 }
+
+module.exports = { register, login, loginWithGoogle, refresh, logout }

@@ -9,11 +9,12 @@ const {
   saveQuestion
 } = require('../controllers/question.controller')
 const verifyJwt = require('../middleware/verifyJwt')
+const upload = require('../middleware/multer')
 const questionRoute = express.Router()
 
 questionRoute.get('/', verifyJwt, getQuestions)
 questionRoute.get('/:questionId', verifyJwt, getQuestion)
-questionRoute.post('/', verifyJwt, createQuestion)
+questionRoute.post('/', upload.array('images'), verifyJwt, createQuestion)
 questionRoute.put('/:questionId', verifyJwt, updateQuestion)
 questionRoute.delete('/:questionId', verifyJwt, deleteQuestion)
 questionRoute.post('/like/:questionId', verifyJwt, likeQuestion)

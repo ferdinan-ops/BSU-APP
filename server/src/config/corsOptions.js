@@ -1,7 +1,5 @@
-// const { logger } = require('../utils/logger')
-// const allowedOrigin = require('./allowedOrigin')
-import { logger } from '../utils/logger'
-import allowedOrigin from './allowedOrigin'
+const { logger } = require('../utils/logger')
+const allowedOrigin = require('./allowedOrigin')
 
 const corsOptions = {
   origin: (origin, callback) => {
@@ -12,5 +10,5 @@ const corsOptions = {
   credentials: true,
   optionsSuccessStatus: 200
 }
-export default corsOptions
-// module.exports = corsOptions
+
+module.exports = corsOptions

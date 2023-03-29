@@ -46,29 +46,29 @@ const questionsQuery = [
   }
 ]
 
-exports.getQuestionsFromDB = async () => {
+const getQuestionsFromDB = async () => {
   return await Question.aggregate(questionsQuery)
 }
 
-exports.addQuestionToDB = async (payload) => {
+const addQuestionToDB = async (payload) => {
   return await Question.create(payload)
 }
 
 // populate data user dengan hanya mengambil field username dan email
-exports.getQuestionById = async (questionId) => {
+const getQuestionById = async (questionId) => {
   return await Question.findById(questionId).populate('userId', 'username photo').exec()
 }
 
-exports.updateQuestionById = async (questionId, payload) => {
+const updateQuestionById = async (questionId, payload) => {
   return await Question.findByIdAndUpdate(questionId, payload)
 }
 
-exports.deleteQuestionById = async (questionId) => {
+const deleteQuestionById = async (questionId) => {
   await Comment.deleteMany({ questionId })
   return await Question.findByIdAndDelete(questionId)
 }
 
-exports.likeQuestionByUserId = async (questionId, userId) => {
+const likeQuestionByUserId = async (questionId, userId) => {
   const question = await Question.findById(questionId)
   if (question.likes.includes(userId)) {
     return await Question.findByIdAndUpdate(questionId, { $pull: { likes: userId } })
@@ -77,7 +77,7 @@ exports.likeQuestionByUserId = async (questionId, userId) => {
   }
 }
 
-exports.saveQuestionByUserId = async (questionId, userId) => {
+const saveQuestionByUserId = async (questionId, userId) => {
   const question = await Question.findById(questionId)
   if (question.saves.includes(userId)) {
     return await Question.findByIdAndUpdate(questionId, { $pull: { saves: userId } })
@@ -86,11 +86,11 @@ exports.saveQuestionByUserId = async (questionId, userId) => {
   }
 }
 
-exports.filterQuestionByFakultas = async (fakultas) => {
+const filterQuestionByFakultas = async (fakultas) => {
   return await Question.aggregate([{ $match: { fakultas } }, ...questionsQuery]).exec()
 }
 
-exports.searchQuestion = async (keyword) => {
+const searchQuestion = async (keyword) => {
   return await Question.aggregate([
     {
       $match: {
@@ -105,4 +105,17 @@ exports.searchQuestion = async (keyword) => {
     },
     ...questionsQuery
   ]).exec()
+}
+
+module.exports = {
+  questionsQuery,
+  getQuestionById,
+  getQuestionsFromDB,
+  addQuestionToDB,
+  updateQuestionById,
+  deleteQuestionById,
+  searchQuestion,
+  likeQuestionByUserId,
+  saveQuestionByUserId,
+  filterQuestionByFakultas
 }

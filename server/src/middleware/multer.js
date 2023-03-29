@@ -1,5 +1,5 @@
 const multer = require('multer')
-const logger = require('./logger')
+const logger = require('../utils/logger')
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -20,6 +20,12 @@ const fileFilter = (req, file, cb) => {
   }
 }
 
-const upload = multer({ storage, fileFilter })
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: {
+    fileSize: 1024 * 1024 * 5 // 5MB
+  }
+})
 
 module.exports = upload

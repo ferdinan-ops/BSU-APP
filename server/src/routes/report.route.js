@@ -2,9 +2,9 @@ const { reportComment, reportQuestion } = require('../controllers/report.control
 const verifyJwt = require('../middleware/verifyJwt')
 const express = require('express')
 
-const reportRouter = express.Router()
+const reportRoute = express.Router()
 
-reportRouter.get('/comment', verifyJwt, reportComment)
-reportRouter.put('/question', verifyJwt, reportQuestion)
+reportRoute.post('/comment', verifyJwt, reportComment)
+reportRoute.post('/question', verifyJwt, reportQuestion)
 
-module.exports = { reportRouter }
+module.exports = { reportRoute }

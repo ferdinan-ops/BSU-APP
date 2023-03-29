@@ -1,21 +1,23 @@
 const Comment = require('../models/comment.model')
 
-exports.addCommentToDB = async (payload) => {
-  return Comment.create(payload)
+const addCommentToDB = async (payload) => {
+  return await Comment.create(payload)
 }
 
-exports.getCommentsByQuestionID = async (questionId) => {
-  return Comment.find({ questionId }).populate('userId', 'username photo').exec()
+const getCommentsByQuestionID = async (questionId) => {
+  return await Comment.find({ questionId }).populate('userId', 'username photo').exec()
 }
 
-exports.getCommentByID = async (commentId) => {
-  return Comment.findById(commentId, { comment: 1 })
+const getCommentByID = async (commentId) => {
+  return await Comment.findById(commentId, { comment: 1 })
 }
 
-exports.updateCommentByID = async (commentId, comment) => {
-  return Comment.findByIdAndUpdate(commentId, { comment })
+const updateCommentByID = async (commentId, comment) => {
+  return await Comment.findByIdAndUpdate(commentId, { comment })
 }
 
-exports.deleteCommentByID = async (commentId) => {
-  return Comment.findByIdAndDelete(commentId)
+const deleteCommentByID = async (commentId) => {
+  return await Comment.findByIdAndDelete(commentId)
 }
+
+module.exports = { addCommentToDB, getCommentsByQuestionID, getCommentByID, updateCommentByID, deleteCommentByID }

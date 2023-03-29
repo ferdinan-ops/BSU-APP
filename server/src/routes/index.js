@@ -1,13 +1,17 @@
 const { authRoute } = require('./auth.route')
 const { questionRoute } = require('./question.route')
-const { notificationRouter } = require('./notification.route')
-const { reportRouter } = require('./report.route')
+const { notificationRoute } = require('./notification.route')
+const { reportRoute } = require('./report.route')
+const { userRoute } = require('./user.route')
+const { commentRoute } = require('./comment.route')
 
 const _routes = [
   ['/auth', authRoute],
   ['/questions', questionRoute],
-  ['/notifications', notificationRouter],
-  ['/reports', reportRouter]
+  ['/comments', commentRoute],
+  ['/notifications', notificationRoute],
+  ['/reports', reportRoute],
+  ['/users', userRoute]
 ]
 
 const routes = (app) => {
