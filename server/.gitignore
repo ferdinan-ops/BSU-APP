@@ -6,6 +6,8 @@
 
 # production
 /build
+/uploads
+/assets
 /dist
 .env
 
