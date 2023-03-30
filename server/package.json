@@ -29,7 +29,8 @@
     "nodemon": "^2.0.22",
     "pino": "^8.11.0",
     "pino-pretty": "^10.0.0",
-    "sharp": "^0.32.0"
+    "sharp": "^0.32.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "eslint": "^8.36.0",

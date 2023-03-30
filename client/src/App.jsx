@@ -1,8 +1,18 @@
+import { Route, Routes } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
+import { Login, Register } from './pages'
+
 const App = () => {
   return (
-    <div className="bg-black text-white min-h-screen">
-      <button className="btn">Hello daisyUI</button>
-    </div>
+    <>
+      <div>
+        <Toaster />
+      </div>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </>
   )
 }
 

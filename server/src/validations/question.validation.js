@@ -9,7 +9,7 @@ const questionValidation = (payload) => {
     semester: Joi.number().required(),
     kategori: Joi.string().required(),
     dosen: Joi.string().required(),
-    images: Joi.array().required(),
+    images: Joi.any(),
     userId: Joi.string().required()
   })
   return schema.validate(payload)

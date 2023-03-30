@@ -1,8 +1,5 @@
 const UserService = require('../services/user.service')
 const { logger } = require('../utils/logger')
-const sharp = require('sharp')
-const fs = require('fs')
-const path = require('path')
 const { userValidation } = require('../validations/user.validation')
 
 const getUser = async (req, res) => {
@@ -23,41 +20,23 @@ const getUser = async (req, res) => {
 }
 
 const updateUser = async (req, res) => {
-  const { userId, method, body, file } = req
+  const { userId, path, method, body, file } = req
   const { value, error } = userValidation(body)
   if (error) {
     logger.error(`${method}:/users\t${error.message}`)
     return res.status(400).json({ error: error.details[0].message })
   }
 
-  const { filename } = file
-  let { username, photo } = value
-
   try {
-    if (req.file) {
-      const compressedPath = path.join(__dirname, '../../assets/users', filename)
-      sharp(path.join(__dirname, '../../uploads', filename))
-        .resize(200, 200)
-        .jpeg({ quality: 90, chromaSubsampling: '4:4:4' })
-        .toFile(compressedPath, (err, info) => {
-          if (info) {
-            fs.unlinkSync(path.join(__dirname, '../../uploads', filename))
-            photo = filename
-          } else {
-            logger.error(err)
-          }
-        })
+    const user = await UserService.getUserById(userId)
 
-      const user = await UserService.getUserById(userId)
-      if (user.photo) {
-        if (user.photo !== photo) {
-          const deleted = UserService.deletePhoto(user.photo)
-          logger.info(deleted)
-        }
-      }
+    if (req.file) {
+      value.photo = await UserService.processPhoto(user._doc.photo, file.filename)
+    } else if (req.file === '') {
+      value.photo = user._doc.photo
     }
 
-    await UserService.updateUserById(userId, { username, photo })
+    await UserService.updateUserById(userId, value)
     logger.info(`${method}:/users${path}\tSukses mengubah data user`)
     return res.status(200).json({ message: 'Sukses mengubah data user' })
   } catch (error) {

@@ -1,5 +1,6 @@
 const Question = require('../models/question.model')
 const Comment = require('../models/comment.model')
+const { compressedFile } = require('../utils/fileUtils')
 
 const questionsQuery = [
   {
@@ -34,7 +35,7 @@ const questionsQuery = [
       createdAt: 1,
       updatedAt: 1,
       user: { $arrayElemAt: ['$user', 0] }, // mengambil data user yang pertama dalam array
-      commentCount: { $size: '$comments' }, // menghitung jumlah data dari field 'comments'
+      saveCount: { $size: '$saves' }, // menghitung jumlah data dari field 'saves'
       likeCount: { $size: '$likes' } // menghitung jumlah data dari field 'likes'
     }
   },
@@ -107,6 +108,12 @@ const searchQuestion = async (keyword) => {
   ]).exec()
 }
 
+const proccessImages = async (files) => {
+  const images = files.map((file) => file.filename)
+  const compressedImages = await Promise.all(images.map((image) => compressedFile(image)))
+  return compressedImages
+}
+
 module.exports = {
   questionsQuery,
   getQuestionById,
@@ -117,5 +124,6 @@ module.exports = {
   searchQuestion,
   likeQuestionByUserId,
   saveQuestionByUserId,
-  filterQuestionByFakultas
+  filterQuestionByFakultas,
+  proccessImages
 }

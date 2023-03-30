@@ -1,22 +1,28 @@
 const { questionValidation } = require('../validations/question.validation')
 const QuestionService = require('../services/question.service')
 const { logger } = require('../utils/logger')
+const { deleteFile } = require('../utils/fileUtils')
 
 const createQuestion = async (req, res) => {
   const { path, body, method, userId } = req
   const { value, error } = questionValidation({ userId, ...body })
-
   if (error) {
     logger.error(`${method}:/questions${path}\t${error.details[0].message}`)
     return res.status(422).json({ error: error.details[0].message })
   }
+
+  if (req.files.length === 0) {
+    logger.error(`${method}:/questions${path}\tTidak ada gambar yang diupload`)
+    return res.status(400).json({ error: 'Tidak ada gambar yang diupload' })
+  }
+  value.images = await QuestionService.proccessImages(req.files)
 
   try {
     await QuestionService.addQuestionToDB(value)
     logger.info(`${method}:/questions${path}\tSukses menambahkan soal baru`)
     return res.status(201).json({ message: `Sukses menambahkan soal ${value.mataKuliah}` })
   } catch (error) {
-    logger.error(`/questions${path} | ${method} ~ ${error}`)
+    logger.error(`${method}:/questions${path}\t${error}`)
     return res.status(400).json({ error })
   }
 }
@@ -84,6 +90,12 @@ const updateQuestion = async (req, res) => {
     return res.status(422).json({ error: error.details[0].message })
   }
 
+  if (req.files.length === 0) {
+    logger.error(`${method}:/questions${path}\tTidak ada gambar yang diupload`)
+    return res.status(400).json({ error: 'Tidak ada gambar yang diupload' })
+  }
+  value.images = await QuestionService.proccessImages(req.files)
+
   try {
     await QuestionService.updateQuestionById(questionId, value)
     logger.info(`${method}:/questions${path}\tSukses mengubah soal`)
@@ -98,11 +110,13 @@ const deleteQuestion = async (req, res) => {
   const { questionId } = params
 
   try {
-    const question = QuestionService.getQuestionById(questionId)
+    const question = await QuestionService.getQuestionById(questionId)
     if (!question) {
       logger.error(`${method}:/questions${path}\tTidak dapat menemukan soal`)
       return res.status(404).json({ error: `Tidak dapat menemukan soal dengan ID ${questionId}` })
     }
+
+    question.images.forEach((image) => deleteFile(image))
     await QuestionService.deleteQuestionById(questionId)
     logger.info(`${method}:/questions${path}\tSukses menghapus soal`)
     return res.status(200).json({ message: `Berhasil menghapus soal dengan ID ${questionId}` })

@@ -1,9 +1,10 @@
-const fs = require('fs')
-const path = require('path')
-const User = require('../models/user.model')
-const Question = require('../models/question.model')
+const { deleteFile, compressedFile } = require('../utils/fileUtils')
 const { questionsQuery } = require('./question.service')
+const Question = require('../models/question.model')
+const { logger } = require('../utils/logger')
+const User = require('../models/user.model')
 const mongoose = require('mongoose')
+
 const ObjectId = mongoose.Types.ObjectId
 
 const getUserById = async (userId) => {
@@ -22,9 +23,21 @@ const updateUserById = async (userId, payload) => {
   return await User.findByIdAndUpdate(userId, payload)
 }
 
-const deletePhoto = async (filePath) => {
-  filePath = path.join(__dirname, '../../assets/users', filePath)
-  fs.unlinkSync(filePath, (err) => console.log(err))
+const processPhoto = async (oldPhoto, filename) => {
+  if (oldPhoto !== '') deleteFile(oldPhoto)
+  const compressedPhoto = await compressedFile(filename)
+  if (compressedPhoto) {
+    return compressedPhoto
+  } else {
+    logger.error('Gagal mengubah foto')
+    return oldPhoto
+  }
 }
 
-module.exports = { getUserById, getMyQuestions, getMySaveQuestions, updateUserById, deletePhoto }
+module.exports = {
+  getUserById,
+  getMyQuestions,
+  getMySaveQuestions,
+  updateUserById,
+  processPhoto
+}

@@ -4,6 +4,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const mongoose = require('mongoose')
+const path = require('path')
 
 // UTILITY
 const { logger } = require('./utils/logger')
@@ -35,6 +36,8 @@ app.use(cookieParser())
 
 // routes
 routes(app)
+
+app.use('/assets', express.static(path.join(__dirname, '../assets')))
 
 mongoose.connection.once('open', () => {
   logger.info('Connected to MongoDB')
