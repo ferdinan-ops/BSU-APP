@@ -1,7 +1,5 @@
 const { registerValidation, loginValidation } = require('../validations/auth.validation')
 const AuthService = require('../services/auth.service')
-const { OAuth2Client } = require('google-auth-library')
-const { CONFIG } = require('../config/environtment')
 const { logger } = require('../utils/logger')
 const jwt = require('jsonwebtoken')
 
@@ -52,18 +50,17 @@ const login = async (req, res) => {
     }
 
     const { password, ...other } = user._doc
-    const accessToken = jwt.sign({ ...other }, CONFIG.accessTokenSecret, { expiresIn: '1d' })
-    const refreshToken = jwt.sign({ ...other }, CONFIG.refreshTokenSecret, { expiresIn: '7d' })
+    const accessToken = AuthService.accessTokenSign({ ...other })
+    const refreshToken = AuthService.refreshTokenSign({ ...other })
     logger.info(`${method}:/auth${path}\tSukses login ${user.username}`)
 
-    res.cookie('jwt', refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 hari
+    res.cookie('bsu', refreshToken, {
+      httpOnly: true, // accessible only by web server
+      secure: true, // https
+      sameSite: 'None', // cross-site cookie
+      maxAge: 7 * 24 * 60 * 60 * 1000 // cookie expiry: set to match rT
     })
-
-    return res.status(200).json({ accessToken })
+    res.json({ accessToken })
   } catch (error) {
     return res.status(400).json({ error })
   }
@@ -71,34 +68,50 @@ const login = async (req, res) => {
 
 const loginWithGoogle = async (req, res) => {
   const { body, path, method } = req
-  const client = new OAuth2Client(CONFIG.googleClientId)
 
   try {
     // Verify Google ID token
-    const ticket = await client.verifyIdToken({ idToken: body.idToken, audience: CONFIG.googleClientId })
-    if (ticket.getPayload()) {
-      const email = ticket.getPayload()?.email
-      const username = ticket.getPayload()?.name
-      const photo = ticket.getPayload()?.picture
+    const { name, email, picture } = await AuthService.verifyGoogleIdToken(body.idToken)
+    let user = await AuthService.findUserByEmail(email)
+    if (!user) user = await AuthService.addUser({ username: name, email, photo: picture })
 
-      let user = await AuthService.findUserByEmail(email)
-      if (!user) {
-        user = await AuthService.addUser({ username, email, photo })
-      }
+    const { password, ...other } = user._doc
+    const accessToken = AuthService.accessTokenSign({ ...other })
+    const refreshToken = AuthService.refreshTokenSign({ ...other })
+    logger.info(`${method}:/auth${path}\tSukses login ${user.username}`)
 
-      const { password, ...other } = user._doc
-      const accessToken = jwt.sign({ ...other }, CONFIG.accessTokenSecret, { expiresIn: '1d' })
-      const refreshToken = jwt.sign({ ...other }, CONFIG.refreshTokenSecret, { expiresIn: '7d' })
-      logger.info(`${method}:/auth${path}\tSukses login ${username}`)
+    res.cookie('bsu', refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'None',
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    })
+    res.json({ accessToken })
+  } catch (error) {
+    return res.status(400).json({ error })
+  }
+}
 
-      res.cookie('jwt', refreshToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none',
-        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 hari
-      })
-      return res.status(200).json({ accessToken })
-    }
+const loginWithGoogleAccessToken = async (req, res) => {
+  const { body, path, method } = req
+
+  try {
+    const { name, email, picture } = await AuthService.verifyGoogleAccessToken(body.accessToken)
+    let user = await AuthService.findUserByEmail(email)
+    if (!user) user = await AuthService.addUser({ username: name, email, photo: picture })
+
+    const { password, ...other } = user._doc
+    const accessToken = AuthService.accessTokenSign({ ...other })
+    const refreshToken = AuthService.refreshTokenSign({ ...other })
+    logger.info(`${method}:/auth${path}\tSukses login ${user.username}`)
+
+    res.cookie('bsu', refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'None',
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    })
+    res.json({ accessToken })
   } catch (error) {
     return res.status(400).json({ error })
   }
@@ -106,12 +119,12 @@ const loginWithGoogle = async (req, res) => {
 
 const refresh = (req, res) => {
   const cookies = req.cookies
-  if (!cookies?.jwt) {
-    logger.error(`${req.method}:/auth${req.path}\tTidak ada cookie jwt atau cookie secure`)
+  if (!cookies?.bsu) {
+    logger.error(`${req.method}:/auth${req.path}\tTidak ada cookie bsu atau cookie secure`)
     return res.status(401).json({ message: 'unauthorized' })
   }
-  const refreshToken = cookies.jwt
 
+  const refreshToken = cookies.bsu
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, decoded) => {
     const { email } = decoded
     if (err) {
@@ -126,7 +139,7 @@ const refresh = (req, res) => {
     }
 
     const { password, ...other } = foundUser._doc
-    const accessToken = jwt.sign({ ...other }, CONFIG.accessTokenSecret, { expiresIn: '1d' })
+    const accessToken = AuthService.accessTokenSign({ ...other })
     logger.info(`${req.method}:/auth${req.path}\tBerhasil melakukan refresh token`)
     res.json({ accessToken })
   })
@@ -139,9 +152,9 @@ const logout = (req, res) => {
     return res.sendStatus(204)
   }
 
-  res.clearCookie('jwt', { httpOnly: true, sameSite: 'none', secure: true })
+  res.clearCookie('bsu', { httpOnly: true, sameSite: 'None', secure: true })
   logger.info(`${req.method}:/auth${req.path}\tBerhasil menghapus token`)
   res.status(200).json({ message: 'Cookie cleared' })
 }
 
-module.exports = { register, login, loginWithGoogle, refresh, logout }
+module.exports = { register, login, loginWithGoogle, loginWithGoogleAccessToken, refresh, logout }

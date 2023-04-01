@@ -9,8 +9,8 @@ const path = require('path')
 // UTILITY
 const { logger } = require('./utils/logger')
 const connectDB = require('./utils/connectDB')
-const corsOptions = require('./config/corsOptions')
 const { routes } = require('./routes')
+const corsOptions = require('./config/corsOptions')
 
 // connect to db
 connectDB()
@@ -18,21 +18,11 @@ connectDB()
 const app = express()
 const port = process.env.PORT
 
-// body parser
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
-
-// cors
-app.use(cors(corsOptions))
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE')
-  res.setHeader('Access-Control-Allow-Headers', '*')
-  next()
-})
-
-// cookies parser
 app.use(cookieParser())
+app.use(express.json())
+app.use(cors(corsOptions))
+app.use(bodyParser.json({ limit: '30mb', extended: true }))
+app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))
 
 // routes
 routes(app)
