@@ -1,8 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
-import { Login, Register } from './pages'
-import Home from './pages/Home'
-import { ProtectedAuth, ProtectedRoute } from './components'
+import { Login, Register, Home } from './components/pages'
+import { ProtectedAuth, ProtectedRoute } from './components/routes'
 
 const App = () => {
   return (

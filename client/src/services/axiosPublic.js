@@ -1,4 +1,4 @@
-import CONFIG from '../config/environtment'
+import CONFIG from '../constants/environtment'
 import axios from 'axios'
 
 const axiosPublic = axios.create({

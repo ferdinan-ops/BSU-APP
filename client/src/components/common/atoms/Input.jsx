@@ -5,7 +5,7 @@ const Input = ({ label, ...rest }) => {
         {label}
       </label>
       <input
-        className="xl:py-4 xl:px-8 px-6 py-3 text-[15px] rounded xl:text-base bg-[#F3F4F6] outline-none"
+        className="xl:py-4 xl:px-8 px-6 py-3 text-sm rounded xl:text-[15px] bg-[#F3F4F6] outline-none placeholder:text-gray-400"
         id={label}
         required
         {...rest}

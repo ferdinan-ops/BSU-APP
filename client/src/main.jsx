@@ -6,18 +6,22 @@ import './index.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { AuthContextProvider } from './context/authContext'
 import { GoogleOAuthProvider } from '@react-oauth/google'
-import CONFIG from './config/environtment'
+import { Provider } from 'react-redux'
+import CONFIG from './constants/environtment'
+import { store } from './store/store'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <GoogleOAuthProvider clientId={CONFIG.googleClientId}>
-      <AuthContextProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/*" element={<App />} />
-          </Routes>
-        </BrowserRouter>
-      </AuthContextProvider>
-    </GoogleOAuthProvider>
+    <Provider store={store}>
+      <GoogleOAuthProvider clientId={CONFIG.googleClientId}>
+        <AuthContextProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/*" element={<App />} />
+            </Routes>
+          </BrowserRouter>
+        </AuthContextProvider>
+      </GoogleOAuthProvider>
+    </Provider>
   </React.StrictMode>
 )

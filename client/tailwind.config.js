@@ -17,7 +17,9 @@ export default {
       },
       colors: {
         primary: '#FCB900',
-        font: '#2D3436',
+        // primary: '#2d3e50',
+        // primary: '#13A458',
+        font: '#344054',
         'primary-hover': '#E1A500'
       },
       boxShadow: {
