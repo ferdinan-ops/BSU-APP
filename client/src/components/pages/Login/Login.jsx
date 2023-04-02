@@ -1,8 +1,9 @@
-import { Password, Input, Button } from '../common'
-import { useAuthContext } from '../../context/authContext'
-import { useGoogleLogin } from '@react-oauth/google'
+import { login, loginWithGoogleCustom } from '../../../store/features/authSlice'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { Logo, LogoWhite } from '../../assets'
+import { useGoogleLogin } from '@react-oauth/google'
+import { Password, Input, Button } from '../../common'
+import { LoginBg, Logo, LogoWhite } from '../../../assets'
 import { useEffect, useState } from 'react'
 import { FcGoogle } from 'react-icons/fc'
 import { toast } from 'react-hot-toast'
@@ -10,13 +11,13 @@ import { toast } from 'react-hot-toast'
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
 
   const navigate = useNavigate()
-  const { login, loginWithGoogleCustom } = useAuthContext()
+  const dispatch = useDispatch()
+  const { loading } = useSelector((state) => state.auth)
 
   useEffect(() => {
-    document.title = 'BSU ~ Login'
+    document.title = 'BSU ~ Masuk'
   }, [])
 
   const handleEmail = (e) => setEmail(e.target.value)
@@ -25,25 +26,20 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      setIsLoading(true)
-      await login({ email, password })
-      toast.success('Berhasil Login')
-      setIsLoading(false)
+      await dispatch(login({ email, password })).unwrap()
       navigate('/home')
-    } catch (error) {
-      console.log({ error })
+      toast.success('Berhasil Login')
+    } catch (err) {
+      toast.error(err.error)
     }
   }
 
   const handleLoginWithGoogle = useGoogleLogin({
-    onSuccess: async (res) => {
-      try {
-        await loginWithGoogleCustom({ accessToken: res.access_token })
-        toast.success('Berhasil Login')
-        navigate('/home')
-      } catch (error) {
-        console.log({ error })
-      }
+    onSuccess: (res) => {
+      const { access_token: accessToken } = res
+      dispatch(loginWithGoogleCustom({ accessToken }))
+      navigate('/home')
+      toast.success('Berhasil Login')
     }
   })
 
@@ -79,7 +75,7 @@ const Login = () => {
             <Password placeholder="********" value={password} onChange={handlePassword} />
             <Button
               className="bg-primary shadow-button hover:bg-primary-hover disabled:bg-primary/60"
-              isLoading={isLoading}
+              isLoading={loading}
             >
               Masuk
             </Button>
@@ -94,12 +90,12 @@ const Login = () => {
         </div>
       </div>
 
-      <div className="flex-1 xl:flex hidden min-h-screen bg-font">
-        <div className="mb-[60px] absolute top-8 z-50 left-8 font-source flex items-center gap-4">
+      <div className="flex-1 xl:flex hidden min-h-screen">
+        <div className="mb-[60px] absolute top-8 z-50 left-8 font-source flex items-center gap-3">
           <img src={LogoWhite} alt="logo-white" className="w-8 h-8" />
           <span className="text-white font-semibold text-xl">BSU (Bank Soal Unika)</span>
         </div>
-        {/* <img src="https://source.unsplash.com/random/?campus" alt="" className="w-full object-cover brightness-50" /> */}
+        <img src={LoginBg} alt="login-bg" className="w-full h-full object-cover brightness-50" />
       </div>
     </section>
   )

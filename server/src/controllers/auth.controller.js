@@ -15,7 +15,7 @@ const register = async (req, res) => {
     const isExist = await AuthService.findUserByEmail(value.email)
     if (isExist) {
       logger.warn(`${method}:/auth${path}\tEmail telah terdaftar`)
-      return res.status(402).json({ message: 'Email telah terdaftar' })
+      return res.status(402).json({ error: 'Email telah terdaftar' })
     }
 
     value.password = `${AuthService.hashing(value.password)}`

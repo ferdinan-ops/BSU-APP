@@ -1,10 +1,12 @@
 import axios from 'axios'
-import { useAuthContext } from '../context/authContext'
+import { useDispatch, useSelector } from 'react-redux'
 import jwtDecode from 'jwt-decode'
 import dayjs from 'dayjs'
+import { setUserInfo } from '../store/features/authSlice'
 
 const useAxios = ({ contentType }) => {
-  const { setUserInfo, userInfo } = useAuthContext()
+  const dispatch = useDispatch()
+  const { userInfo } = useSelector((state) => state.auth)
 
   const axiosInstance = axios.create({
     baseURL: 'http://localhost:5000',
@@ -14,6 +16,7 @@ const useAxios = ({ contentType }) => {
 
   axiosInstance.interceptors.request.use(async (req) => {
     const user = jwtDecode(userInfo?.token)
+    console.log({ userToken: user })
     const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1
     if (!isExpired) {
       req.headers.Authorization = `Bearer ${userInfo?.token}`
@@ -26,15 +29,17 @@ const useAxios = ({ contentType }) => {
         headers: { 'Content-Type': 'Application/json' }
       })
       const decoded = jwtDecode(data.accessToken)
-      setUserInfo({ token: data.accessToken, ...decoded })
+      dispatch(setUserInfo({ token: data.accessToken, ...decoded }))
+      localStorage.setItem('user', JSON.stringify({ token: data.accessToken, ...decoded }))
       req.headers.Authorization = `Bearer ${data.accessToken}`
-      return req
     } catch (error) {
       if (error.response.status === 401) {
-        setUserInfo(null)
+        dispatch(setUserInfo(null))
+        localStorage.removeItem('user')
         window.location.href = '/login'
       }
     }
+    return req
   })
 
   return axiosInstance

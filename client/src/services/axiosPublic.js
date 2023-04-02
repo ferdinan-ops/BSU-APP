@@ -7,7 +7,9 @@ const axiosPublic = axios.create({
   headers: { 'Content-Type': 'Application/json' }
 })
 
-export const login = (fields) => axiosPublic.post('/auth/login', fields)
-export const loginWithGoogle = (fields) => axiosPublic.post('/auth/google', fields)
-export const loginWithGoogleCustom = (fields) => axiosPublic.post('/auth/google-custom', fields)
-export const logout = () => axiosPublic.delete('/logout')
+/* AUTH */
+export const loginAPI = (fields) => axiosPublic.post('/auth/login', fields)
+export const loginWithGoogleAPI = (fields) => axiosPublic.post('/auth/google', fields)
+export const loginWithGoogleCustomAPI = (fields) => axiosPublic.post('/auth/google-custom', fields)
+export const logoutAPI = () => axiosPublic.delete('/logout')
+export const registerAPI = (fields) => axiosPublic.post('/auth/register', fields)
