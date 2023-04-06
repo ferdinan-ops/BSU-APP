@@ -1,16 +1,31 @@
-const Input = ({ label, ...rest }) => {
+// const Input = ({ label, ...rest }) => {
+//   return (
+//     <div className="flex flex-col xl:gap-3 gap-2">
+//       <label htmlFor={label} className="font-semibold tracking-wide text-[13px] md:text-sm">
+//         {label}
+//       </label>
+//       <input
+//         className="xl:py-3 xl:px-6 px-4 py-2 text-sm rounded-lg xl:text-[15px] bg-transparent outline-none placeholder:text-gray-400 border border-slate-300 focus:border-font"
+//         id={label}
+//         required
+//         {...rest}
+//       />
+//     </div>
+//   )
+// }
+
+// export default Input
+
+const Input = ({ id, variant, ...rest }) => {
   return (
-    <div className="flex flex-col xl:gap-3 gap-2">
-      <label htmlFor={label} className="font-semibold tracking-wide text-[15px] xl:text-base">
-        {label}
-      </label>
+    <>
       <input
-        className="xl:py-4 xl:px-8 px-6 py-3 text-sm rounded xl:text-[15px] bg-[#F3F4F6] outline-none placeholder:text-gray-400"
-        id={label}
+        id={id}
         required
+        className={`text-sm rounded-lg xl:text-[15px] bg-transparent outline-none placeholder:text-gray-400 ${variant}`}
         {...rest}
       />
-    </div>
+    </>
   )
 }
 

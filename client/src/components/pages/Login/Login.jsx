@@ -1,9 +1,8 @@
 import { login, loginWithGoogleCustom } from '../../../store/features/authSlice'
+import { Password, Button, TextField, Checkbox } from '../../common'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { useGoogleLogin } from '@react-oauth/google'
-import { Password, Input, Button } from '../../common'
-import { LoginBg, Logo, LogoWhite } from '../../../assets'
 import { useEffect, useState } from 'react'
 import { FcGoogle } from 'react-icons/fc'
 import { toast } from 'react-hot-toast'
@@ -27,7 +26,7 @@ const Login = () => {
     e.preventDefault()
     try {
       await dispatch(login({ email, password })).unwrap()
-      navigate('/home')
+      navigate('/')
       toast.success('Berhasil Login')
     } catch (err) {
       toast.error(err.error)
@@ -38,66 +37,49 @@ const Login = () => {
     onSuccess: (res) => {
       const { access_token: accessToken } = res
       dispatch(loginWithGoogleCustom({ accessToken }))
-      navigate('/home')
+      navigate('/')
       toast.success('Berhasil Login')
     }
   })
 
   return (
-    <section className="flex xl:max-h-screen relative flex-row-reverse text-font xl:px-0 xl:py-0 py-[40px] px-[18px]">
-      <div className="flex-1 flex relative items-center justify-center flex-col xl:flex-row">
-        <div className="static mb-[40px] flex-col xl:hidden top-8 z-50 left-8 font-source flex items-center gap-3 xl:gap-4">
-          <img src={Logo} alt="logo-white" className="xl:w-8 xl:h-8 w-7 h-7" />
-          <span className="font-semibold text-lg xl:text-xl">BSU (Bank Soal Unika)</span>
-        </div>
-
-        <div className="xl:w-[55%] font-poppins flex flex-col gap-9 xl:gap-10 w-full">
-          <div className="flex gap-2 flex-col">
-            <h1 className="text-[28px] xl:text-[36px] font-semibold">Masuk</h1>
-            <p className="text-font/50 text-[15px] xl:text-sm font-medium">
-              Selamat datang di BSU, silahkan isi data yang diperlukan untuk bisa masuk ke aplikasi
-            </p>
-          </div>
-
-          <Button className="gap-5 border border-slate-300 hover:bg-slate-100" onClick={() => handleLoginWithGoogle()}>
-            <FcGoogle className="xl:text-2xl text-[22px]" />
-            <span className="text-slate-500">Masuk dengan Google</span>
-          </Button>
-
-          <div className="flex gap-5 items-center text-[13px] xl:text-sm">
-            <span className="border border-[#DFDFDF] h-[2px] w-full"></span>
-            <span className="text-[#ACADAC] min-w-max font-medium">Atau masuk dengan</span>
-            <span className="border border-[#DFDFDF] h-[2px] w-full"></span>
-          </div>
-
-          <form className="flex flex-col gap-8 xl:gap-7" onSubmit={handleSubmit}>
-            <Input label="Email" type="email" placeholder="name@email.com" value={email} onChange={handleEmail} />
-            <Password placeholder="********" value={password} onChange={handlePassword} />
-            <Button
-              className="bg-primary shadow-button hover:bg-primary-hover disabled:bg-primary/60"
-              isLoading={loading}
-            >
-              Masuk
-            </Button>
-          </form>
-
-          <div className="text-center font-semibold text-sm xl:text-base">
-            <span>Belum punya akun? </span>
-            <Link to="/register" className="text-primary">
-              Daftar sekarang, gratis!
-            </Link>
-          </div>
-        </div>
+    <div className="flex w-full flex-col gap-9 font-poppins xl:w-[55%] xl:gap-10">
+      <div className="flex flex-col gap-1">
+        <h1 className="text-[28px] font-semibold xl:text-[36px]">Masuk</h1>
+        <p className="text-[15px] font-medium text-font/50 xl:text-sm">
+          Selamat datang di BSU, silahkan isi data yang diperlukan untuk bisa masuk ke aplikasi
+        </p>
       </div>
 
-      <div className="flex-1 xl:flex hidden min-h-screen">
-        <div className="mb-[60px] absolute top-8 z-50 left-8 font-source flex items-center gap-3">
-          <img src={LogoWhite} alt="logo-white" className="w-8 h-8" />
-          <span className="text-white font-semibold text-xl">BSU (Bank Soal Unika)</span>
+      <form className="flex flex-col gap-5 xl:gap-6" onSubmit={handleSubmit}>
+        <TextField label="Email" type="email" placeholder="name@email.com" value={email} onChange={handleEmail} />
+        <Password label="Kata Sandi" value={password} onChange={handlePassword} />
+        <div className="flex items-center justify-between font-semibold tracking-wide ">
+          <Checkbox label="Ingat Saya" />
+          <Link to="/login" className="text-[13px] text-primary xl:text-sm">
+            Lupa Password?
+          </Link>
         </div>
-        <img src={LoginBg} alt="login-bg" className="w-full h-full object-cover brightness-50" />
+        <Button className="bg-primary text-white hover:bg-primary-hover disabled:bg-primary/60" isLoading={loading}>
+          Masuk
+        </Button>
+      </form>
+
+      <Button
+        className="-mt-6 gap-5 border border-slate-300 hover:bg-slate-100"
+        onClick={() => handleLoginWithGoogle()}
+      >
+        <FcGoogle className="text-[22px] xl:text-2xl" />
+        <span className="text-font">Masuk dengan Google</span>
+      </Button>
+
+      <div className="text-center text-sm font-semibold xl:text-base">
+        <span>Belum punya akun? </span>
+        <Link to="/register" className="text-primary hover:underline">
+          Daftar sekarang, gratis!
+        </Link>
       </div>
-    </section>
+    </div>
   )
 }
 

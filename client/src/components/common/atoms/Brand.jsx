@@ -1,11 +1,13 @@
-const Brand = ({ src, title, className }) => {
+import { Logo } from '../../../assets'
+
+const Brand = ({ variant, width }) => {
   return (
-    <>
-      <div className={`${className}`}>
-        <img src={src} alt="brand" className="w-full h-full" />
+    <div className={`flex items-center gap-3 font-source text-font ${variant}`}>
+      <div className={width}>
+        <img src={Logo} alt="logo" className="h-full w-full" />
       </div>
-      <span>{title}</span>
-    </>
+      <span className="font-bold">BSU</span>
+    </div>
   )
 }
 

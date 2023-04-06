@@ -6,7 +6,7 @@ export default {
       screens: {
         sm: '640px',
         md: '768px',
-        lg: '1024px',
+        lg: '1080px',
         xl: '1170px'
       }
     },
@@ -16,14 +16,12 @@ export default {
         source: ['Source Sans Pro', 'sans-serif']
       },
       colors: {
-        primary: '#FCB900',
-        // primary: '#2d3e50',
-        // primary: '#13A458',
+        primary: '#5429FF',
         font: '#344054',
-        'primary-hover': '#E1A500'
+        'primary-hover': '#3b18c7'
       },
       boxShadow: {
-        button: '0px 10px 20px rgba(252, 185, 0, 0.25)'
+        button: '0px 10px 20px rgba(84, 41, 255, 0.25)'
       }
     }
   },
@@ -33,7 +31,7 @@ export default {
       {
         light: {
           ...require('daisyui/src/colors/themes')['[data-theme=light]'],
-          primary: '#FCB900'
+          primary: '#5429FF'
         }
       }
     ]

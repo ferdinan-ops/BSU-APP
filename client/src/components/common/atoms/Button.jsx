@@ -1,13 +1,14 @@
-import { DotWave } from '@uiball/loaders'
+import { Ring } from '@uiball/loaders'
+
 const Button = ({ isLoading, children, className, ...rest }) => {
   return (
     <button
-      // className="bg-primary flex items-center justify-center hover:bg-primary-hover text-font font-bold py-3 text-sm xl:text-base xl:py-4 rounded disabled:bg-primary/60 shadow-button"
-      className={`flex items-center justify-center text-font font-semibold py-3 text-sm xl:text-base xl:py-4 rounded ${className}`}
+      className={`flex items-center justify-center rounded-lg py-2 text-sm font-semibold text-font xl:py-3 xl:text-base ${className}`}
       disabled={isLoading}
       {...rest}
     >
-      {isLoading ? <DotWave size={34} speed={1} color="white" /> : children}
+      {/* {isLoading ? <DotWave size={34} speed={1} color="white" /> : children} */}
+      {isLoading ? <Ring size={24} lineWeight={6} speed={2} color="white" /> : children}
     </button>
   )
 }

@@ -6,7 +6,7 @@ const ProtectedAuth = ({ children }) => {
   const { userInfo } = useSelector((state) => state.auth)
 
   if (userInfo) {
-    return <Navigate to="/home" replace state={{ from: location }} />
+    return <Navigate to="/" replace state={{ from: location }} />
   }
   return children || <Outlet />
 }
