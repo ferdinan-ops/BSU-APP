@@ -1,10 +1,14 @@
-import { Route, Routes } from 'react-router-dom'
-import { Toaster } from 'react-hot-toast'
-import { Login, Register, Home } from './components/pages'
 import { ProtectedAuth, ProtectedRoute } from './components/routes'
 import { AuthLayout, MainLayout } from './components/common'
+import { Login, Register, Home } from './components/pages'
+import { Route, Routes } from 'react-router-dom'
+import localization from 'moment/locale/id'
+import { Toaster } from 'react-hot-toast'
+import moment from 'moment'
 
 const App = () => {
+  moment.updateLocale('id', localization)
+
   return (
     <>
       <div>

@@ -8,7 +8,7 @@ const Header = () => {
   const [showSearch, setShowSearch] = useState(false)
 
   return (
-    <header className="fixed inset-x-0 top-0 flex h-20 items-center bg-white font-source text-font md:h-24">
+    <header className="sticky inset-x-0 top-0 flex h-20 items-center bg-white font-source text-font md:h-24">
       <div className="container mx-auto flex items-center justify-between gap-16 px-[18px] xl:px-0">
         <HiBars3 className="text-3xl xl:hidden" onClick={() => setShowNav(!showNav)} />
         <Brand width="xl:h-9 xl:w-9 h-7 w-7" variant="text-xl md:text-[25px]" />
