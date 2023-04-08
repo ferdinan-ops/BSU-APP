@@ -1,5 +1,8 @@
-import { HiEllipsisHorizontal, HiHeart, HiBookmark } from 'react-icons/hi2'
+import { HiHeart, HiBookmark } from 'react-icons/hi2'
 import CONFIG from '../../../constants/environtment'
+import { Link } from 'react-router-dom'
+import { Avatar, Info } from '../atoms'
+import { More } from '../molecules'
 import moment from 'moment'
 
 const Post = ({ post }) => {
@@ -7,53 +10,37 @@ const Post = ({ post }) => {
 
   return (
     <article className="rounded-lg bg-white font-source">
-      <div className="flex items-center justify-between border-b border-slate-200 p-5">
-        <div className="flex items-center gap-4">
-          <img
-            src={
-              post?.user?.photo ? `${ASSETS_URI}/${post?.user?.photo}` : 'https://source.unsplash.com/random/?profile'
-            }
-            alt={post?.user?.username}
-            className="h-9 w-9 rounded-full object-cover"
-          />
+      <div className="flex items-center justify-between p-5">
+        <Link className="flex items-center gap-4" to={`/user/${post?.user?._id}`}>
+          <Avatar src={post?.user?.photo} alt={post?.user?.username} size="h-9 w-9" />
           <div className="flex items-center gap-2">
             <span className="font-semibold">{post?.user?.username}</span>
             <span className="text-slate-400">&bull;</span>
             <span className="text-[15px] text-slate-400">{moment(post.createdAt).fromNow()}</span>
           </div>
-        </div>
-        <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full hover:bg-slate-200">
-          <HiEllipsisHorizontal className="text-2xl text-font" />
-        </div>
+        </Link>
+        <More postUserId={post?.user?._id} />
       </div>
+
       <div className="flex gap-7 p-5">
         <div className="h-[216px] flex-[1.5] overflow-hidden rounded-lg">
           <img src={`${ASSETS_URI}/${post.image}`} alt={post.mataKuliah} className="h-full w-full object-cover" />
         </div>
+
         <div className="flex flex-[4] flex-col gap-4">
-          <h1 className="text-xl font-semibold capitalize md:text-2xl">{post.mataKuliah}</h1>
+          <Link
+            to={`/question/${post._id}`}
+            className="w-fit text-xl font-semibold capitalize hover:text-primary md:text-2xl"
+          >
+            {post.mataKuliah}
+          </Link>
+
           <table className="w-fit text-sm md:text-base">
             <tbody>
-              <tr>
-                <td className="font-semibold">Fakultas</td>
-                <td className="px-4">:</td>
-                <td className="text-[#5C5C5C]">{post.fakultas}</td>
-              </tr>
-              <tr>
-                <td className="font-semibold">Program Studi</td>
-                <td className="px-4">:</td>
-                <td className="text-[#5C5C5C]">{post.programStudi}</td>
-              </tr>
-              <tr>
-                <td className="font-semibold">Semester</td>
-                <td className="px-4">:</td>
-                <td className="text-[#5C5C5C]">{post.semester}</td>
-              </tr>
-              <tr>
-                <td className="font-semibold">Kategori</td>
-                <td className="px-4">:</td>
-                <td className="text-[#5C5C5C]">{post.kategori}</td>
-              </tr>
+              <Info title="Fakultas" content={post.fakultas} />
+              <Info title="Program Studi" content={post.programStudi} />
+              <Info title="Semester" content={post.semester} />
+              <Info title="Kategori" content={post.kategori} />
             </tbody>
           </table>
 

@@ -22,7 +22,7 @@ const checkPassword = (password, userPassword) => {
 }
 
 const accessTokenSign = (payload) => {
-  const accessToken = jwt.sign(payload, CONFIG.accessTokenSecret, { expiresIn: '10s' })
+  const accessToken = jwt.sign(payload, CONFIG.accessTokenSecret, { expiresIn: '1d' })
   return accessToken
 }
 

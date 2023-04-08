@@ -7,7 +7,7 @@ export default {
         sm: '640px',
         md: '768px',
         // lg: '1240px',
-        lg: '1020px',
+        lg: '1024px',
         xl: '1170px'
       }
     },
@@ -22,7 +22,8 @@ export default {
         'primary-hover': '#3b18c7'
       },
       boxShadow: {
-        button: '0px 10px 20px rgba(84, 41, 255, 0.25)'
+        button: '0px 10px 20px rgba(84, 41, 255, 0.25)',
+        'white-btn': '0px 10px 20px rgba(255, 255, 255, 0.25)'
       }
     }
   },

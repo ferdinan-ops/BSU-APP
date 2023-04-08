@@ -60,13 +60,16 @@ const Login = () => {
             Lupa Password?
           </Link>
         </div>
-        <Button className="bg-primary text-white hover:bg-primary-hover disabled:bg-primary/60" isLoading={loading}>
+        <Button
+          className="bg-primary font-semibold text-white hover:bg-primary-hover disabled:bg-primary/60 xl:text-base"
+          isLoading={loading}
+        >
           Masuk
         </Button>
       </form>
 
       <Button
-        className="-mt-6 gap-5 border border-slate-300 hover:bg-slate-100"
+        className="-mt-6 gap-5 border border-slate-300 font-semibold hover:bg-slate-100 xl:text-base"
         onClick={() => handleLoginWithGoogle()}
       >
         <FcGoogle className="text-[22px] xl:text-2xl" />

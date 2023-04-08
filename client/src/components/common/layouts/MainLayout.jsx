@@ -5,7 +5,7 @@ const MainLayout = () => {
   return (
     <>
       <Header />
-      <div className="min-h-[calc(100vh-80px)]">
+      <div className="z-0 flex min-h-[calc(100vh-100px)] flex-col font-source">
         <Outlet />
       </div>
     </>
