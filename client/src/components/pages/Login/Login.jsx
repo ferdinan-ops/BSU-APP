@@ -1,16 +1,15 @@
 import { login, loginWithGoogleCustom } from '../../../store/features/authSlice'
+import { loginInitialValues, loginValidation } from '../../../validations/auth.validation'
 import { Password, Button, TextField, Checkbox } from '../../common'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { useGoogleLogin } from '@react-oauth/google'
-import { useEffect, useState } from 'react'
 import { FcGoogle } from 'react-icons/fc'
 import { toast } from 'react-hot-toast'
+import { useFormik } from 'formik'
+import { useEffect } from 'react'
 
 const Login = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { loading } = useSelector((state) => state.auth)
@@ -19,11 +18,8 @@ const Login = () => {
     document.title = 'BSU ~ Masuk'
   }, [])
 
-  const handleEmail = (e) => setEmail(e.target.value)
-  const handlePassword = (e) => setPassword(e.target.value)
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const handleSubmit = async (values) => {
+    const { email, password } = values
     try {
       await dispatch(login({ email, password })).unwrap()
       navigate('/')
@@ -42,6 +38,12 @@ const Login = () => {
     }
   })
 
+  const formik = useFormik({
+    initialValues: loginInitialValues,
+    validationSchema: loginValidation,
+    onSubmit: handleSubmit
+  })
+
   return (
     <div className="flex w-full flex-col gap-9 font-poppins xl:w-[55%] xl:gap-10">
       <div className="flex flex-col gap-1">
@@ -51,9 +53,21 @@ const Login = () => {
         </p>
       </div>
 
-      <form className="flex flex-col gap-5 xl:gap-6" onSubmit={handleSubmit}>
-        <TextField label="Email" type="email" placeholder="name@email.com" value={email} onChange={handleEmail} />
-        <Password label="Kata Sandi" value={password} onChange={handlePassword} />
+      <form className="flex flex-col gap-5 xl:gap-6" onSubmit={formik.handleSubmit}>
+        <TextField
+          label="Email"
+          type="email"
+          name="email"
+          placeholder="name@email.com"
+          error={formik.touched.email && formik.errors.email && formik.errors.email}
+          {...formik.getFieldProps('email')}
+        />
+        <Password
+          label="Kata Sandi"
+          name="password"
+          error={formik.touched.password && formik.errors.password && formik.errors.password}
+          {...formik.getFieldProps('password')}
+        />
         <div className="flex items-center justify-between font-semibold tracking-wide ">
           <Checkbox label="Ingat Saya" />
           <Link to="/login" className="text-[13px] text-primary xl:text-sm">
@@ -61,7 +75,7 @@ const Login = () => {
           </Link>
         </div>
         <Button
-          className="bg-primary font-semibold text-white hover:bg-primary-hover disabled:bg-primary/60 xl:text-base"
+          className="mt-2 bg-primary font-semibold text-white hover:bg-primary-hover disabled:bg-primary/60 xl:text-base"
           isLoading={loading}
         >
           Masuk

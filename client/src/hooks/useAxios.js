@@ -16,7 +16,6 @@ const useAxios = ({ contentType }) => {
 
   axiosInstance.interceptors.request.use(async (req) => {
     const user = jwtDecode(userInfo?.token)
-    console.log({ userToken: user })
     const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1
     if (!isExpired) {
       req.headers.Authorization = `Bearer ${userInfo?.token}`

@@ -1,10 +1,9 @@
+import { Label } from '../atoms'
 const Checkbox = ({ label, ...rest }) => {
   return (
-    <div className="form-control">
-      <label className="label cursor-pointer gap-3">
-        <input type="checkbox" className="checkbox-primary checkbox" {...rest} />
-        <span className="label-text text-[13px] xl:text-sm">{label}</span>
-      </label>
+    <div className="flex items-center gap-3">
+      <input type="checkbox" id={label} className="h-[17px] w-[17px] cursor-pointer accent-primary" />
+      <Label htmlFor={label}>{label}</Label>
     </div>
   )
 }

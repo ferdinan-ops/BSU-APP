@@ -1,6 +1,11 @@
+import { useEffect } from 'react'
 import { Button, TextField, Upload } from '../../common'
 
 const Create = () => {
+  useEffect(() => {
+    document.title = 'BSU ~ Upload Soal'
+  }, [])
+
   return (
     <section className="container mx-auto w-full px-[18px] py-[40px] xl:px-0 xl:py-[60px]">
       <div className="mx-auto w-full md:w-10/12 xl:w-8/12">
@@ -10,7 +15,7 @@ const Create = () => {
           <TextField label="Fakultas" placeholder="Ilmu Komputer" />
           <TextField label="Program Studi" placeholder="Teknik Informatika" />
           <TextField label="Nama Dosen" placeholder="Budi Harianja, S.Kom, M.Kom" />
-          <div className="flex flex-col items-center gap-6 xl:flex-row xl:gap-0">
+          <div className="flex flex-col items-center gap-6 xl:flex-row xl:gap-5">
             <div className="w-full">
               <TextField label="Tahun Ajaran" placeholder="2020/2021" />
             </div>

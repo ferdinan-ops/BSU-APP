@@ -1,40 +1,40 @@
-import { register } from '../../../store/features/authSlice'
+import { register as registerAction } from '../../../store/features/authSlice'
 import { Button, Password, TextField } from '../../common'
 import { useDispatch, useSelector } from 'react-redux'
+import { registerInitialValues, registerValidation } from '../../../validations/auth.validation'
 import { Link, useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { toast } from 'react-hot-toast'
+import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
 
 const Register = () => {
-  const [email, setEmail] = useState('')
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const {
-    register: { loading }
-  } = useSelector((state) => state.auth)
+  const { register: state } = useSelector((state) => state.auth)
+
+  const { register, handleSubmit } = useForm()
 
   useEffect(() => {
     document.title = 'BSU ~ Daftar'
   }, [])
 
-  const handleUsername = (e) => setUsername(e.target.value)
-  const handleEmail = (e) => setEmail(e.target.value)
-  const handlePassword = (e) => setPassword(e.target.value)
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-
+  const onSubmit = async (values) => {
+    const { username, email, password } = values
     try {
-      await dispatch(register({ username, email, password })).unwrap()
+      await dispatch(registerAction({ username, email, password })).unwrap()
       toast.success('Anda berhasil Terdaftar, silahkan login')
       navigate('/login')
     } catch (error) {
       toast.error(error.error)
     }
   }
+
+  const formik = useFormik({
+    initialValues: registerInitialValues,
+    validationSchema: registerValidation,
+    onSubmit: handleSubmit
+  })
 
   return (
     <div className="flex w-full flex-col gap-9 font-poppins xl:w-[55%] xl:gap-10">
@@ -45,11 +45,39 @@ const Register = () => {
         </p>
       </div>
 
-      <form className="flex flex-col gap-8 xl:gap-7" onSubmit={handleSubmit}>
-        <TextField placeholder="John Doe" label="Username" type="text" value={username} onChange={handleUsername} />
-        <TextField placeholder="name@email.com" label="Email" type="email" value={email} onChange={handleEmail} />
-        <Password label="Kata Sandi" value={password} onChange={handlePassword} />
-        <Button className="bg-primary text-white hover:bg-primary-hover disabled:bg-primary/60" isLoading={loading}>
+      <form className="flex flex-col gap-7 xl:gap-8 " onSubmit={handleSubmit(onSubmit)}>
+        <TextField
+          placeholder="John Doe"
+          label="Username"
+          type="text"
+          name="username"
+          error={formik.touched.username && formik.errors.username && formik.errors.username}
+          {...formik.getFieldProps('username')}
+        />
+        <TextField
+          placeholder="name@email.com"
+          label="Email"
+          type="email"
+          name="email"
+          error={formik.touched.email && formik.errors.email && formik.errors.email}
+          {...formik.getFieldProps('email')}
+        />
+        <Password
+          label="Kata Sandi"
+          name="password"
+          error={formik.touched.password && formik.errors.password && formik.errors.password}
+          {...formik.getFieldProps('password')}
+        />
+        <Password
+          label="Konfirmasi Kata Sandi"
+          name="confirmPassword"
+          error={formik.touched.confirmPassword && formik.errors.confirmPassword && formik.errors.confirmPassword}
+          {...formik.getFieldProps('confirmPassword')}
+        />
+        <Button
+          isLoading={state.loading}
+          className="bg-primary font-semibold text-white hover:bg-primary-hover disabled:bg-primary/60 xl:text-base"
+        >
           Daftar
         </Button>
       </form>

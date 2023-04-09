@@ -8,10 +8,10 @@ const ImagePreview = ({ value, inputOnClick }) => {
       {value.map((image, id) => (
         <div
           key={id}
-          className="group relative h-[140px] cursor-pointer flex-wrap overflow-hidden rounded shadow-md xl:h-[200px]"
+          className="relative w-[46.8%] cursor-pointer flex-wrap overflow-hidden rounded shadow-md xl:w-[22.9%]"
         >
-          <img src={image} alt="preview" className="w-[100px] xl:w-[160px]" />
-          <div className="absolute inset-0 flex items-center justify-center gap-5 bg-black/60 opacity-0 transition-all  group-hover:opacity-100">
+          <img src={image} alt="preview" className="h-full w-full object-cover" />
+          <div className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-5 bg-black/60 py-3 transition-all">
             <div className="flex h-9 w-9 cursor-pointer rounded-lg bg-green-500 hover:bg-green-600">
               <HiEye className="m-auto text-xl text-white" />
             </div>
@@ -23,7 +23,7 @@ const ImagePreview = ({ value, inputOnClick }) => {
       ))}
       {value.length < 4 && (
         <div
-          className="flex h-[200px] w-[160px] cursor-pointer flex-col items-center justify-center gap-2 rounded border-2 border-dashed border-slate-300"
+          className="flex h-auto w-[160px] cursor-pointer flex-col items-center justify-center gap-2 rounded border-2 border-dashed border-slate-300"
           onClick={inputOnClick}
         >
           <TbPhotoPlus className="text-5xl text-slate-300" />
