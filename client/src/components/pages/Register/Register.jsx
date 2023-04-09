@@ -1,28 +1,25 @@
-import { register as registerAction } from '../../../store/features/authSlice'
+import { registerInitialValues, registerValidation } from '../../../validations/auth.validation'
+import { register } from '../../../store/features/authSlice'
 import { Button, Password, TextField } from '../../common'
 import { useDispatch, useSelector } from 'react-redux'
-import { registerInitialValues, registerValidation } from '../../../validations/auth.validation'
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 import { useFormik } from 'formik'
-import { useForm } from 'react-hook-form'
 
 const Register = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { register: state } = useSelector((state) => state.auth)
 
-  const { register, handleSubmit } = useForm()
-
   useEffect(() => {
     document.title = 'BSU ~ Daftar'
   }, [])
 
-  const onSubmit = async (values) => {
+  const handleSubmit = async (values) => {
     const { username, email, password } = values
     try {
-      await dispatch(registerAction({ username, email, password })).unwrap()
+      await dispatch(register({ username, email, password })).unwrap()
       toast.success('Anda berhasil Terdaftar, silahkan login')
       navigate('/login')
     } catch (error) {
@@ -45,7 +42,7 @@ const Register = () => {
         </p>
       </div>
 
-      <form className="flex flex-col gap-7 xl:gap-8 " onSubmit={handleSubmit(onSubmit)}>
+      <form className="flex flex-col gap-7 xl:gap-8 " onSubmit={formik.handleSubmit}>
         <TextField
           placeholder="John Doe"
           label="Username"

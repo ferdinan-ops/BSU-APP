@@ -3,7 +3,7 @@ import { useRef, useState } from 'react'
 import { ImagePreview, Label } from '../atoms'
 import { toast } from 'react-hot-toast'
 
-const Upload = ({ onUpload }) => {
+const Upload = ({ img, setImg, error }) => {
   const [value, setValue] = useState([])
   const ref = useRef(null)
 
@@ -12,7 +12,7 @@ const Upload = ({ onUpload }) => {
       const reader = new FileReader()
       reader.readAsDataURL(image)
       reader.onloadend = () => {
-        setValue((oldArr) => [...oldArr, reader.result])
+        setValue((old) => [...old, reader.result])
       }
     })
   }
@@ -43,12 +43,14 @@ const Upload = ({ onUpload }) => {
     e.preventDefault()
     e.stopPropagation()
     const { files } = e.dataTransfer
+    setImg(files)
     const images = Array.from(files)
     const isValid = handleValidation(images)
     if (isValid) previewHandler(images)
   }
 
   const handleChange = (e) => {
+    setImg(e.target.files)
     const images = Array.from(e.target.files)
     const isValid = handleValidation(images)
     if (isValid) previewHandler(images)
@@ -58,19 +60,12 @@ const Upload = ({ onUpload }) => {
 
   return (
     <div className="flex flex-col gap-2 xl:gap-4">
-      <Label htmlFor="images">Upload Gambar (maks.4)</Label>
-      <input
-        type="file"
-        id="images"
-        name="images"
-        multiple
-        hidden
-        ref={ref}
-        onChange={handleChange}
-        accept="images/*"
-      />
+      <Label>Upload Gambar (maks.4)</Label>
+      <input type="file" id="images" multiple hidden ref={ref} onChange={handleChange} accept="images/*" />
       <div
-        className="flex min-h-[200px] w-full rounded-lg border-2 border-dashed border-slate-300 p-4"
+        className={`flex min-h-[200px] w-full rounded-lg border-2 border-dashed p-4 ${
+          error ? 'border-red-400' : 'border-slate-300'
+        }`}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >
@@ -88,6 +83,7 @@ const Upload = ({ onUpload }) => {
           <ImagePreview value={value} inputOnClick={inputOnClick} />
         )}
       </div>
+      {error && <span className="-mt-1 text-xs text-red-400 xl:text-sm">{error}</span>}
     </div>
   )
 }

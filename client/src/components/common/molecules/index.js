@@ -5,4 +5,5 @@ import UserMenu from './UserMenu'
 import AuthMenu from './AuthMenu'
 import More from './More'
 import Upload from './Upload'
-export { TextField, Password, Checkbox, UserMenu, AuthMenu, More, Upload }
+import Dropdown from './Dropdown'
+export { TextField, Password, Checkbox, UserMenu, AuthMenu, More, Upload, Dropdown }

@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 const More = ({ postUserId }) => {
   const [show, setShow] = useState(false)
   const { userInfo } = useSelector((state) => state.auth)
+
   return (
     <div className="relative font-source font-semibold">
       <div
