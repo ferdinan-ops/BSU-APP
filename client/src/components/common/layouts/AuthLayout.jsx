@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom'
-import { LoginBg } from '../../../assets'
+// import { LoginBg } from '../../../assets'
 import { Brand } from '../atoms'
 
 const AuthLayout = () => {
@@ -10,7 +10,12 @@ const AuthLayout = () => {
         <Outlet />
       </div>
       <div className="hidden min-h-screen flex-1 xl:flex">
-        <img src={LoginBg} alt="login-bg" className="h-full w-full object-cover brightness-50" />
+        {/* <img src={LoginBg} alt="login-bg" className="h-full w-full object-cover brightness-50" /> */}
+        <img
+          src="https://source.unsplash.com/random/?campus"
+          alt="login-bg"
+          className="h-full w-full object-cover brightness-50"
+        />
       </div>
     </section>
   )

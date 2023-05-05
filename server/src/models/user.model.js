@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema({
   isAdmin: {
     type: Boolean,
     default: false
+  },
+  provider: {
+    type: String,
+    default: 'local'
   }
 })
 

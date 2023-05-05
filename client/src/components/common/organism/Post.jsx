@@ -12,22 +12,22 @@ const Post = ({ post }) => {
     <article className="rounded-lg bg-white font-source">
       <div className="flex items-center justify-between p-5">
         <Link className="flex items-center gap-4" to={`/user/${post?.user?._id}`}>
-          <Avatar src={post?.user?.photo} alt={post?.user?.username} size="h-9 w-9" />
+          <Avatar src={post?.user?.photo} alt={post?.user?.username} size="h-9 w-9" provider={post?.user?.provider} />
           <div className="flex items-center gap-2">
             <span className="font-semibold">{post?.user?.username}</span>
             <span className="text-slate-400">&bull;</span>
             <span className="text-[15px] text-slate-400">{moment(post.createdAt).fromNow()}</span>
           </div>
         </Link>
-        <More postUserId={post?.user?._id} />
+        <More postUserId={post?.user?._id} postId={post._id} />
       </div>
 
-      <div className="flex gap-7 p-5">
-        <div className="h-[216px] flex-[1.5] overflow-hidden rounded-lg">
+      <div className="flex flex-col gap-7 p-5 xl:flex-row">
+        <div className="h-[160px] overflow-hidden rounded-lg border-2 border-slate-200 xl:h-[216px] xl:flex-[1.5]">
           <img src={`${ASSETS_URI}/${post.image}`} alt={post.mataKuliah} className="h-full w-full object-cover" />
         </div>
 
-        <div className="flex flex-[4] flex-col gap-4">
+        <div className="flex flex-col gap-4 xl:flex-[4]">
           <Link
             to={`/question/${post._id}`}
             className="w-fit text-xl font-semibold capitalize hover:text-primary md:text-2xl"

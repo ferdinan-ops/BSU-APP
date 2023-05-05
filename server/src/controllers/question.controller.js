@@ -6,6 +6,7 @@ const { deleteFile } = require('../utils/fileUtils')
 const createQuestion = async (req, res) => {
   const { path, body, method, userId } = req
   const { value, error } = questionValidation({ userId, ...body })
+  console.log({ value, files: req.files, body })
   if (error) {
     logger.error(`${method}:/questions${path}\t${error.details[0].message}`)
     return res.status(422).json({ error: error.details[0].message })

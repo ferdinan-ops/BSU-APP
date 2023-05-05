@@ -18,11 +18,5 @@ export const questionSchema = Yup.object({
   programStudi: Yup.string().required('Program Studi harus diisi'),
   dosen: Yup.string().required('Nama Dose harus diisi'),
   tahunAjaran: Yup.string().required('Tahun Ajaran harus diisi'),
-  images: Yup.array()
-    .of(
-      Yup.object().shape({
-        name: Yup.string().max(255).required().label('images')
-      })
-    )
-    .min(1, 'Gambar harus di upload')
+  images: Yup.array().min(1, 'Gambar harus di upload')
 })

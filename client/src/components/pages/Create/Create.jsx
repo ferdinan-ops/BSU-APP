@@ -1,20 +1,43 @@
 import { categoriesList, semesterList } from '../../../constants/listData'
 import { questionSchema, questionValues } from '../../../validations/question.schema'
 import { Button, Dropdown, TextField, Upload } from '../../common'
+import { addQuestion } from '../../../store/features/questionSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { useAxios } from '../../../hooks'
 import { useEffect } from 'react'
 import { useFormik } from 'formik'
 
 const Create = () => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { loading } = useSelector((state) => state.question)
+  const API = useAxios({ contentType: 'multipart/form-data' })
+
   useEffect(() => {
     document.title = 'BSU ~ Upload Soal'
   }, [])
 
+  const handleSubmit = async (values) => {
+    const newData = new FormData()
+    newData.append('mataKuliah', values.mataKuliah)
+    newData.append('fakultas', values.fakultas)
+    newData.append('programStudi', values.programStudi)
+    newData.append('tahunAjaran', values.tahunAjaran)
+    newData.append('semester', values.semester)
+    newData.append('kategori', values.kategori)
+    newData.append('dosen', values.dosen)
+    values.images.forEach((image) => {
+      newData.append('images', image)
+    })
+    await dispatch(addQuestion({ API, fields: newData })).unwrap()
+    navigate('/')
+  }
+
   const formik = useFormik({
     initialValues: questionValues,
     validationSchema: questionSchema,
-    onSubmit: (values) => {
-      console.log(values)
-    }
+    onSubmit: handleSubmit
   })
 
   return (
@@ -75,10 +98,11 @@ const Create = () => {
           <Upload
             img={formik.values.images}
             setImg={(value) => formik.setFieldValue('images', [...formik.values.images, ...value])}
-            error={formik.errors.images && formik.errors.images}
+            error={formik.touched.images && formik.errors.images}
           />
           <Button
             className="ml-auto w-fit bg-primary px-6 font-bold text-white shadow-button hover:bg-primary-hover"
+            isLoading={loading}
             type="submit"
           >
             Upload Soal
