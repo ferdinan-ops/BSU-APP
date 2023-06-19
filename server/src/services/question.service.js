@@ -14,15 +14,6 @@ const questionsQuery = [
     }
   },
   {
-    // join data comment untuk setiap question
-    $lookup: {
-      from: 'comments',
-      localField: 'commentId',
-      foreignField: '_id',
-      as: 'comments'
-    }
-  },
-  {
     // memilih field yang ingin ditampilkan
     $project: {
       _id: 1,
@@ -47,8 +38,27 @@ const questionsQuery = [
   }
 ]
 
+// const questionsQuery = {
+//   _id: 1,
+//   mataKuliah: 1,
+//   fakultas: 1,
+//   programStudi: 1,
+//   semester: 1,
+//   kategori: 1,
+//   image: { $arrayElemAt: ['$images', 0] },
+//   createdAt: 1,
+//   saveCount: { $size: '$saves' },
+//   likeCount: { $size: '$likes' }
+// }
+
 const getQuestionsFromDB = async () => {
-  return await Question.aggregate(questionsQuery)
+  // return await Question.find()
+  //   .populate('user', 'username photo')
+  //   .projection(questionsQuery)
+  //   .sort({ createdAt: -1 })
+  //   .limit(5)
+  //   .exec()
+  return await Question.aggregate(questionsQuery).exec()
 }
 
 const addQuestionToDB = async (payload) => {
@@ -57,7 +67,7 @@ const addQuestionToDB = async (payload) => {
 
 // populate data user dengan hanya mengambil field username dan email
 const getQuestionById = async (questionId) => {
-  return await Question.findById(questionId).populate('userId', 'username photo').exec()
+  return await Question.findById(questionId).populate('user', 'username photo').exec()
 }
 
 const updateQuestionById = async (questionId, payload) => {
@@ -89,6 +99,12 @@ const saveQuestionByUserId = async (questionId, userId) => {
 
 const filterQuestionByFakultas = async (fakultas) => {
   return await Question.aggregate([{ $match: { fakultas } }, ...questionsQuery]).exec()
+  // return await Question.find({ fakultas })
+  //   .populate('user', 'username photo')
+  //   .projection(questionsQuery)
+  //   .sort({ createdAt: -1 })
+  //   .limit(5)
+  //   .exec()
 }
 
 const searchQuestion = async (keyword) => {
@@ -106,6 +122,20 @@ const searchQuestion = async (keyword) => {
     },
     ...questionsQuery
   ]).exec()
+  // return await Question.find({
+  //   $or: [
+  //     { mataKuliah: { $regex: keyword, $options: 'i' } },
+  //     { fakultas: { $regex: keyword, $options: 'i' } },
+  //     { programStudi: { $regex: keyword, $options: 'i' } },
+  //     { kategori: { $regex: keyword, $options: 'i' } },
+  //     { dosen: { $regex: keyword, $options: 'i' } }
+  //   ]
+  // })
+  //   .populate('user', 'username photo')
+  //   .projection(questionsQuery)
+  //   .sort({ createdAt: -1 })
+  //   .limit(5)
+  //   .exec()
 }
 
 const proccessImages = async (files) => {

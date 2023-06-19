@@ -13,10 +13,22 @@ const getUserById = async (userId) => {
 
 const getMyQuestions = async (userId) => {
   return await Question.aggregate([{ $match: { userId: new ObjectId(userId) } }, ...questionsQuery])
+  // return await Question.find({ userId })
+  //   .populate('user', 'username photo')
+  //   .projection(questionsQuery)
+  //   .sort({ createdAt: -1 })
+  //   .limit(5)
+  //   .exec()
 }
 
 const getMySaveQuestions = async (userId) => {
   return await Question.aggregate([{ $match: { saves: { $in: [userId] } } }, ...questionsQuery])
+  // return await Question.find({ saves: { $in: [userId] } })
+  //   .populate('user', 'username photo')
+  //   .projection(questionsQuery)
+  //   .sort({ createdAt: -1 })
+  //   .limit(5)
+  //   .exec()
 }
 
 const updateUserById = async (userId, payload) => {

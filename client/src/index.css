@@ -3,3 +3,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  .truncate-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .soal-shadow {
+    filter: drop-shadow(0px 10px 20px rgba(38, 50, 56, 0.12));
+  }
+
+  .input-base {
+    @apply w-full rounded-lg bg-transparent text-sm text-font outline-none placeholder:text-gray-400 xl:text-[15px];
+  }
+}

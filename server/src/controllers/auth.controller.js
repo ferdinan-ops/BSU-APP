@@ -57,7 +57,7 @@ const login = async (req, res) => {
     res.cookie('bsu', refreshToken, {
       httpOnly: true, // accessible only by web server
       secure: true, // https
-      sameSite: 'None', // cross-site cookie
+      sameSite: 'none', // cross-site cookie
       maxAge: 7 * 24 * 60 * 60 * 1000 // cookie expiry: set to match rT
     })
     res.json({ accessToken })
@@ -83,7 +83,7 @@ const loginWithGoogle = async (req, res) => {
     res.cookie('bsu', refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: 'None',
+      sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000
     })
     res.json({ accessToken })
@@ -108,7 +108,7 @@ const loginWithGoogleAccessToken = async (req, res) => {
     res.cookie('bsu', refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: 'None',
+      sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000
     })
     res.json({ accessToken })
@@ -147,12 +147,12 @@ const refresh = (req, res) => {
 
 const logout = (req, res) => {
   const { cookies } = req
-  if (!cookies?.jwt) {
+  if (!cookies?.bsu) {
     logger.error(`${req.method}:/auth${req.path}\tTidak ada cookie jwt atau cookie secure`)
     return res.sendStatus(204)
   }
 
-  res.clearCookie('bsu', { httpOnly: true, sameSite: 'None', secure: true })
+  res.clearCookie('bsu', { httpOnly: true, sameSite: 'none', secure: true })
   logger.info(`${req.method}:/auth${req.path}\tBerhasil menghapus token`)
   res.status(200).json({ message: 'Cookie cleared' })
 }

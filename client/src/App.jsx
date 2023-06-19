@@ -1,6 +1,6 @@
 import { ProtectedAuth, ProtectedRoute } from './components/routes'
-import { AuthLayout, MainLayout } from './components/common'
-import { Login, Register, Home, Create, Profile } from './components/pages'
+import { AuthLayout, MainLayout } from './components'
+import { Login, Register, Home, Create, Profile, Update, Detail } from './pages'
 import { Route, Routes } from 'react-router-dom'
 import localization from 'moment/locale/id'
 import { Toaster } from 'react-hot-toast'
@@ -25,6 +25,8 @@ const App = () => {
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Home />} />
             <Route path="create" element={<Create />} />
+            <Route path="update/:postId" element={<Update />} />
+            <Route path=":postId" element={<Detail />} />
             <Route path="user/:id" element={<Profile />} />
           </Route>
         </Route>

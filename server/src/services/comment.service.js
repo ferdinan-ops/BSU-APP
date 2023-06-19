@@ -5,7 +5,7 @@ const addCommentToDB = async (payload) => {
 }
 
 const getCommentsByQuestionID = async (questionId) => {
-  return await Comment.find({ questionId }).populate('userId', 'username photo').exec()
+  return await Comment.find({ questionId }).populate('user', 'username photo').exec()
 }
 
 const getCommentByID = async (commentId) => {

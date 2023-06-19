@@ -17,14 +17,19 @@ export default {
         source: ['Source Sans Pro', 'sans-serif']
       },
       colors: {
-        primary: '#5429FF',
-        font: '#344054',
-        'primary-hover': '#3b18c7'
+        // primary: '#5429FF',
+        primary: '#2563eb',
+        // primary: '#22c55e',
+        // font: '#344054',
+        font: '#080027',
+        'primary-hover': '#1e40af'
       },
       boxShadow: {
-        button: '0px 10px 20px rgba(84, 41, 255, 0.25)',
+        button: '0px 10px 20px rgba(59, 130, 246, 0.25)',
+        card: '0px 0px 20px #2e385614',
+        box: '5px 5px 0px #000',
         'white-btn': '0px 10px 20px rgba(255, 255, 255, 0.25)'
       }
     }
-  },
+  }
 }
