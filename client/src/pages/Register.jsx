@@ -47,7 +47,7 @@ const Register = () => {
           <Input id="email" label="Email" placeholder="name@email.com" />
           <Password id="password" label="Password" />
           <Password id="confirmPassword" label="Konfirmasi Kata Sandi" />
-          <Button variant="primary" disabled={isLoading}>
+          <Button variant="primary" loading={isLoading}>
             Daftar
           </Button>
         </form>

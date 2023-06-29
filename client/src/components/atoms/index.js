@@ -5,4 +5,6 @@ import Button from './Button'
 import ImagePreview from './ImagePreview'
 import Section from './Section'
 import Icon from './Icon'
-export { Brand, Avatar, Info, ImagePreview, Button, Section, Icon }
+import Skeleton from './Skeleton'
+import Container from './Container'
+export { Brand, Avatar, Info, ImagePreview, Button, Section, Icon, Skeleton, Container }

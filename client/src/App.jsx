@@ -21,12 +21,13 @@ const App = () => {
             <Route path="register" element={<Register />} />
           </Route>
         </Route>
-        <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<MainLayout />}>
-            <Route index element={<Home />} />
+
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<Home />} />
+          <Route path=":postId" element={<Detail />} />
+          <Route element={<ProtectedRoute />}>
             <Route path="create" element={<Create />} />
             <Route path="update/:postId" element={<Update />} />
-            <Route path=":postId" element={<Detail />} />
             <Route path="user/:id" element={<Profile />} />
           </Route>
         </Route>

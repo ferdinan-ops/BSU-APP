@@ -27,9 +27,7 @@ const Input = ({ label, id, disabled = false, LeftIcon, ...rest }) => {
           )}
         />
       </div>
-      {label && errors[id] && (
-        <span className="-mt-1 text-xs text-red-400 xl:text-sm ">{errors[id].message.toString()}</span>
-      )}
+      {errors[id] && <span className="-mt-1 text-xs text-red-400 xl:text-sm ">{errors[id].message.toString()}</span>}
     </div>
   )
 }

@@ -20,14 +20,13 @@ export default {
         // primary: '#5429FF',
         primary: '#2563eb',
         // primary: '#22c55e',
-        // font: '#344054',
-        font: '#080027',
+        font: '#344054',
+        // font: '#080027',
         'primary-hover': '#1e40af'
       },
       boxShadow: {
         button: '0px 10px 20px rgba(59, 130, 246, 0.25)',
-        card: '0px 0px 20px #2e385614',
-        box: '5px 5px 0px #000',
+        card: '0px 0px 10px #2e385614',
         'white-btn': '0px 10px 20px rgba(255, 255, 255, 0.25)'
       }
     }

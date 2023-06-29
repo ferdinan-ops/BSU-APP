@@ -20,4 +20,8 @@
   .input-base {
     @apply w-full rounded-lg bg-transparent text-sm text-font outline-none placeholder:text-gray-400 xl:text-[15px];
   }
+
+  .unauth {
+    background: repeating-linear-gradient(45deg, #039be5 0px, #039be5 20px, #90caf9 20px, #90caf9 40px);
+  }
 }

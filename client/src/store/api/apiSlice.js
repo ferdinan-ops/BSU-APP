@@ -17,7 +17,7 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions)
 
-  if (result?.error?.originalStatus === 401) {
+  if (result?.error?.status === 403) {
     console.log('sending refresh token')
     const refreshResult = await baseQuery('/auth/refresh', api, extraOptions)
     console.log(refreshResult)
@@ -26,6 +26,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
       result = await baseQuery(args, api, extraOptions)
     } else {
       api.dispatch(setLogout())
+      window.location.reload()
     }
   }
 
@@ -34,5 +35,6 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
 export const apiSlice = createApi({
   baseQuery: baseQueryWithReauth,
+  tagTypes: ['Question', 'Comment', 'User', 'Notification', 'Report'],
   endpoints: (builder) => ({})
 })

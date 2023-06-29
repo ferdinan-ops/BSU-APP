@@ -6,7 +6,7 @@ const Section = ({ children, className, title }) => {
     document.title = 'BSU  ~ ' + title
   }, [])
 
-  return <section className={clsx('flex w-full flex-col font-source', className)}>{children}</section>
+  return <section className={clsx('flex w-full flex-col font-source text-font', className)}>{children}</section>
 }
 
 export default Section

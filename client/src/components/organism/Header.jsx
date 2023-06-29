@@ -1,9 +1,12 @@
+import { useGoogleOneTapLogin } from '@react-oauth/google'
 import { HiBars3 } from 'react-icons/hi2'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import clsx from 'clsx'
 
+import { useLoginWithGoogleMutation } from '../../store/api/authApi'
+import { setUserInfo } from '../../store/features/authSlice'
 import { AuthMenu, UserMenu } from '../molecules'
 import { Brand, Icon } from '../atoms'
 import Search from '../molecules/Search'
@@ -11,6 +14,21 @@ import Search from '../molecules/Search'
 const Header = () => {
   const [showNav, setShowNav] = useState(false)
   const { userInfo } = useSelector((state) => state.auth)
+
+  const dispatch = useDispatch()
+  const [login] = useLoginWithGoogleMutation()
+
+  !userInfo &&
+    useGoogleOneTapLogin({
+      onError: (error) => {
+        console.log(error)
+      },
+      onSuccess: async (response) => {
+        const data = await login({ idToken: response.credential }).unwrap()
+        dispatch(setUserInfo(data))
+        window.location.reload()
+      }
+    })
 
   const onShowNav = () => {
     setShowNav(!showNav)

@@ -10,8 +10,8 @@ const Profile = () => {
   const { userInfo } = useSelector((state) => state.auth)
   const handleLogout = async () => {
     await dispatch(logout()).unwrap()
-    dispatch(setLogout())
-    navigate('/login', { replace: true })
+    await dispatch(setLogout()).unwrap()
+    navigate('/login')
   }
   return (
     <section className="container mx-auto w-full px-[18px] py-[40px] font-source xl:px-0 xl:py-[60px]">

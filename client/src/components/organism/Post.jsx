@@ -1,60 +1,42 @@
 import { HiHeart, HiBookmark } from 'react-icons/hi2'
-import { Link } from 'react-router-dom'
 import moment from 'moment'
 
-import CONFIG from '../../constants/environtment'
-import { Avatar, Info } from '../atoms'
-import { More } from '../molecules'
+import { Button, Icon, Info } from '../atoms'
+import { useNavigate } from 'react-router-dom'
 
 const Post = ({ post }) => {
+  const navigate = useNavigate()
+
   return (
-    <article className="rounded-lg bg-white font-source">
-      <div className="flex items-center justify-between p-5">
-        <Link className="flex items-center gap-4" to={`/user/${post?.user?._id}`}>
-          <Avatar src={post?.user?.photo} alt={post?.user?.username} size="h-9 w-9" provider={post?.user?.provider} />
-          <div className="flex items-center gap-2">
-            <span className="font-semibold">{post?.user?.username}</span>
-            <span className="text-slate-400">&bull;</span>
-            <span className="text-[15px] text-slate-400">{moment(post.createdAt).fromNow()}</span>
+    <article className="rounded-lg bg-white p-6 shadow-card">
+      <h1 className="text-xl font-bold">{post.mataKuliah}</h1>
+      <table className="mt-5 w-fit text-sm">
+        <tbody>
+          <Info title="Fakultas" content={post.fakultas} />
+          <Info title="Program Studi" content={post.programStudi} />
+          <Info title="Semester" content={post.semester} />
+          <Info title="Kategori" content={post.kategori} />
+          <Info title="Tanggal Upload" content={moment(post.createdAt).fromNow()} />
+        </tbody>
+      </table>
+      <div className="mt-8 flex items-center justify-between text-font">
+        <div className="flex items-center gap-5 text-sm md:text-base">
+          <div className="flex items-center gap-3 font-semibold">
+            <Icon className="pointer-events-none h-6 w-6 bg-red-200 hover:bg-red-200">
+              <HiHeart className="text-red-500" />
+            </Icon>
+            <p className="font-poppins text-sm">{post.likeCount}</p>
           </div>
-        </Link>
-        <More postUserId={post?.user?._id} postId={post._id} />
-      </div>
-
-      <div className="flex flex-col gap-7 p-5 xl:flex-row">
-        <div className="h-[160px] overflow-hidden rounded-lg border-2 border-slate-200 xl:h-[216px] xl:flex-[1.5]">
-          <img src={CONFIG.imageUrl + post.image} alt={post.mataKuliah} className="h-full w-full object-cover" />
-        </div>
-
-        <div className="flex flex-col gap-4 xl:flex-[4]">
-          <Link to={`/${post._id}`} className="w-fit text-xl font-semibold capitalize hover:text-primary md:text-2xl">
-            {post.mataKuliah}
-          </Link>
-
-          <table className="w-fit text-sm md:text-base">
-            <tbody>
-              <Info title="Fakultas" content={post.fakultas} />
-              <Info title="Program Studi" content={post.programStudi} />
-              <Info title="Semester" content={post.semester} />
-              <Info title="Kategori" content={post.kategori} />
-            </tbody>
-          </table>
-
-          <div className="mt-[30px] flex items-center gap-7 text-sm md:mt-auto md:text-base">
-            <div className="flex items-center gap-4 font-semibold">
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-red-200">
-                <HiHeart className="text-[17px] text-red-500" />
-              </div>
-              <p className="font-poppins">{post.likeCount}</p>
-            </div>
-            <div className="flex items-center gap-3 font-semibold">
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-200">
-                <HiBookmark className="text-[17px] text-indigo-500" />
-              </div>
-              <p className="font-poppins">{post.saveCount}</p>
-            </div>
+          <div className="flex items-center gap-3 font-semibold">
+            <Icon className="pointer-events-none h-6 w-6 bg-yellow-200 hover:bg-yellow-200">
+              <HiBookmark className="text-yellow-500" />
+            </Icon>
+            <p className="font-poppins text-sm">{post.saveCount}</p>
           </div>
         </div>
+        <Button variant="primary" className="px-4 xl:text-xs" onClick={() => navigate(`/${post._id}`)}>
+          Lihat Detail
+        </Button>
       </div>
     </article>
   )

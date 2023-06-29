@@ -61,13 +61,13 @@ const Login = () => {
         <form className="flex flex-col gap-4 xl:gap-5" onSubmit={handleSubmit(handleLoginLocal)}>
           <Input id="email" label="Email" placeholder="name@email.com" />
           <Password id="password" label="Kata Sandi" />
-          <Button disabled={isLoading} variant="primary">
+          <Button loading={isLoading} variant="primary">
             Masuk
           </Button>
         </form>
       </FormProvider>
 
-      <Button className="-mt-4 gap-5 border border-slate-300 hover:bg-slate-100" onClick={handleLoginWithGoogle}>
+      <Button className="-mt-4 gap-5" variant="outline" onClick={handleLoginWithGoogle}>
         <FcGoogle className="text-[22px] xl:text-2xl" />
         <span className="text-font">Masuk dengan Google</span>
       </Button>

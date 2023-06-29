@@ -1,4 +1,3 @@
-import dayjs from 'dayjs'
 import axios from 'axios'
 import CONFIG from '../constants/environtment'
 import { useDispatch, useSelector } from 'react-redux'
@@ -18,11 +17,11 @@ const privateApi = ({ contentType }) => {
   })
 
   axiosInstance.interceptors.request.use(async (req) => {
-    const isExpired = dayjs.unix(userInfo?.exp).diff(dayjs()) < 1
-    if (!isExpired) {
-      req.headers.Authorization = `Bearer ${userInfo?.token}`
-      return req
-    }
+    // const isExpired = dayjs.unix(userInfo?.exp).diff(dayjs()) < 1
+    // if (!isExpired) {
+    // req.headers.Authorization = `Bearer ${userInfo?.token}`
+    // return req
+    // }
 
     try {
       const { data } = await axios.get(CONFIG.baseUrl + '/auth/refresh', {
