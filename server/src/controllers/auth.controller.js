@@ -73,7 +73,7 @@ const loginWithGoogle = async (req, res) => {
     // Verify Google ID token
     const { name, email, picture } = await AuthService.verifyGoogleIdToken(body.idToken)
     let user = await AuthService.findUserByEmail(email)
-    if (!user) user = await AuthService.addUser({ username: name, email, photo: picture })
+    if (!user) user = await AuthService.addUser({ username: name, email, photo: picture, provider: 'google' })
 
     const { password, ...other } = user._doc
     const accessToken = AuthService.accessTokenSign({ ...other })
@@ -98,7 +98,7 @@ const loginWithGoogleAccessToken = async (req, res) => {
   try {
     const { name, email, picture } = await AuthService.verifyGoogleAccessToken(body.accessToken)
     let user = await AuthService.findUserByEmail(email)
-    if (!user) user = await AuthService.addUser({ username: name, email, photo: picture })
+    if (!user) user = await AuthService.addUser({ username: name, email, photo: picture, provider: 'google' })
 
     const { password, ...other } = user._doc
     const accessToken = AuthService.accessTokenSign({ ...other })

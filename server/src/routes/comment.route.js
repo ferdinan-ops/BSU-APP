@@ -10,7 +10,7 @@ const express = require('express')
 
 const commentRoute = express.Router()
 
-commentRoute.get('/question/:questionId', verifyJwt, getComments)
+commentRoute.get('/question/:questionId', getComments)
 commentRoute.get('/:commentId', verifyJwt, getComment)
 commentRoute.post('/', verifyJwt, createComment)
 commentRoute.put('/:commentId', verifyJwt, updateComment)
