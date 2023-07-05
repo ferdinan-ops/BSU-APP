@@ -1,14 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit'
 import authReducer from './features/authSlice'
-import questionReducer from './features/questionSlice'
+import commentReducer from './features/commentSlice'
 import { apiSlice } from './api/apiSlice'
+import dialogSlice from './features/dialogSlice'
 
 export const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
     auth: authReducer,
-    question: questionReducer
+    comment: commentReducer,
+    dialog: dialogSlice
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }).concat(apiSlice.middleware),
   devTools: process.env.NODE_ENV !== 'production'
 })

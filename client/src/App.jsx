@@ -1,5 +1,5 @@
 import { ProtectedAuth, ProtectedRoute } from './components/routes'
-import { AuthLayout, MainLayout } from './components'
+import { AuthLayout, Dialog, MainLayout } from './components'
 import { Login, Register, Home, Create, Profile, Update, Detail } from './pages'
 import { Route, Routes } from 'react-router-dom'
 import localization from 'moment/locale/id'
@@ -14,6 +14,7 @@ const App = () => {
       <div>
         <Toaster />
       </div>
+      <Dialog />
       <Routes>
         <Route element={<ProtectedAuth />}>
           <Route path="/" element={<AuthLayout />}>

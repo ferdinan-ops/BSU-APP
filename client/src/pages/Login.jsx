@@ -2,7 +2,6 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Link, useNavigate } from 'react-router-dom'
 import { useGoogleLogin } from '@react-oauth/google'
-import { useDispatch } from 'react-redux'
 import { FcGoogle } from 'react-icons/fc'
 import { toast } from 'react-hot-toast'
 import { useEffect } from 'react'
@@ -10,12 +9,9 @@ import { useEffect } from 'react'
 import { useLoginMutation, useLoginWithGoogleCustomMutation } from '../store/api/authApi'
 import { Button, Input, Password, Section } from '../components'
 import { loginValidation } from '../validations/auth.validation'
-import { setUserInfo } from '../store/features/authSlice'
 
 const Login = () => {
   const navigate = useNavigate()
-  const dispatch = useDispatch()
-
   const methods = useForm({
     mode: 'onTouched',
     resolver: yupResolver(loginValidation)
@@ -29,22 +25,20 @@ const Login = () => {
   useEffect(() => {
     if (isSuccess || isSuccessGoogle) {
       reset()
-      navigate('/')
+      navigate('/', { replace: true })
       toast.success('Berhasil Login')
     }
     if (isError) toast.error(error.data.error)
   }, [isLoading, isLoadingGoogle])
 
-  const handleLoginLocal = async (values) => {
-    const data = await login(values).unwrap()
-    dispatch(setUserInfo(data))
+  const handleLoginLocal = (values) => {
+    login(values)
   }
 
   const handleLoginWithGoogle = useGoogleLogin({
-    onSuccess: async (res) => {
+    onSuccess: (res) => {
       const { access_token: accessToken } = res
-      const data = await loginWithGoogleCustom({ accessToken }).unwrap()
-      dispatch(setUserInfo(data))
+      loginWithGoogleCustom({ accessToken })
     }
   })
 

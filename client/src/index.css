@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Source+Sans+Pro:wght@400;500;600;700;800;900&display=swap');
 
+/* * {
+  outline: 1px solid red;
+} */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -23,5 +27,9 @@
 
   .unauth {
     background: repeating-linear-gradient(45deg, #039be5 0px, #039be5 20px, #90caf9 20px, #90caf9 40px);
+  }
+
+  .list-more {
+    @apply flex cursor-pointer items-center gap-3 px-4 py-2 text-sm hover:bg-slate-200;
   }
 }

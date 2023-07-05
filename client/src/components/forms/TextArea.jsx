@@ -16,6 +16,7 @@ const TextArea = ({ id, placeholder, ...rest }) => {
       id={id}
       placeholder={placeholder}
       rows={1}
+      spellCheck="false"
       className="flex-1 resize-none self-start overflow-y-hidden border-none pt-[7px] text-sm outline-none md:pt-[9px] md:text-base"
       onInput={handleInput}
     />

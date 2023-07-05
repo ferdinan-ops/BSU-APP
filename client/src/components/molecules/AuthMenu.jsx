@@ -8,12 +8,13 @@ const AuthMenu = ({ onShowNav }) => {
   const navigate = useNavigate()
 
   return (
-    <div className="flex flex-col justify-center gap-5 xl:mt-0 xl:flex-row xl:items-center">
+    <div className="flex flex-col justify-center gap-4 xl:mt-0 xl:flex-row xl:items-center">
       <Search className="flex items-center justify-between gap-3 xl:hidden">
         <HiXMark className="cursor-pointer text-3xl" onClick={onShowNav} />
       </Search>
       <Button
-        className="w-full self-start bg-primary/5 px-6 uppercase tracking-wide text-primary hover:bg-primary/10 xl:w-fit"
+        variant="secondary"
+        className="w-full self-start px-6 uppercase tracking-wide xl:w-fit"
         onClick={() => navigate('/register')}
       >
         Daftar

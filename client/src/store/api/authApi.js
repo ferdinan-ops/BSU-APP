@@ -1,3 +1,4 @@
+import { setLogout, setUserInfo } from '../features/authSlice'
 import { apiSlice } from './apiSlice'
 
 export const authApi = apiSlice.injectEndpoints({
@@ -7,54 +8,71 @@ export const authApi = apiSlice.injectEndpoints({
         url: '/auth/login',
         method: 'POST',
         body: fields,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
+        credentials: 'include'
+      }),
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        try {
+          const { data } = await queryFulfilled
+          dispatch(setUserInfo(data))
+        } catch (err) {
+          console.log(err)
         }
-      })
+      }
     }),
     loginWithGoogleCustom: builder.mutation({
       query: (fields) => ({
         url: '/auth/google-custom',
         method: 'POST',
         body: fields,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
+        credentials: 'include'
+      }),
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        try {
+          const { data } = await queryFulfilled
+          dispatch(setUserInfo(data))
+        } catch (err) {
+          console.log(err)
         }
-      })
+      }
     }),
     loginWithGoogle: builder.mutation({
       query: (fields) => ({
         url: '/auth/google',
         method: 'POST',
         body: fields,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
+        credentials: 'include'
+      }),
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        try {
+          const { data } = await queryFulfilled
+          dispatch(setUserInfo(data))
+        } catch (err) {
+          console.log(err)
         }
-      })
+      }
     }),
     register: builder.mutation({
       query: (fields) => ({
         url: '/auth/register',
         method: 'POST',
         body: fields,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        }
+        credentials: 'include'
       })
     }),
     logout: builder.mutation({
       query: () => ({
         url: '/auth/logout',
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
+        method: 'DELETE',
+        credentials: 'include'
+      }),
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        try {
+          await queryFulfilled
+          dispatch(setLogout())
+        } catch (err) {
+          console.log(err)
         }
-      })
+      }
     })
   })
 })

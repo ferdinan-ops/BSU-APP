@@ -7,11 +7,18 @@ const Button = ({ disabled, loading, children, className, variant, ...rest }) =>
       className={clsx(
         'relative flex items-center justify-center rounded-lg text-sm font-bold text-font',
         'disabled:cursor-not-allowed disabled:shadow-none',
+        'py-[9px] md:py-[13px]',
         loading && 'disabled:text-transparent',
-        variant === 'primary' && 'bg-primary py-2 text-white hover:bg-primary-hover disabled:bg-primary/70 md:py-3',
-        variant === 'secondary' && 'bg-white py-2 hover:bg-slate-200 disabled:bg-white/70 md:py-3',
-        variant === 'outline' && 'border border-slate-300 py-[7px] hover:bg-slate-100 md:py-[11px]',
-        variant === 'danger' && 'bg-red-500 py-2 text-white hover:bg-red-700 disabled:bg-red-500/70 md:py-3',
+        variant === 'primary' && 'bg-primary text-white hover:bg-primary-hover disabled:bg-primary/70',
+        variant === 'secondary' && 'bg-primary/5 text-primary hover:bg-primary/10',
+        variant === 'success' && 'bg-green-500 text-white hover:bg-green-700 disabled:bg-green-500/70',
+        variant === 'danger' && 'bg-red-500 text-white hover:bg-red-700 disabled:bg-red-500/70',
+        variant === 'base' && 'bg-white hover:bg-slate-200 disabled:bg-white/70',
+        variant === 'outline' && 'border border-slate-300 py-[6px] hover:bg-slate-100 md:py-[10px]',
+        // size === 'sm' && 'py-1 md:py-2',
+        // size === 'base' && 'py-[9px] md:py-[13px]',
+        // size === 'sm' && variant === 'outline' && 'py-[3px] md:py-[7px]',
+        // size === 'base' && variant === 'outline' && 'py-[6px] md:py-[10px]',
         className
       )}
       disabled={disabled || loading}

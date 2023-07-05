@@ -13,13 +13,15 @@ export const questionApi = apiSlice.injectEndpoints({
       query: (questionId) => ({
         url: `/questions/like/${questionId}`,
         method: 'POST'
-      })
+      }),
+      invalidatesTags: ['Question']
     }),
     saveQuestion: builder.mutation({
       query: (questionId) => ({
         url: `/questions/save/${questionId}`,
         method: 'POST'
-      })
+      }),
+      invalidatesTags: ['Question']
     })
   })
 })

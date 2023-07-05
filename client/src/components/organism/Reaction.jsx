@@ -8,26 +8,22 @@ import { toast } from 'react-hot-toast'
 const Reaction = ({ question }) => {
   const [isSaved, setIsSaved] = useState(false)
   const [isLiked, setIsLiked] = useState(false)
-  const [likeCount, setLikeCount] = useState(0)
-  const [saveCount, setSaveCount] = useState(0)
+  const [likeCount, setLikeCount] = useState(question.likes?.length)
+  const [saveCount, setSaveCount] = useState(question.saves?.length)
 
-  const { _id } = useSelector((state) => state.auth.userInfo)
+  const user = useSelector((state) => state.auth.userInfo)
   const [like] = useLikeQuestionMutation()
   const [save] = useSaveQuestionMutation()
 
   useEffect(() => {
-    if (question) {
-      setLikeCount(question.likes?.length)
-      setSaveCount(question.saves?.length)
-      if (_id) {
-        setIsLiked(question.likes?.includes(_id))
-        setIsSaved(question.saves?.includes(_id))
-      }
+    if (user) {
+      setIsLiked(question.likes?.includes(user._id))
+      setIsSaved(question.saves?.includes(user._id))
     }
-  }, [question, _id])
+  }, [question, user])
 
   const likeHandler = () => {
-    if (_id) {
+    if (user) {
       like(question._id)
       setIsLiked(!isLiked)
       if (isLiked) return setLikeCount(likeCount - 1)
@@ -37,7 +33,7 @@ const Reaction = ({ question }) => {
   }
 
   const saveHandler = () => {
-    if (_id) {
+    if (user) {
       save(question._id)
       setIsSaved(!isSaved)
       if (isSaved) return setSaveCount(saveCount - 1)
@@ -48,21 +44,13 @@ const Reaction = ({ question }) => {
 
   return (
     <div className="flex gap-4 md:gap-5">
-      <Button className="gap-2 px-3 text-xs md:gap-3 md:px-4 md:text-sm" variant="outline" onClick={likeHandler}>
-        {isLiked ? (
-          <HiHeart className="text-sm text-red-500 md:text-base" />
-        ) : (
-          <HiOutlineHeart className="text-sm md:text-base" />
-        )}
-        <span>{likeCount}</span>
+      <Button className="gap-2 px-3 text-sm md:gap-3 md:px-4 md:text-base" variant="outline" onClick={likeHandler}>
+        {isLiked ? <HiHeart className="text-red-500" /> : <HiOutlineHeart />}
+        <span className="text-xs md:text-sm">{likeCount}</span>
       </Button>
-      <Button className="gap-2 px-3 text-xs md:gap-3 md:px-4 md:text-sm" variant="outline" onClick={saveHandler}>
-        {isSaved ? (
-          <HiBookmark className="text-sm text-yellow-500 md:text-base" />
-        ) : (
-          <HiOutlineBookmark className="text-sm md:text-base" />
-        )}
-        <span>{saveCount}</span>
+      <Button className="gap-2 px-3 text-sm md:gap-3 md:px-4 md:text-base" variant="outline" onClick={saveHandler}>
+        {isSaved ? <HiBookmark className="text-yellow-500" /> : <HiOutlineBookmark />}
+        <span className="text-xs md:text-sm">{saveCount}</span>
       </Button>
     </div>
   )

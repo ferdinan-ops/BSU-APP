@@ -17,11 +17,8 @@ export default {
         source: ['Source Sans Pro', 'sans-serif']
       },
       colors: {
-        // primary: '#5429FF',
         primary: '#2563eb',
-        // primary: '#22c55e',
         font: '#344054',
-        // font: '#080027',
         'primary-hover': '#1e40af'
       },
       boxShadow: {

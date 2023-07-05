@@ -1,31 +1,24 @@
 import { useGoogleOneTapLogin } from '@react-oauth/google'
 import { HiBars3 } from 'react-icons/hi2'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import clsx from 'clsx'
 
 import { useLoginWithGoogleMutation } from '../../store/api/authApi'
-import { setUserInfo } from '../../store/features/authSlice'
 import { AuthMenu, UserMenu } from '../molecules'
-import { Brand, Icon } from '../atoms'
 import Search from '../molecules/Search'
+import { Brand, Icon } from '../atoms'
 
 const Header = () => {
   const [showNav, setShowNav] = useState(false)
-  const { userInfo } = useSelector((state) => state.auth)
-
-  const dispatch = useDispatch()
   const [login] = useLoginWithGoogleMutation()
+  const user = useSelector((state) => state.auth.userInfo)
 
-  !userInfo &&
+  !user &&
     useGoogleOneTapLogin({
-      onError: (error) => {
-        console.log(error)
-      },
       onSuccess: async (response) => {
-        const data = await login({ idToken: response.credential }).unwrap()
-        dispatch(setUserInfo(data))
+        await login({ idToken: response.credential }).unwrap()
         window.location.reload()
       }
     })
@@ -52,7 +45,7 @@ const Header = () => {
             !showNav ? '-translate-x-full' : 'translate-x-0'
           )}
         >
-          {userInfo ? <UserMenu userInfo={userInfo} onShowNav={onShowNav} /> : <AuthMenu onShowNav={onShowNav} />}
+          {user ? <UserMenu userInfo={user} onShowNav={onShowNav} /> : <AuthMenu onShowNav={onShowNav} />}
         </nav>
       </div>
     </header>
