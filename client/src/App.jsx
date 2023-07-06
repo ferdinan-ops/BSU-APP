@@ -1,14 +1,10 @@
 import { ProtectedAuth, ProtectedRoute } from './components/routes'
-import { AuthLayout, Dialog, MainLayout } from './components'
-import { Login, Register, Home, Create, Profile, Update, Detail } from './pages'
+import { AuthLayout, Dialog, MainLayout, UserLayout } from './components'
+import { Login, Register, Home, Create, User, Update, Detail, UserSave, UserLike } from './pages'
 import { Route, Routes } from 'react-router-dom'
-import localization from 'moment/locale/id'
 import { Toaster } from 'react-hot-toast'
-import moment from 'moment'
 
 const App = () => {
-  moment.updateLocale('id', localization)
-
   return (
     <>
       <div>
@@ -29,7 +25,11 @@ const App = () => {
           <Route element={<ProtectedRoute />}>
             <Route path="create" element={<Create />} />
             <Route path="update/:postId" element={<Update />} />
-            <Route path="user/:id" element={<Profile />} />
+            <Route path="user/:userId" element={<UserLayout />}>
+              <Route index element={<User />} />
+              <Route path="save" element={<UserSave />} />
+              <Route path="like" element={<UserLike />} />
+            </Route>
           </Route>
         </Route>
       </Routes>

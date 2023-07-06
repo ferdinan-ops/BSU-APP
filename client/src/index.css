@@ -9,6 +9,9 @@
 @tailwind utilities;
 
 @layer base {
+  .tab-container {
+    @apply flex-1 cursor-pointer border-b-2 py-4 hover:bg-gray-100;
+  }
   .truncate-1 {
     display: -webkit-box;
     -webkit-line-clamp: 1;

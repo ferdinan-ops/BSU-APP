@@ -37,7 +37,7 @@ const Description = ({ question }) => {
   }
 
   return (
-    <div className="flex flex-col gap-7 rounded-lg bg-font p-3 md:p-6">
+    <div className="flex flex-col gap-5 rounded-lg bg-font p-3 md:gap-7 md:p-6">
       <table cellPadding={5} className="block w-fit">
         <tbody className="text-xs text-white md:text-base">
           <Info title="Mata Kuliah" content={question.mataKuliah} />
@@ -49,22 +49,26 @@ const Description = ({ question }) => {
           <Info title="Dosen" content={question.dosen} />
         </tbody>
       </table>
-      {user._id === question.user._id ? (
+      {user && (
         <div className="flex gap-3">
-          <Button variant="base" className="flex-1 gap-2">
-            <HiPencilSquare className="text-base" />
-            Ubah Soal
-          </Button>
-          <Button variant="danger" className="flex-1 gap-2" onClick={handleDelete}>
-            <HiTrash className="text-base" />
-            Hapus Soal
-          </Button>
+          {user._id === question.user._id ? (
+            <>
+              <Button variant="base" className="flex-1 gap-2">
+                <HiPencilSquare className="text-sm md:text-base" />
+                Ubah Soal
+              </Button>
+              <Button variant="danger" className="flex-1 gap-2" onClick={handleDelete}>
+                <HiTrash className="text-sm md:text-base" />
+                Hapus Soal
+              </Button>
+            </>
+          ) : (
+            <Button variant="danger" className="flex-1 gap-2" onClick={handleReport}>
+              <HiFlag className="text-sm md:text-base" />
+              Laporkan Soal Ini
+            </Button>
+          )}
         </div>
-      ) : (
-        <Button variant="danger" className="flex-1 gap-2" onClick={handleReport}>
-          <HiFlag className="text-base" />
-          Laporkan Soal Ini
-        </Button>
       )}
     </div>
   )

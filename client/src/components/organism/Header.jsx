@@ -20,6 +20,7 @@ const Header = () => {
       onSuccess: async (response) => {
         await login({ idToken: response.credential }).unwrap()
         window.location.reload()
+        window.location.reload()
       }
     })
 
@@ -45,7 +46,7 @@ const Header = () => {
             !showNav ? '-translate-x-full' : 'translate-x-0'
           )}
         >
-          {user ? <UserMenu userInfo={user} onShowNav={onShowNav} /> : <AuthMenu onShowNav={onShowNav} />}
+          {user ? <UserMenu user={user} onShowNav={onShowNav} /> : <AuthMenu onShowNav={onShowNav} />}
         </nav>
       </div>
     </header>

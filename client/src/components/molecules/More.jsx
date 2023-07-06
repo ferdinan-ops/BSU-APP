@@ -61,7 +61,7 @@ const More = ({ comment }) => {
 
   return (
     <div className="relative font-source font-semibold">
-      <Icon className="h-7 w-7" onClick={() => setShow(!show)}>
+      <Icon className="h-6 w-6 md:h-7 md:w-7" onClick={() => setShow(!show)}>
         <HiEllipsisHorizontal className="text-xl text-font" />
       </Icon>
       <ul

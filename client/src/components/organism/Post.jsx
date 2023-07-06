@@ -1,14 +1,14 @@
 import { HiHeart, HiBookmark } from 'react-icons/hi2'
-import moment from 'moment'
-
-import { Button, Icon, Info } from '../atoms'
 import { useNavigate } from 'react-router-dom'
 
-const Post = ({ post }) => {
+import * as formatDate from '../../services/formatDate'
+import { Button, Icon, Info } from '../atoms'
+
+const Post = ({ post, className }) => {
   const navigate = useNavigate()
 
   return (
-    <article className="rounded-lg bg-white p-6 shadow-card">
+    <article className={'rounded-lg bg-white p-6 shadow-card ' + className}>
       <h1 className="text-xl font-bold">{post.mataKuliah}</h1>
       <table className="mt-5 w-fit text-sm">
         <tbody>
@@ -16,7 +16,7 @@ const Post = ({ post }) => {
           <Info title="Program Studi" content={post.programStudi} />
           <Info title="Semester" content={post.semester} />
           <Info title="Kategori" content={post.kategori} />
-          <Info title="Tanggal Upload" content={moment(post.createdAt).fromNow()} />
+          <Info title="Tanggal Upload" content={formatDate.base(post.createdAt)} />
         </tbody>
       </table>
       <div className="mt-8 flex items-center justify-between text-font">

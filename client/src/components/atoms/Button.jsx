@@ -5,7 +5,7 @@ const Button = ({ disabled, loading, children, className, variant, ...rest }) =>
   return (
     <button
       className={clsx(
-        'relative flex items-center justify-center rounded-lg text-sm font-bold text-font',
+        'relative flex items-center justify-center rounded-lg text-xs font-bold text-font md:text-sm',
         'disabled:cursor-not-allowed disabled:shadow-none',
         'py-[9px] md:py-[13px]',
         loading && 'disabled:text-transparent',

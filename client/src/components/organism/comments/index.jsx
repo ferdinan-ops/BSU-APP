@@ -1,9 +1,10 @@
 import { useSelector } from 'react-redux'
+import { HiOutlineChatBubbleLeftRight } from 'react-icons/hi2'
 
 import { useGetCommentsQuery } from '../../../store/api/commentApi'
+import NoData from '../../molecules/NoData'
 import CommentSkeleton from './CommentSkeleton'
 import CommentForm from './CommentForm'
-import CommentNull from './CommentNull'
 import Comment from './Comment'
 
 const Comments = ({ question }) => {
@@ -16,11 +17,17 @@ const Comments = ({ question }) => {
   } else if (isSuccess && comments.data.length > 0) {
     content = comments.data.map((comment) => <Comment comment={comment} key={comment._id} />)
   } else if (isSuccess && comments.data.length === 0) {
-    content = <CommentNull />
+    content = (
+      <NoData
+        Icon={HiOutlineChatBubbleLeftRight}
+        title="Pujian dan umpan balik Anda sangat kami harapkan!"
+        text="Bagikan pendapat Anda dengan menggunakan kotak komentar di bawah."
+      />
+    )
   }
 
   return (
-    <div className="mx-auto flex w-8/12 flex-col gap-[21px]">
+    <div className="mx-auto flex w-full flex-col gap-[21px] md:w-8/12">
       {user && <CommentForm question={question} />}
       <h3 className="px-4 text-sm font-semibold">{comments?.data?.length} komentar</h3>
       <div className="flex flex-col gap-4 px-4">{content}</div>

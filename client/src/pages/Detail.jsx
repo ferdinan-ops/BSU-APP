@@ -1,13 +1,13 @@
 import { HiArrowDownTray, HiLockClosed } from 'react-icons/hi2'
-import { Navigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import { Waveform } from '@uiball/loaders'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-hot-toast'
-import moment from 'moment'
 
 import { Avatar, Button, Carousel, Comments, Container, Description, Reaction, Section } from '../components'
 import { useGetQuestionQuery } from '../store/api/questionApi'
 import { downloadPost } from '../services/questionService'
+import * as formatDate from '../services/formatDate'
 
 const Detail = () => {
   const { postId } = useParams()
@@ -43,8 +43,10 @@ const Detail = () => {
                 size="h-5 w-5 md:h-7 md:w-7"
               />
               <div className="flex items-center gap-2 text-[13px] md:gap-3 md:text-base">
-                <p className="font-semibold">{question.data?.user?.username}</p> |
-                <p className="text-font/80">{moment(question.data?.createdAt).fromNow()}</p>
+                <Link to={`/user/${question.data?.user?._id}`} className="font-semibold hover:text-primary">
+                  {question.data?.user?.username}
+                </Link>{' '}
+                |<p className="text-font/80">{formatDate.fromNow(question.data?.createdAt)}</p>
               </div>
             </div>
           </div>
