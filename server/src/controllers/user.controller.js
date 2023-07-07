@@ -77,4 +77,20 @@ const getUserSaveQuestions = async (req, res) => {
   }
 }
 
-module.exports = { getUser, updateUser, getUserQuestions, getUserSaveQuestions }
+const getUserLikeQuestions = async (req, res) => {
+  const { userId, path, method } = req
+
+  try {
+    const questions = await UserService.getMyLikesQuestions(userId)
+    if (!questions) {
+      logger.error(`${method}:/users${path}\tTidak dapat menemukan soal yang disukai dengan userId ${userId}`)
+      return res.status(404).json({ error: `Tidak menemukan soal yang disukai dengan userId ${userId}` })
+    }
+    logger.info(`${method}:/users${path}\tBerhasil mendapatkan soal yang disukai dengan userId ${userId}`)
+    return res.status(200).json({ data: questions })
+  } catch (error) {
+    return res.status(400).json({ error })
+  }
+}
+
+module.exports = { getUser, updateUser, getUserQuestions, getUserSaveQuestions, getUserLikeQuestions }
