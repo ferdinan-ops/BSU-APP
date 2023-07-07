@@ -14,6 +14,10 @@ export const userApi = apiSlice.injectEndpoints({
       query: (userId) => `/users/${userId}/save-post`,
       providesTags: ['Question']
     }),
+    getUserLikeQuestions: builder.query({
+      query: (userId) => `/users/${userId}/like-post`,
+      providesTags: ['Question']
+    }),
     updateUserData: builder.mutation({
       query: (fields) => ({
         url: '/users',
@@ -25,5 +29,10 @@ export const userApi = apiSlice.injectEndpoints({
   })
 })
 
-export const { useGetUserQuery, useGetUserQuestionsQuery, useGetUserSaveQuestionsQuery, useUpdateUserDataMutation } =
-  userApi
+export const {
+  useGetUserQuery,
+  useGetUserQuestionsQuery,
+  useGetUserSaveQuestionsQuery,
+  useGetUserLikeQuestionsQuery,
+  useUpdateUserDataMutation
+} = userApi

@@ -1,15 +1,15 @@
-import { useParams } from 'react-router-dom'
 import { GiFullFolder } from 'react-icons/gi'
+import { useParams } from 'react-router-dom'
 
-import { Post, PostSkeleton } from '../components'
-import { useGetUserQuestionsQuery } from '../store/api/userApi'
+import { useGetUserLikeQuestionsQuery } from '../store/api/userApi'
 import NoData from '../components/molecules/NoData'
+import { Post, PostSkeleton } from '../components'
 import { useSelector } from 'react-redux'
 
 const UserLike = () => {
   const { userId } = useParams()
   const user = useSelector((state) => state.auth.userInfo)
-  const { data: posts, isSuccess, isLoading } = useGetUserQuestionsQuery(userId)
+  const { data: posts, isSuccess, isLoading } = useGetUserLikeQuestionsQuery(userId)
 
   let content
   if (isLoading) {

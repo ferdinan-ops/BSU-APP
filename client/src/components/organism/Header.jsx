@@ -30,9 +30,9 @@ const Header = () => {
 
   return (
     <header className="sticky inset-x-0 top-0 z-[999] flex h-20 items-center border-b border-slate-200 bg-white font-source text-font md:h-24">
-      <div className="container mx-auto flex items-center justify-between gap-16 px-[18px] xl:px-0">
+      <div className="container mx-auto flex items-center justify-between gap-14 px-[18px] xl:px-0">
         <Link to="/">
-          <Brand width="xl:h-9 xl:w-9 h-7 w-7" variant="text-xl md:text-[25px]" />
+          <Brand width="xl:h-8 xl:w-8 h-7 w-7" variant="text-xl md:text-[25px]" />
         </Link>
         <Icon className="h-10 w-10 xl:hidden">
           <HiBars3 className="text-3xl" onClick={onShowNav} />
