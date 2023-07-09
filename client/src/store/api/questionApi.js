@@ -22,9 +22,31 @@ export const questionApi = apiSlice.injectEndpoints({
         method: 'POST'
       }),
       invalidatesTags: ['Question']
+    }),
+    createQuestion: builder.mutation({
+      query: (body) => ({
+        url: '/questions',
+        method: 'POST',
+        body
+      }),
+      invalidatesTags: ['Question']
+    }),
+    updateQuestion: builder.mutation({
+      query: ({ questionId, body }) => ({
+        url: `/questions/${questionId}`,
+        method: 'PUT',
+        body
+      }),
+      invalidatesTags: ['Question']
     })
   })
 })
 
-export const { useGetQuestionsQuery, useGetQuestionQuery, useLikeQuestionMutation, useSaveQuestionMutation } =
-  questionApi
+export const {
+  useGetQuestionsQuery,
+  useGetQuestionQuery,
+  useLikeQuestionMutation,
+  useSaveQuestionMutation,
+  useCreateQuestionMutation,
+  useUpdateQuestionMutation
+} = questionApi

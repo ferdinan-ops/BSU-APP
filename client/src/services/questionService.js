@@ -16,3 +16,5 @@ export const downloadPost = async (question) => {
     saveAs(content, `${question.data?.mataKuliah}.zip`)
   })
 }
+
+export const selectValue = (value) => ({ label: value, value })

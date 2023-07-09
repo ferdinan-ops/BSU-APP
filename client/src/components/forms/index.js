@@ -4,5 +4,6 @@ import Dropdown from './Dropdown'
 import Password from './Password'
 import Upload from './Upload'
 import TextArea from './TextArea'
+import DropZone from './DropZone'
 
-export { Checkbox, Input, Dropdown, Password, Upload, TextArea }
+export { Checkbox, Input, Dropdown, Password, Upload, TextArea, DropZone }

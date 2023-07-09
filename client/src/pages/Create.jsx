@@ -1,131 +1,55 @@
-// // import { categoriesList, semesterList } from '../constants/listData'
-// // import { questionSchema, questionValues } from '../validations/question.validation'
-// // import { Button, Dropdown, TextField, Upload } from '../components/common'
-// // import { addQuestion } from '../store/features/questionSlice'
-// // import { useDispatch, useSelector } from 'react-redux'
-// // import { useNavigate } from 'react-router-dom'
-// // import { privateApi } from '../services'
-// // import { useEffect } from 'react'
-// // import { useFormik } from 'formik'
-
-// const Create = () => {
-//   // const navigate = useNavigate()
-//   // const dispatch = useDispatch()
-//   // const { loading } = useSelector((state) => state.question)
-//   // const API = privateApi({ contentType: 'multipart/form-data' })
-
-//   // useEffect(() => {
-//   //   document.title = 'BSU ~ Upload Soal'
-//   // }, [])
-
-//   // const handleSubmit = async (values) => {
-//   //   const newData = new FormData()
-//   //   newData.append('mataKuliah', values.mataKuliah)
-//   //   newData.append('fakultas', values.fakultas)
-//   //   newData.append('programStudi', values.programStudi)
-//   //   newData.append('tahunAjaran', values.tahunAjaran)
-//   //   newData.append('semester', values.semester)
-//   //   newData.append('kategori', values.kategori)
-//   //   newData.append('dosen', values.dosen)
-//   //   values.images.forEach((image) => {
-//   //     newData.append('images', image)
-//   //   })
-//   //   await dispatch(addQuestion({ API, fields: newData })).unwrap()
-//   //   navigate('/')
-//   // }
-
-//   // const formik = useFormik({
-//   //   initialValues: questionValues,
-//   //   validationSchema: questionSchema,
-//   //   onSubmit: handleSubmit
-//   // })
-
-//   return (
-//     <section className="container mx-auto w-full px-[18px] py-[40px] xl:px-0 xl:py-[60px]">
-//       {/* <div className="mx-auto w-full md:w-10/12 xl:w-8/12">
-//         <h1 className="text-center text-xl font-bold uppercase md:text-[32px]">UPLOAD SOAL YANG KAMU PUNYA 😁</h1>
-//         <form className="mt-[40px] flex flex-col gap-6 md:mt-[60px] xl:gap-8" onSubmit={formik.handleSubmit}>
-//           <TextField
-//             label="Mata Kuliah"
-//             placeholder="Matematika Diskrit"
-//             error={formik.touched.mataKuliah && formik.errors.mataKuliah}
-//             {...formik.getFieldProps('mataKuliah')}
-//           />
-//           <TextField
-//             label="Fakultas"
-//             placeholder="Ilmu Komputer"
-//             error={formik.touched.fakultas && formik.errors.fakultas}
-//             {...formik.getFieldProps('fakultas')}
-//           />
-//           <TextField
-//             label="Program Studi"
-//             placeholder="Teknik Informatika"
-//             error={formik.touched.programStudi && formik.errors.programStudi}
-//             {...formik.getFieldProps('programStudi')}
-//           />
-//           <TextField
-//             label="Nama Dosen"
-//             placeholder="Budi Harianja, S.Kom, M.Kom"
-//             error={formik.touched.dosen && formik.errors.dosen}
-//             {...formik.getFieldProps('dosen')}
-//           />
-//           <div className="flex flex-col items-center gap-6 xl:flex-row xl:gap-5">
-//             <div className="w-full">
-//               <TextField
-//                 label="Tahun Ajaran"
-//                 placeholder="2020/2021"
-//                 error={formik.touched.tahunAjaran && formik.errors.tahunAjaran}
-//                 {...formik.getFieldProps('tahunAjaran')}
-//               />
-//             </div>
-//             <div className="w-full">
-//               <Dropdown
-//                 title="Semester"
-//                 options={semesterList}
-//                 value={formik.values.semester}
-//                 onChange={(value) => formik.setFieldValue('semester', value)}
-//               />
-//             </div>
-//             <div className="w-full">
-//               <Dropdown
-//                 title="Kategori"
-//                 options={categoriesList}
-//                 value={formik.values.kategori}
-//                 onChange={(value) => formik.setFieldValue('kategori', value)}
-//               />
-//             </div>
-//           </div>
-//           <Upload
-//             img={formik.values.images}
-//             setImg={(value) => formik.setFieldValue('images', value)}
-//             error={formik.touched.images && formik.errors.images}
-//           />
-//           <Button
-//             className="ml-auto w-fit bg-primary px-6 font-bold text-white shadow-button hover:bg-primary-hover"
-//             isLoading={loading}
-//             type="submit"
-//           >
-//             Upload Soal
-//           </Button>
-//         </form>
-//       </div> */}
-//     </section>
-//   )
-// }
-
-// export default Create
-
 import { FormProvider, useForm } from 'react-hook-form'
-import { Button, Section, Input } from '../components'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useEffect } from 'react'
+
+import { Button, Section, Input, Dropdown, DropZone } from '../components'
+import { useCreateQuestionMutation } from '../store/api/questionApi'
+import { categoriesList, semesterList } from '../constants/listData'
+import { questionSchema } from '../validations/question.validation'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { openDialog } from '../store/features/dialogSlice'
 
 const Create = () => {
-  const methods = useForm({
-    mode: 'onTouched'
-  })
-  const { handleSubmit } = methods
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  const onSubmit = (data) => {
-    console.log(data)
+  const methods = useForm({
+    mode: 'onTouched',
+    resolver: yupResolver(questionSchema)
+  })
+
+  const { handleSubmit, reset } = methods
+  const [create, { isLoading, isSuccess }] = useCreateQuestionMutation()
+
+  useEffect(() => {
+    if (isSuccess) reset()
+  }, [isLoading])
+
+  const onSubmit = async (data) => {
+    const newData = new FormData()
+    newData.append('mataKuliah', data.mataKuliah)
+    newData.append('fakultas', data.fakultas)
+    newData.append('programStudi', data.programStudi)
+    newData.append('tahunAjaran', data.tahunAjaran)
+    newData.append('semester', data.semester.value)
+    newData.append('kategori', data.kategori.value)
+    newData.append('dosen', data.dosen)
+    data.images.forEach((image) => {
+      newData.append('images', image)
+    })
+
+    await create(newData).unwrap()
+    dispatch(
+      openDialog({
+        title: 'Berhasil Upload Soal',
+        content:
+          'Soal yang kamu berikan telah berhasil kami proses dan upload, terima kasih sudah berkontribusi pada web ini',
+        buttonText: 'Kembali ke Beranda',
+        variant: 'success',
+        handler: () => navigate('/')
+      })
+    )
   }
 
   return (
@@ -140,10 +64,21 @@ const Create = () => {
             <Input label="Nama Dosen" id="dosen" placeholder="Budi Harianja, S.Kom, M.Kom" />
             <div className="flex flex-col items-center gap-6 xl:flex-row xl:gap-5">
               <Input id="tahunAjaran" label="Tahun Ajaran" placeholder="2020/2021" />
-              <Input id="semester" label="Semester" placeholder="2" type="number" />
-              <Input id="kategori" label="Kategori" placeholder="UAS" />
+              <Dropdown id="semester" label="Semester" options={semesterList} placeholder={semesterList[0]} />
+              <Dropdown id="kategori" label="Kategori" options={categoriesList} placeholder={categoriesList[0]} />
             </div>
-            <Button variant="primary" className="ml-auto w-fit px-4 shadow-button md:px-6" type="submit">
+            <DropZone
+              id="images"
+              label="Upload foto soal (maks.5 foto)"
+              accept={{ 'image/*': ['.png', '.jpg', '.jpeg'] }}
+              maxFiles={5}
+            />
+            <Button
+              variant="primary"
+              className="ml-auto w-fit px-4 shadow-button md:px-6"
+              type="submit"
+              loading={isLoading}
+            >
               Upload Soal
             </Button>
           </form>

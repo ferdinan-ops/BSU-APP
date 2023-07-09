@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
-import authReducer from './features/authSlice'
+
 import commentReducer from './features/commentSlice'
-import { apiSlice } from './api/apiSlice'
 import dialogSlice from './features/dialogSlice'
+import authReducer from './features/authSlice'
+
+import { apiSlice } from './api/apiSlice'
 
 export const store = configureStore({
   reducer: {

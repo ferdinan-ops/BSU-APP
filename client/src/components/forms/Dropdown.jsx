@@ -1,75 +1,113 @@
-import { Fragment, useState } from 'react'
-import { Combobox, Transition } from '@headlessui/react'
-import { HiCheck, HiChevronUpDown } from 'react-icons/hi2'
+import { Controller, useFormContext } from 'react-hook-form'
+import Select, { components } from 'react-select'
+import { FiChevronDown } from 'react-icons/fi'
+
 import Label from './Label'
 
-const Dropdown = ({ title, options, name, value, onChange }) => {
-  const [query, setQuery] = useState('')
+const Dropdown = ({ label, id, disabled = false, options, defaultValue, placeholder, ...rest }) => {
+  const { control, formState } = useFormContext()
+  const { errors } = formState
 
-  const searchData = options.filter((data) =>
-    data.toLowerCase().replace(/\s+/g, '').includes(query.toLowerCase().replace(/\s+/g, ''))
-  )
-  const filteredData = query === '' ? options : searchData
+  const customStyles = {
+    control: (styles, state) => ({
+      ...styles,
+      border: `2px solid ${errors[id] ? '#EF4444' : state.isFocused ? '#2563eb' : '#e2e8f0'}`,
+      boxShadow: 'none',
+      '&:hover': {
+        border: `2px solid ${errors[id] ? '#EF4444' : '#e2e8f0'}`
+      },
+      '*': {
+        boxShadow: 'none'
+      },
+      borderRadius: '0.5rem',
+      padding: '0.75rem 1.5rem',
+      background: disabled ? '#F3F4F6' : undefined,
+      cursor: 'pointer',
+      '@media (max-width: 640px)': {
+        padding: '0.5rem 1rem'
+      },
+      transition: 'none'
+    }),
+    valueContainer: (styles) => ({
+      ...styles,
+      padding: '0',
+      gap: '0.5rem'
+    }),
+    input: (styles) => ({
+      ...styles,
+      padding: 0,
+      margin: 0
+    }),
+    indicatorsContainer: (styles) => ({
+      ...styles,
+      '&>div': {
+        padding: '0'
+      }
+    }),
+    dropdownIndicator: (styles) => ({
+      ...styles,
+      color: '#878787',
+      '&:hover': {
+        color: '#878787'
+      }
+    }),
+    options: (styles, state) => ({
+      ...styles,
+      color: '#344054',
+      background: state.isSelected ? '#2563eb' : '#fff',
+      '&:hover': {
+        background: '#2563eb'
+      },
+      cursor: 'pointer'
+    }),
+    menu: (styles) => ({
+      ...styles,
+      borderRadius: '0.5rem',
+      overvlow: 'hidden'
+    }),
+    placeholder: (styles) => ({
+      ...styles,
+      color: '#9ca3af'
+    })
+  }
+
+  const optionsObject = options.map((option) => {
+    return {
+      value: option,
+      label: option
+    }
+  })
 
   return (
-    <div className="flex flex-col">
-      <Label htmlFor={title}>{title}</Label>
-      <Combobox value={value} onChange={onChange} name={name}>
-        <div className="relative mt-3">
-          <div className="relative flex h-[50px] w-full cursor-default items-center justify-center overflow-hidden rounded-lg border-2 border-slate-200 text-base focus-within:border-primary">
-            <Combobox.Input
-              className="w-full px-4 py-2 text-sm text-font outline-none md:text-base xl:px-6 xl:py-3"
-              displayValue={(data) => data}
-              onChange={(event) => setQuery(event.target.value)}
+    <div className="flex w-full flex-col gap-1.5 xl:gap-2.5">
+      {label && <Label htmlFor={id}>{label}</Label>}
+      <div className="relative text-sm md:text-[15px]">
+        <Controller
+          name={id}
+          control={control}
+          defaultValue={defaultValue ? { value: defaultValue, label: defaultValue } : ''}
+          render={({ field }) => (
+            <Select
+              {...field}
+              isDisabled={disabled}
+              placeholder={placeholder}
+              options={optionsObject}
+              styles={customStyles}
+              className={{ control: () => '!min-h-[2.25rem] md:!min-h-[2.5rem]' }}
+              components={{
+                IndicatorSeparator: () => null,
+                DropdownIndicator: (props) => (
+                  <components.DropdownIndicator {...props}>
+                    <FiChevronDown className="text-sm text-slate-400 sm:text-xl" />
+                  </components.DropdownIndicator>
+                )
+              }}
             />
-            <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-              <HiChevronUpDown className="h-5 w-5 text-font" aria-hidden="true" />
-            </Combobox.Button>
-          </div>
-          <Transition
-            as={Fragment}
-            leave="transition ease-in duration-100"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-            afterLeave={() => setQuery('')}
-          >
-            <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg sm:text-sm">
-              {filteredData.length === 0 && query !== '' ? (
-                <div className="relative cursor-default select-none px-4 py-2 text-gray-700">
-                  Tidak dapat menemukan apapun 😢.
-                </div>
-              ) : (
-                filteredData.map((data, index) => (
-                  <Combobox.Option
-                    key={index}
-                    className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                        active ? 'bg-primary text-white' : 'text-gray-900'
-                      }`
-                    }
-                    value={data}
-                  >
-                    {({ selected, active }) => (
-                      <>
-                        <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>{data}</span>
-                        {selected ? (
-                          <span
-                            className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-                              active ? 'text-white' : 'text-primary'
-                            }`}
-                          >
-                            <HiCheck className="h-5 w-5" aria-hidden="true" />
-                          </span>
-                        ) : null}
-                      </>
-                    )}
-                  </Combobox.Option>
-                ))
-              )}
-            </Combobox.Options>
-          </Transition>
-        </div>
-      </Combobox>
+          )}
+          {...rest}
+        />
+      </div>
+      {errors[id] && <span className="-mt-1 text-xs text-red-400 xl:text-sm ">{errors[id].message.toString()}</span>}
     </div>
   )
 }

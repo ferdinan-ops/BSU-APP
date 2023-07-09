@@ -3,8 +3,10 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { openDialog } from '../../store/features/dialogSlice'
 import { Button, Info } from '../atoms'
+import { useNavigate } from 'react-router-dom'
 
 const Description = ({ question }) => {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const user = useSelector((state) => state.auth.userInfo)
 
@@ -53,7 +55,7 @@ const Description = ({ question }) => {
         <div className="flex gap-3">
           {user._id === question.user._id ? (
             <>
-              <Button variant="base" className="flex-1 gap-2">
+              <Button variant="base" className="flex-1 gap-2" onClick={() => navigate(`/update/${question._id}`)}>
                 <HiPencilSquare className="text-sm md:text-base" />
                 Ubah Soal
               </Button>
