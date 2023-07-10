@@ -16,12 +16,8 @@ const More = ({ comment }) => {
   const [deleteComment, { isLoading, isSuccess }] = useDeleteCommentMutation()
 
   useEffect(() => {
-    if (isSuccess) {
-      dispatch(setIsLoading(false))
-    }
-    if (isLoading) {
-      dispatch(setIsLoading(true))
-    }
+    if (isSuccess) dispatch(setIsLoading(false))
+    if (isLoading) dispatch(setIsLoading(true))
   }, [isLoading, isSuccess])
 
   const handleDelete = () => {

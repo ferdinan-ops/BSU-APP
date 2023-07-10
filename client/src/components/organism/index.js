@@ -7,5 +7,6 @@ import Carousel from './Carousel'
 import Reaction from './Reaction'
 import Comments from './comments'
 import Description from './Description'
+import NotifCard from './NotifCard'
 
-export { Header, Footer, Post, Promote, PostSkeleton, Carousel, Reaction, Comments, Description }
+export { Header, Footer, Post, Promote, PostSkeleton, Carousel, Reaction, Comments, Description, NotifCard }

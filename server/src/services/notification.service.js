@@ -6,7 +6,7 @@ const pushNotification = async ({ message, userTarget, userSender, link }) => {
 
 const getNotificationsFromDB = async (userId) => {
   return await Notification.find({ userTarget: userId })
-    .populate('userSender', 'username photo')
+    .populate('userSender', 'username photo provider')
     .sort({ createdAt: -1 })
 }
 

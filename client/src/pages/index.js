@@ -7,5 +7,6 @@ import Update from './Update'
 import Detail from './Detail'
 import UserSave from './UserSave'
 import UserLike from './UserLike'
+import Notification from './Notification'
 
-export { Login, Register, Home, Create, User, Update, Detail, UserSave, UserLike }
+export { Login, Register, Home, Create, User, Update, Detail, UserSave, UserLike, Notification }

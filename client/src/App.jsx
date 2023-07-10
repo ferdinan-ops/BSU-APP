@@ -1,6 +1,6 @@
 import { ProtectedAuth, ProtectedRoute } from './components/routes'
 import { AuthLayout, Dialog, MainLayout, UserLayout } from './components'
-import { Login, Register, Home, Create, User, Update, Detail, UserSave, UserLike } from './pages'
+import { Login, Register, Home, Create, User, Update, Detail, UserSave, UserLike, Notification } from './pages'
 import { Route, Routes } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 
@@ -25,6 +25,7 @@ const App = () => {
           <Route element={<ProtectedRoute />}>
             <Route path="create" element={<Create />} />
             <Route path="update/:postId" element={<Update />} />
+            <Route path="notification" element={<Notification />} />
             <Route path="user/:userId" element={<UserLayout />}>
               <Route index element={<User />} />
               <Route path="save" element={<UserSave />} />

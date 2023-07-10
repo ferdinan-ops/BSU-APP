@@ -9,7 +9,7 @@ import { TextArea } from '../../forms'
 
 const CommentForm = ({ question }) => {
   const methods = useForm()
-  const { handleSubmit, formState, reset, setValue } = methods
+  const { handleSubmit, formState, reset, setValue, setFocus } = methods
 
   const user = useSelector((state) => state.auth.userInfo)
   const comment = useSelector((state) => state.comment.comment)
@@ -22,7 +22,10 @@ const CommentForm = ({ question }) => {
   }, [isSuccess, isSuccessUpdate])
 
   useEffect(() => {
-    if (comment) setValue('comment', comment.comment)
+    if (comment) {
+      setValue('comment', comment.comment)
+      setFocus('comment')
+    }
   }, [comment])
 
   const onSubmit = (values) => {

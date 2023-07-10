@@ -73,12 +73,7 @@ const Create = () => {
               accept={{ 'image/*': ['.png', '.jpg', '.jpeg'] }}
               maxFiles={5}
             />
-            <Button
-              variant="primary"
-              className="ml-auto w-fit px-4 shadow-button md:px-6"
-              type="submit"
-              loading={isLoading}
-            >
+            <Button variant="primary" className="ml-auto w-fit px-4 shadow-button md:px-6" loading={isLoading}>
               Upload Soal
             </Button>
           </form>
