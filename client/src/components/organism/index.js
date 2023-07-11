@@ -1,12 +1,12 @@
 import Header from './Header'
-import Footer from './Footer'
-import Post from './Post'
-import Promote from './Promote'
-import PostSkeleton from './PostSkeleton'
+import Posts from './posts'
+import Post from './posts/Post'
+import PostSkeleton from './posts/PostSkeleton'
 import Carousel from './Carousel'
-import Reaction from './Reaction'
 import Comments from './comments'
 import Description from './Description'
-import NotifCard from './NotifCard'
+import NotifCard from './notifications/NotifCard'
+import NotifSkeleton from './notifications/NotifSkeleton'
+import Reaction from './Reaction'
 
-export { Header, Footer, Post, Promote, PostSkeleton, Carousel, Reaction, Comments, Description, NotifCard }
+export { Header, Post, PostSkeleton, Carousel, Comments, Description, NotifCard, NotifSkeleton, Posts, Reaction }

@@ -9,13 +9,13 @@ export const fromNow = (value) => {
     return tahun + ' tahun yang lalu'
   }
   if (hari >= 320 && hari <= 547) {
-    return 'satu tahun yang lalu'
+    return 'Satu tahun yang lalu'
   }
   if (hari >= 45 && hari <= 319) {
     return bulan + ' bulan yang lalu'
   }
   if (hari >= 26 && hari <= 45) {
-    return 'satu bulan yang lalu'
+    return 'Satu bulan yang lalu'
   }
 
   const jam = Math.floor(detik / 3600)
@@ -24,7 +24,7 @@ export const fromNow = (value) => {
     return hari + ' hari yang lalu'
   }
   if (jam >= 22 && jam <= 35) {
-    return 'satu hari yang lalu'
+    return 'Satu hari yang lalu'
   }
 
   const menit = Math.floor(detik / 60)
@@ -33,16 +33,16 @@ export const fromNow = (value) => {
     return jam + ' jam yang lalu'
   }
   if (menit >= 45 && menit <= 89) {
-    return 'satu jam yang lalu'
+    return 'Satu jam yang lalu'
   }
   if (detik >= 90 && menit <= 44) {
     return menit + ' menit yang lalu'
   }
   if (detik >= 45 && detik <= 89) {
-    return 'satu menit yang lalu'
+    return 'Satu menit yang lalu'
   }
   if (detik >= 0 && detik <= 45) {
-    return 'satu detik yang lalu'
+    return 'Satu detik yang lalu'
   }
 }
 

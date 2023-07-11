@@ -1,10 +1,9 @@
 import { HiArrowDownTray, HiLockClosed } from 'react-icons/hi2'
 import { Link, Navigate, useParams } from 'react-router-dom'
-import { Waveform } from '@uiball/loaders'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-hot-toast'
 
-import { Avatar, Button, Carousel, Comments, Container, Description, Reaction, Section } from '../components'
+import { Avatar, Button, Carousel, Comments, Container, Description, Loader, Reaction, Section } from '../components'
 import { useGetQuestionQuery } from '../store/api/questionApi'
 import { downloadPost } from '../services/questionService'
 import * as formatDate from '../services/formatDate'
@@ -15,14 +14,7 @@ const Detail = () => {
   const user = useSelector((state) => state.auth.userInfo)
 
   if (isError) return <Navigate to="/404" />
-
-  if (!isSuccess) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Waveform size={40} lineWeight={3.5} speed={1} color="#ddd" />
-      </div>
-    )
-  }
+  if (!isSuccess) return <Loader />
 
   const handleDownload = () => {
     if (user) return downloadPost(question)
@@ -39,7 +31,6 @@ const Detail = () => {
               <Avatar
                 src={question.data?.user?.photo}
                 alt={question.data?.user?.username}
-                provider={question.data?.user?.provider}
                 size="h-5 w-5 md:h-7 md:w-7"
               />
               <div className="flex items-center gap-2 text-[13px] md:gap-3 md:text-base">
@@ -59,7 +50,7 @@ const Detail = () => {
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-7 md:flex-row md:items-start md:gap-10">
+        <div className="mt-5 flex flex-col items-center justify-between gap-7 md:mt-0 md:flex-row md:items-start md:gap-10">
           <Carousel question={question} />
           <Description question={question.data} />
         </div>

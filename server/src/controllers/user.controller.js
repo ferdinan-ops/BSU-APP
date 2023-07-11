@@ -37,57 +37,90 @@ const updateUser = async (req, res) => {
     }
 
     await UserService.updateUserById(userId, value)
+    const { username, photo } = await UserService.getUserById(userId)
     logger.info(`${method}:/users${path}\tSukses mengubah data user`)
-    return res.status(200).json({ message: 'Sukses mengubah data user' })
+    return res.status(200).json({ message: 'Sukses mengubah data user', data: { username, photo } })
   } catch (error) {
     return res.status(400).json({ error })
   }
 }
 
 const getUserQuestions = async (req, res) => {
-  const { params, path, method } = req
+  const { params, path, method, query } = req
   const { userId } = params
 
+  const currentPage = query.page || 1
+  const perPage = query.perPage || 6
+  let skipItems = (parseInt(currentPage) - 1) * parseInt(perPage)
+  let totalItem
+
   try {
-    const questions = await UserService.getMyQuestions(userId)
+    const totalDoc = await UserService.getMyQuestionsCount(userId)
+    totalItem = totalDoc
+
+    const questions = await UserService.getMyQuestions(userId, perPage, skipItems)
     if (!questions) {
       logger.error(`${method}:/users${path}\tTidak dapat menemukan soal dengan userId ${userId}`)
       return res.status(404).json({ error: `Tidak menemukan soal dengan userId ${userId}` })
     }
     logger.info(`${method}:/users${path}\tBerhasil mendapatkan soal dengan userId ${userId}`)
-    return res.status(200).json({ data: questions })
+    return res
+      .status(200)
+      .json({ data: questions, total_data: totalItem, per_page: perPage, current_page: currentPage })
   } catch (error) {
     return res.status(400).json({ error })
   }
 }
 
 const getUserSaveQuestions = async (req, res) => {
-  const { userId, path, method } = req
+  const { path, method, query } = req
+  const { userId } = req.params
+
+  const currentPage = query.page || 1
+  const perPage = query.perPage || 6
+  let skipItems = (parseInt(currentPage) - 1) * parseInt(perPage)
+  let totalItem
 
   try {
-    const questions = await UserService.getMySaveQuestions(userId)
+    const totalDoc = await UserService.getMySaveQuestionsCount(userId)
+    totalItem = totalDoc
+
+    const questions = await UserService.getMySaveQuestions(userId, perPage, skipItems)
     if (!questions) {
       logger.error(`${method}:/users${path}\tTidak dapat menemukan soal yang disimpan dengan userId ${userId}`)
       return res.status(404).json({ error: `Tidak menemukan soal yang disimpan dengan userId ${userId}` })
     }
     logger.info(`${method}:/users${path}\tBerhasil mendapatkan soal yang disimpan dengan userId ${userId}`)
-    return res.status(200).json({ data: questions })
+    return res
+      .status(200)
+      .json({ data: questions, total_data: totalItem, per_page: perPage, current_page: currentPage })
   } catch (error) {
     return res.status(400).json({ error })
   }
 }
 
 const getUserLikeQuestions = async (req, res) => {
-  const { userId, path, method } = req
+  const { path, method, query } = req
+  const { userId } = req.params
+
+  const currentPage = query.page || 1
+  const perPage = query.perPage || 6
+  let skipItems = (parseInt(currentPage) - 1) * parseInt(perPage)
+  let totalItem
 
   try {
-    const questions = await UserService.getMyLikesQuestions(userId)
+    const totalDoc = await UserService.getMyLikesQuestionsCount(userId)
+    totalItem = totalDoc
+
+    const questions = await UserService.getMyLikesQuestions(userId, perPage, skipItems)
     if (!questions) {
       logger.error(`${method}:/users${path}\tTidak dapat menemukan soal yang disukai dengan userId ${userId}`)
       return res.status(404).json({ error: `Tidak menemukan soal yang disukai dengan userId ${userId}` })
     }
     logger.info(`${method}:/users${path}\tBerhasil mendapatkan soal yang disukai dengan userId ${userId}`)
-    return res.status(200).json({ data: questions })
+    return res
+      .status(200)
+      .json({ data: questions, total_data: totalItem, per_page: perPage, current_page: currentPage })
   } catch (error) {
     return res.status(400).json({ error })
   }

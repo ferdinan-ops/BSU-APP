@@ -6,7 +6,11 @@ const Section = ({ children, className, title }) => {
     document.title = 'Bank Soal Unika  ~ ' + title
   }, [])
 
-  return <section className={clsx('flex w-full flex-col font-source text-font', className)}>{children}</section>
+  return (
+    <section className={clsx('flex w-full flex-col px-[18px] font-source text-font xl:px-0', className)}>
+      {children}
+    </section>
+  )
 }
 
 export default Section

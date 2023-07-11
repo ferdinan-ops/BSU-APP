@@ -1,8 +1,8 @@
 const Report = require('../models/report.model')
 const User = require('../models/user.model')
 
-const createReport = async ({ message, userTarget, userSender }) => {
-  return await Report.create({ message, userTarget, userSender })
+const createReport = async ({ userTarget, userSender }) => {
+  return await Report.create({ userTarget, userSender })
 }
 
 const getSystems = async () => {

@@ -7,18 +7,20 @@ import { setComment } from '../../store/features/commentSlice'
 import { Icon } from '../atoms'
 import { useDeleteCommentMutation } from '../../store/api/commentApi'
 import { openDialog, setIsLoading } from '../../store/features/dialogSlice'
+import { useReportCommentMutation } from '../../store/api/reportApi'
 
-const More = ({ comment }) => {
+const More = ({ comment, questionId }) => {
   const [show, setShow] = useState(false)
   const dispatch = useDispatch()
 
   const user = useSelector((state) => state.auth.userInfo)
   const [deleteComment, { isLoading, isSuccess }] = useDeleteCommentMutation()
+  const [reportComment, { isLoading: isLoadingReport, isSuccess: isSuccessReport }] = useReportCommentMutation()
 
   useEffect(() => {
-    if (isSuccess) dispatch(setIsLoading(false))
-    if (isLoading) dispatch(setIsLoading(true))
-  }, [isLoading, isSuccess])
+    if (isSuccess || isSuccessReport) dispatch(setIsLoading(false))
+    if (isLoading || isLoadingReport) dispatch(setIsLoading(true))
+  }, [isLoading, isSuccess, isLoadingReport, isSuccessReport])
 
   const handleDelete = () => {
     setShow(false)
@@ -45,7 +47,7 @@ const More = ({ comment }) => {
           'Apakah Anda yakin ingin melaporkan komentar ini? Komentar ini akan dilaporkan kepada admin. Tindakan ini tidak dapat dibatalkan.',
         buttonText: 'Laporkan',
         variant: 'danger',
-        handler: () => {}
+        handler: () => reportComment({ questionId, userCommentId: comment.user._id })
       })
     )
   }

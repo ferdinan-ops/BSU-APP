@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom'
 import clsx from 'clsx'
 
-import * as formatDate from '../../services/formatDate'
-import { Avatar } from '../atoms'
-import { useMarkAsReadMutation } from '../../store/api/notificationApi'
+import * as formatDate from '../../../services/formatDate'
+import { Avatar } from '../../atoms'
+import { useMarkAsReadMutation } from '../../../store/api/notificationApi'
 
 const NotifCard = ({ notif }) => {
   const navigate = useNavigate()
@@ -24,18 +24,15 @@ const NotifCard = ({ notif }) => {
       )}
       onClick={() => handleMarkAsRead(notif.read)}
     >
-      <Avatar
-        src={user.photo}
-        alt={user.username}
-        provider={user.provider}
-        size="w-10 h-10 md:h-11 md:w-11 rounded-lg"
-      />
+      <Avatar src={user.photo} alt={user.username} size="w-10 h-10 md:h-11 md:w-11 rounded-lg" />
 
       <div className="flex flex-1 flex-col text-sm md:text-base">
         <div>
-          <span className="font-semibold">{user.username}</span> <span className="lowercase">{notif.message}</span>
+          <span className="font-semibold">{user.username}</span>
+          <span className="mx-1 text-font/60">&bull;</span>
+          <span className="text-[15px] lowercase">{notif.message}</span>
         </div>
-        <span className="ml-auto text-xs font-semibold text-font/60 md:ml-0 md:text-sm">
+        <span className="ml-auto text-xs font-semibold text-font/50 md:ml-0 md:text-sm">
           {formatDate.fromNow(notif.createdAt)}
         </span>
       </div>

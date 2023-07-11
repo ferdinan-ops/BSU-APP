@@ -8,6 +8,7 @@ const UserMenu = ({ user, onShowNav }) => {
   const navigate = useNavigate()
 
   const navigateToCreate = () => {
+    onShowNav(false)
     navigate('/create')
   }
 
@@ -34,7 +35,7 @@ const UserMenu = ({ user, onShowNav }) => {
           <span className="xl:hidden">Notifikasi</span>
         </Link>
         <Link to={`/user/${user._id}`} className="flex items-center gap-3" onClick={handleCloseNav}>
-          <Avatar src={user.photo} alt={user.username} size="h-6 w-6 xl:w-11 xl:h-11" provider={user.provider} />
+          <Avatar src={user.photo} alt={user.username} size="h-6 w-6 xl:w-11 xl:h-11" />
           <span className="xl:hidden">{user.username}</span>
         </Link>
       </div>

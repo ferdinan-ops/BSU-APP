@@ -1,16 +1,16 @@
 import { useNavigate } from 'react-router-dom'
+import { HiLockClosed } from 'react-icons/hi2'
 import { useSelector } from 'react-redux'
 import clsx from 'clsx'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { A11y, Navigation, Pagination } from 'swiper'
+import { EffectCards } from 'swiper'
 
 import 'swiper/css'
-import 'swiper/css/pagination'
+import 'swiper/css/effect-cards'
 
 import CONFIG from '../../constants/environtment'
 import { CarouselButton } from '../molecules'
-import { HiLockClosed } from 'react-icons/hi2'
 import { Button, Icon } from '../atoms'
 
 const Carousel = ({ question }) => {
@@ -19,16 +19,10 @@ const Carousel = ({ question }) => {
   const post = question.data
 
   return (
-    <Swiper
-      modules={[Pagination, Navigation, A11y]}
-      slidesPerView={1}
-      spaceBetween={40}
-      grabCursor={true}
-      className="w-full md:flex-1"
-    >
+    <Swiper modules={[EffectCards]} effect="cards" grabCursor={true} className="w-10/12 md:w-4/12">
       {question.data?.images.map((image, index) => (
         <SwiperSlide key={index} className="w-full overflow-hidden rounded-xl border-4 border-slate-200">
-          <div className="relative min-h-[500px]">
+          <div className="relative">
             <img src={CONFIG.imageUrl + image} alt={post.mataKuliah} className={clsx('w-full', !user && 'blur-lg')} />
             {!user && (
               <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
@@ -53,7 +47,7 @@ const Carousel = ({ question }) => {
           </div>
         </SwiperSlide>
       ))}
-      {question.data?.images.length > 0 && (
+      {question.data?.images?.length > 1 && (
         <div className="mt-6 flex items-center justify-center gap-4 md:mt-8 md:gap-5">
           <CarouselButton direction="prev" />
           <CarouselButton direction="next" />

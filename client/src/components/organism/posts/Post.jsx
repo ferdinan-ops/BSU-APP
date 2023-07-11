@@ -1,8 +1,8 @@
 import { HiHeart, HiBookmark } from 'react-icons/hi2'
 import { useNavigate } from 'react-router-dom'
 
-import * as formatDate from '../../services/formatDate'
-import { Button, Icon, Info } from '../atoms'
+import * as formatDate from '../../../services/formatDate'
+import { Button, Icon, Info } from '../../atoms'
 
 const Post = ({ post, className }) => {
   const navigate = useNavigate()

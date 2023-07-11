@@ -1,14 +1,25 @@
 import { HiFlag, HiPencilSquare, HiTrash } from 'react-icons/hi2'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { openDialog } from '../../store/features/dialogSlice'
+import { openDialog, setIsLoading } from '../../store/features/dialogSlice'
 import { Button, Info } from '../atoms'
 import { useNavigate } from 'react-router-dom'
+import { useReportQuestionMutation } from '../../store/api/reportApi'
+import { useEffect } from 'react'
+import { useDeleteQuestionMutation } from '../../store/api/questionApi'
 
 const Description = ({ question }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const user = useSelector((state) => state.auth.userInfo)
+
+  const [report, { isSuccess, isLoading }] = useReportQuestionMutation()
+  const [deleteQuestion, { isSuccess: isSuccessDelete, isLoading: isLoadingDelete }] = useDeleteQuestionMutation()
+
+  useEffect(() => {
+    if (isSuccess || isSuccessDelete) dispatch(setIsLoading(false))
+    if (isLoading || isLoadingDelete) dispatch(setIsLoading(true))
+  }, [isLoading, isSuccess, isLoadingDelete, isSuccessDelete])
 
   const handleReport = () => {
     dispatch(
@@ -19,7 +30,7 @@ const Description = ({ question }) => {
           'Apakah Anda yakin ingin melaporkan soal ini? Soal ini akan dilaporkan kepada admin. Tindakan ini tidak dapat dibatalkan.',
         buttonText: 'Laporkan',
         variant: 'danger',
-        handler: () => {}
+        handler: () => report({ questionId: question._id, userQuestionId: question.user._id })
       })
     )
   }
@@ -33,7 +44,10 @@ const Description = ({ question }) => {
           'Apakah Anda yakin ingin menghapus soal ini? Soal ini akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan.',
         buttonText: 'Hapus',
         variant: 'danger',
-        handler: () => {}
+        handler: async () => {
+          await deleteQuestion(question._id).unwrap()
+          navigate('/')
+        }
       })
     )
   }
@@ -41,7 +55,7 @@ const Description = ({ question }) => {
   return (
     <div className="flex flex-col gap-5 rounded-lg bg-font p-3 md:gap-7 md:p-6">
       <table cellPadding={5} className="block w-fit">
-        <tbody className="text-xs text-white md:text-base">
+        <tbody className="text-xs text-white sm:text-base">
           <Info title="Mata Kuliah" content={question.mataKuliah} />
           <Info title="Fakultas" content={question.fakultas} />
           <Info title="Program Studi" content={question.programStudi} />

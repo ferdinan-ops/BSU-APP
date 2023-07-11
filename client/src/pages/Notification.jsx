@@ -1,13 +1,35 @@
-import { Button, Container, NotifCard, Section } from '../components'
+import { MdNotificationsActive } from 'react-icons/md'
+
 import { useGetNotificationsQuery, useMarkAllAsReadMutation } from '../store/api/notificationApi'
+import { Button, Container, NotifCard, NotifSkeleton, Section } from '../components'
+import NoData from '../components/molecules/NoData'
 
 const Notification = () => {
-  const { data: notif, isSuccess } = useGetNotificationsQuery()
-  const [markAllAsRead, { isLoading }] = useMarkAllAsReadMutation()
+  const { data: notif, isSuccess, isLoading } = useGetNotificationsQuery()
+  const [markAllAsRead, { isLoadingMark }] = useMarkAllAsReadMutation()
 
   const handleMarkAllAsRead = (e) => {
     e.preventDefault()
     markAllAsRead()
+  }
+
+  console.log(notif)
+
+  let content = null
+  if (isLoading) {
+    content = [...Array(3)].map((_, i) => <NotifSkeleton key={i} />)
+  } else if (isSuccess && notif.data?.length > 0) {
+    content = notif.data?.map((item) => <NotifCard notif={item} key={item._id} />)
+  } else if (isSuccess && notif.data?.length === 0) {
+    content = (
+      <div className="mt-10">
+        <NoData
+          Icon={MdNotificationsActive}
+          title="Tidak ada notifikasi"
+          text="Anda tidak memiliki notifikasi apapun."
+        />
+      </div>
+    )
   }
 
   return (
@@ -21,17 +43,17 @@ const Notification = () => {
             </p>
             <p className="text-sm font-semibold md:text-base">Klik notifikasinya untuk menuju ke topik.</p>
           </div>
-          <Button
-            variant="primary"
-            className="ml-auto px-2 md:px-4 md:text-xs"
-            onClick={handleMarkAllAsRead}
-            loading={isLoading}
-          >
-            Tandai Sudah Dibaca
-          </Button>
-          <section className="flex flex-col gap-2 md:gap-3">
-            {isSuccess && notif.data?.map((item) => <NotifCard notif={item} key={item._id} />)}
-          </section>
+          {notif?.data?.length > 0 && (
+            <Button
+              variant="primary"
+              className="ml-auto px-2 md:px-4 md:text-xs"
+              onClick={handleMarkAllAsRead}
+              loading={isLoadingMark}
+            >
+              Tandai Sudah Dibaca
+            </Button>
+          )}
+          <section className="flex flex-col gap-2 md:gap-3">{content}</section>
         </section>
       </Container>
     </Section>

@@ -19,7 +19,7 @@ const questionSchema = new mongoose.Schema(
       require: true
     },
     semester: {
-      type: Number,
+      type: String,
       require: true
     },
     kategori: {

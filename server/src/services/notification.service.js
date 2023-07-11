@@ -10,6 +10,10 @@ const getNotificationsFromDB = async (userId) => {
     .sort({ createdAt: -1 })
 }
 
+const getNotifCountByUserId = async (userId) => {
+  return await Notification.find({ userTarget: userId, read: false }).countDocuments()
+}
+
 const markNotificationAsRead = async (notifId, userId) => {
   return await Notification.findOneAndUpdate({ _id: notifId, userTarget: userId }, { read: true })
 }
@@ -18,4 +22,10 @@ const markAllNotificationAsRead = async (userId) => {
   return await Notification.updateMany({ userTarget: userId }, { read: true })
 }
 
-module.exports = { pushNotification, getNotificationsFromDB, markNotificationAsRead, markAllNotificationAsRead }
+module.exports = {
+  pushNotification,
+  getNotificationsFromDB,
+  markNotificationAsRead,
+  markAllNotificationAsRead,
+  getNotifCountByUserId
+}

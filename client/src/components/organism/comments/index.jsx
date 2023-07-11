@@ -15,7 +15,7 @@ const Comments = ({ question }) => {
   if (isLoading) {
     content = <CommentSkeleton />
   } else if (isSuccess && comments.data.length > 0) {
-    content = comments.data.map((comment) => <Comment comment={comment} key={comment._id} />)
+    content = comments.data.map((comment) => <Comment comment={comment} key={comment._id} questionId={question._id} />)
   } else if (isSuccess && comments.data.length === 0) {
     content = (
       <NoData

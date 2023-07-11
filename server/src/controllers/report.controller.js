@@ -11,17 +11,18 @@ const reportComment = async (req, res) => {
     return res.status(422).json({ error: error.details[0].message })
   }
 
-  const { message, questionId: link, userCommentId: userTarget } = value
+  const { questionId: link, userCommentId: userTarget } = value
+  console.log(value)
   if (userId === userTarget) {
     logger.error(`${method}: /reports${path}\tAnda tidak dapat melapor diri sendiri`)
     return res.status(204).json({ error: 'Anda tidak dapat melapor diri sendiri' })
   }
 
   const messageNotif = 'Komentar anda telah dilaporkan, silahkan buat komentar yang baik & benar'
-  const system = '63ad4799c1ebf859f3011684'
+  const system = await ReportService.getSystems()
 
   try {
-    await ReportService.createReport({ message, userTarget, userSender: userId })
+    await ReportService.createReport({ userTarget, userSender: userId })
     await pushNotification({ message: messageNotif, userTarget, link, userSender: system })
     logger.info(`${method}: /reports${path}\tBerhasil melaporkan komentar dan push notifikasi`)
     res.status(200).json({ msg: 'Berhasil melaporkan komentar' })
@@ -38,7 +39,7 @@ const reportQuestion = async (req, res) => {
     return res.status(422).json({ error: error.details[0].message })
   }
 
-  const { message, questionId: link, userQuestionId: userTarget } = value
+  const { questionId: link, userQuestionId: userTarget } = value
   if (userId === userTarget) {
     logger.error(`${method}: /reports${path}\tAnda tidak dapat melapor diri sendiri`)
     return res.status(204).json({ error: 'Anda tidak dapat melapor diri sendiri' })
@@ -49,7 +50,7 @@ const reportQuestion = async (req, res) => {
   const system = await ReportService.getSystems()
 
   try {
-    await ReportService.createReport({ message, userTarget, userSender: userId })
+    await ReportService.createReport({ userTarget, userSender: userId })
     await pushNotification({ message: messageNotif, userTarget, link, userSender: system })
     logger.info(`${method}: /reports${path}\tBerhasil melaporkan soal dan push notifikasi`)
     res.status(200).json({ msg: 'Berhasil melaporkan soal' })

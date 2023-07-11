@@ -1,21 +1,27 @@
-import { useGetQuestionsQuery } from '../store/api/questionApi'
-import { Container, Post, PostSkeleton, Section } from '../components'
+import { useGetQuestionsByKeywordQuery, useGetQuestionsQuery } from '../store/api/questionApi'
+import { PostSkeleton, Posts, Section } from '../components'
+import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 const Home = () => {
-  const { data: posts, isLoading, isSuccess, isError, error } = useGetQuestionsQuery()
+  const [page, setPage] = useState(1)
+  const [searchParams] = useSearchParams()
+  const search = searchParams.get('search')
 
-  let content
-  if (isLoading) {
-    content = [...Array(6)].map((_, i) => <PostSkeleton key={i} />)
-  } else if (isSuccess) {
-    content = posts.data.map((post) => <Post key={post._id} post={post} />)
-  } else if (isError) {
-    content = <p>{error.message}</p>
+  let posts
+  if (search) {
+    posts = useGetQuestionsByKeywordQuery({ search, page })
+  } else {
+    posts = useGetQuestionsQuery(page)
   }
 
   return (
     <Section title="Beranda" className="z-0 min-h-[calc(100vh-100px)] bg-slate-100">
-      <Container className="mt-5 grid grid-cols-1 gap-8 md:mt-10 md:grid-cols-2 xl:grid-cols-3">{content}</Container>
+      {posts.isLoading ? (
+        <PostSkeleton count={6} />
+      ) : (
+        posts.isSuccess && <Posts posts={posts.data} handler={() => setPage(page + 1)} />
+      )}
     </Section>
   )
 }

@@ -39,7 +39,7 @@ const CommentForm = ({ question }) => {
         className="flex justify-between gap-5 rounded-lg border-2 border-slate-200 p-2 focus-within:border-primary md:p-3"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <Avatar src={user.photo} alt={user.username} provider={user.provider} size="h-8 w-8 md:h-10 md:w-10 border-2" />
+        <Avatar src={user.photo} alt={user.username} size="h-8 w-8 md:h-10 md:w-10 border-2" />
         <TextArea id="comment" placeholder="Tulis komentar" />
         <Button
           className="self-end px-3 shadow-button md:px-4 md:text-xs"

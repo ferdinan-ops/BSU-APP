@@ -7,4 +7,6 @@ import Section from './Section'
 import Icon from './Icon'
 import Skeleton from './Skeleton'
 import Container from './Container'
-export { Brand, Avatar, Info, ImagePreview, Button, Section, Icon, Skeleton, Container }
+import Loader from './Loader'
+
+export { Brand, Avatar, Info, ImagePreview, Button, Section, Icon, Skeleton, Container, Loader }

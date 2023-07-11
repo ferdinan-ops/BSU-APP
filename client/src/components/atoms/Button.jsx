@@ -15,10 +15,6 @@ const Button = ({ disabled, loading, children, className, variant, ...rest }) =>
         variant === 'danger' && 'bg-red-500 text-white hover:bg-red-700 disabled:bg-red-500/70',
         variant === 'base' && 'bg-white hover:bg-slate-200 disabled:bg-white/70',
         variant === 'outline' && 'border border-slate-300 py-[6px] hover:bg-slate-100 md:py-[10px]',
-        // size === 'sm' && 'py-1 md:py-2',
-        // size === 'base' && 'py-[9px] md:py-[13px]',
-        // size === 'sm' && variant === 'outline' && 'py-[3px] md:py-[7px]',
-        // size === 'base' && variant === 'outline' && 'py-[6px] md:py-[10px]',
         className
       )}
       disabled={disabled || loading}

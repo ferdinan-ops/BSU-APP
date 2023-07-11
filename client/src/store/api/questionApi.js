@@ -2,11 +2,33 @@ import { apiSlice } from './apiSlice'
 export const questionApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getQuestions: builder.query({
-      query: () => '/questions',
+      query: (page) => `/questions?page=${page}`,
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName
+      },
+      merge: (currentCache, newItems) => {
+        currentCache.data.push(...newItems.data)
+      },
+      forceRefetch: ({ currentArg, previousArg }) => {
+        return currentArg !== previousArg
+      },
       providesTags: ['Question']
     }),
     getQuestion: builder.query({
       query: (questionId) => `/questions/${questionId}`,
+      providesTags: ['Question']
+    }),
+    getQuestionsByKeyword: builder.query({
+      query: ({ search, page }) => `/questions?search=${search}&page=${page}`,
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName
+      },
+      merge: (currentCache, newItems) => {
+        currentCache.data.push(...newItems.data)
+      },
+      forceRefetch: ({ currentArg, previousArg }) => {
+        return currentArg !== previousArg
+      },
       providesTags: ['Question']
     }),
     likeQuestion: builder.mutation({
@@ -38,6 +60,13 @@ export const questionApi = apiSlice.injectEndpoints({
         body
       }),
       invalidatesTags: ['Question']
+    }),
+    deleteQuestion: builder.mutation({
+      query: (questionId) => ({
+        url: `/questions/${questionId}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: ['Question']
     })
   })
 })
@@ -45,8 +74,10 @@ export const questionApi = apiSlice.injectEndpoints({
 export const {
   useGetQuestionsQuery,
   useGetQuestionQuery,
+  useGetQuestionsByKeywordQuery,
   useLikeQuestionMutation,
   useSaveQuestionMutation,
   useCreateQuestionMutation,
-  useUpdateQuestionMutation
+  useUpdateQuestionMutation,
+  useDeleteQuestionMutation
 } = questionApi
