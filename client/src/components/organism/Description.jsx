@@ -1,49 +1,45 @@
 import { HiFlag, HiPencilSquare, HiTrash } from 'react-icons/hi2'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-hot-toast'
+import { useEffect } from 'react'
 
 import { openDialog, setIsLoading } from '../../store/features/dialogSlice'
-import { Button, Info } from '../atoms'
-import { useNavigate } from 'react-router-dom'
-import { useReportQuestionMutation } from '../../store/api/reportApi'
-import { useEffect } from 'react'
 import { useDeleteQuestionMutation } from '../../store/api/questionApi'
+import { useReportQuestionMutation } from '../../store/api/reportApi'
+import { dangerMsg, successReportMsg } from '../../constants/dialogMessage'
+import { useSuccessProsess } from '../../hooks'
+import { Button, Info } from '../atoms'
 
 const Description = ({ question }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const reportMsg = successReportMsg('soal')
   const user = useSelector((state) => state.auth.userInfo)
 
-  const [report, { isSuccess, isLoading }] = useReportQuestionMutation()
+  const [report, { isSuccess: isSuccessReport, isLoading: isLoadingReport }] = useReportQuestionMutation()
   const [deleteQuestion, { isSuccess: isSuccessDelete, isLoading: isLoadingDelete }] = useDeleteQuestionMutation()
+  useSuccessProsess({ isLoading: isLoadingReport, isSuccess: isSuccessReport, ...reportMsg })
 
   useEffect(() => {
-    if (isSuccess || isSuccessDelete) dispatch(setIsLoading(false))
-    if (isLoading || isLoadingDelete) dispatch(setIsLoading(true))
-  }, [isLoading, isSuccess, isLoadingDelete, isSuccessDelete])
+    if (isSuccessDelete) {
+      dispatch(setIsLoading(false))
+      toast.success('Soal berhasil dihapus')
+    }
+    if (isLoadingDelete) dispatch(setIsLoading(true))
+  }, [isLoadingDelete, isSuccessDelete])
 
   const handleReport = () => {
-    dispatch(
-      openDialog({
-        isOpen: true,
-        title: 'Laporkan Soal',
-        content:
-          'Apakah Anda yakin ingin melaporkan soal ini? Soal ini akan dilaporkan kepada admin. Tindakan ini tidak dapat dibatalkan.',
-        buttonText: 'Laporkan',
-        variant: 'danger',
-        handler: () => report({ questionId: question._id, userQuestionId: question.user._id })
-      })
-    )
+    const msg = dangerMsg('laporkan', 'soal')
+    const data = { questionId: question._id, userQuestionId: question.user._id }
+    dispatch(openDialog({ ...msg, handler: () => report({ ...data }) }))
   }
 
   const handleDelete = () => {
+    const msg = dangerMsg('hapus', 'soal')
     dispatch(
       openDialog({
-        isOpen: true,
-        title: 'Hapus Soal',
-        content:
-          'Apakah Anda yakin ingin menghapus soal ini? Soal ini akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan.',
-        buttonText: 'Hapus',
-        variant: 'danger',
+        ...msg,
         handler: async () => {
           await deleteQuestion(question._id).unwrap()
           navigate('/')

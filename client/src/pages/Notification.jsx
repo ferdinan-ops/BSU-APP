@@ -6,14 +6,12 @@ import NoData from '../components/molecules/NoData'
 
 const Notification = () => {
   const { data: notif, isSuccess, isLoading } = useGetNotificationsQuery()
-  const [markAllAsRead, { isLoadingMark }] = useMarkAllAsReadMutation()
+  const [markAllAsRead, { isLoading: isLoadingMark }] = useMarkAllAsReadMutation()
 
   const handleMarkAllAsRead = (e) => {
     e.preventDefault()
     markAllAsRead()
   }
-
-  console.log(notif)
 
   let content = null
   if (isLoading) {
@@ -32,6 +30,8 @@ const Notification = () => {
     )
   }
 
+  console.log(isLoadingMark)
+
   return (
     <Section title="Notifikasi" className="py-8">
       <Container>
@@ -46,7 +46,7 @@ const Notification = () => {
           {notif?.data?.length > 0 && (
             <Button
               variant="primary"
-              className="ml-auto px-2 md:px-4 md:text-xs"
+              className="ml-auto px-3 md:px-4 md:text-xs"
               onClick={handleMarkAllAsRead}
               loading={isLoadingMark}
             >

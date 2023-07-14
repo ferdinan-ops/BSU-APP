@@ -51,8 +51,6 @@ const DropZone = ({ accept, id, label, maxFiles }) => {
     maxFiles
   })
 
-  console.log(files)
-
   return (
     <div className="flex w-full flex-col gap-1.5 xl:gap-2.5">
       {label && <Label htmlFor={id}>{label}</Label>}

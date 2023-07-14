@@ -7,42 +7,15 @@ export const userApi = apiSlice.injectEndpoints({
       providesTags: ['User']
     }),
     getUserQuestions: builder.query({
-      query: (userId, page) => `/users/${userId}/my-post?page=${page}`,
-      serializeQueryArgs: ({ endpointName }) => {
-        return endpointName
-      },
-      merge: (currentCache, newItems) => {
-        currentCache.data.push(...newItems.data)
-      },
-      forceRefetch: ({ currentArg, previousArg }) => {
-        return currentArg !== previousArg
-      },
+      query: ({ userId, page }) => `/users/${userId}/my-post?page=${page}`,
       providesTags: ['Question']
     }),
     getUserSaveQuestions: builder.query({
-      query: (userId, page) => `/users/${userId}/save-post?page=${page}`,
-      serializeQueryArgs: ({ endpointName }) => {
-        return endpointName
-      },
-      merge: (currentCache, newItems) => {
-        currentCache.data.push(...newItems.data)
-      },
-      forceRefetch: ({ currentArg, previousArg }) => {
-        return currentArg !== previousArg
-      },
+      query: ({ userId, page }) => `/users/${userId}/save-post?page=${page}`,
       providesTags: ['Question']
     }),
     getUserLikeQuestions: builder.query({
-      query: (userId, page) => `/users/${userId}/like-post?page=${page}`,
-      serializeQueryArgs: ({ endpointName }) => {
-        return endpointName
-      },
-      merge: (currentCache, newItems) => {
-        currentCache.data.push(...newItems.data)
-      },
-      forceRefetch: ({ currentArg, previousArg }) => {
-        return currentArg !== previousArg
-      },
+      query: ({ userId, page }) => `/users/${userId}/like-post?page=${page}`,
       providesTags: ['Question']
     }),
     updateUserData: builder.mutation({

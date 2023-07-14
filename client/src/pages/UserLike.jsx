@@ -4,33 +4,40 @@ import { useSelector } from 'react-redux'
 import { useState } from 'react'
 
 import { useGetUserLikeQuestionsQuery } from '../store/api/userApi'
-import { PostSkeleton, Posts, NoData } from '../components'
+import { NoData, Pagination, Posts } from '../components'
+import clsx from 'clsx'
 
 const UserLike = () => {
   const { userId } = useParams()
   const [page, setPage] = useState(1)
-  const user = useSelector((state) => state.auth.userInfo)
-  const { data: posts, isSuccess, isLoading } = useGetUserLikeQuestionsQuery(userId, page)
 
-  let content
-  if (isLoading) {
-    content = <PostSkeleton count={3} />
-  } else if (isSuccess && posts.data.length > 0) {
-    content = <Posts posts={posts} handler={() => setPage(page + 1)} className="border-2" />
-  } else if (isSuccess && posts.data.length === 0) {
-    content = (
-      <NoData
-        Icon={GiFullFolder}
-        title="Tidak ada soal yang disukai"
-        text={
-          user._id === userId
-            ? 'Anda belum pernah menyukai soal?. Ayo, sukai soal pertamamu sekarang'
-            : 'Pengguna ini belum pernah menyukai soal apapun'
-        }
-      />
-    )
-  }
-  return <div className={isSuccess && posts.data.length === 0 && 'my-10 flex justify-center'}>{content}</div>
+  const user = useSelector((state) => state.auth.userInfo)
+  const { data: posts, isSuccess, isLoading, isFetching } = useGetUserLikeQuestionsQuery({ userId, page })
+
+  return (
+    <div className={clsx(isSuccess && posts.data.length === 0 && 'my-10 flex justify-center')}>
+      <Posts isLoading={isLoading} isSuccess={isSuccess} posts={posts} className="border-2" />
+      {isSuccess && posts.data.length === 0 && (
+        <NoData
+          Icon={GiFullFolder}
+          title="Tidak ada soal yang disukai"
+          text={
+            user._id === userId
+              ? 'Anda belum pernah menyukai soal?. Ayo, sukai soal pertamamu sekarang'
+              : 'Pengguna ini belum pernah menyukai soal apapun'
+          }
+        />
+      )}
+      {isSuccess && posts.total_data > 6 && (
+        <Pagination
+          handlePrev={() => setPage(page + -1)}
+          handleNext={() => setPage(page + 1)}
+          page={page}
+          posts={{ isFetching, data: posts }}
+        />
+      )}
+    </div>
+  )
 }
 
 export default UserLike

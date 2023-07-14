@@ -15,14 +15,12 @@ const Header = () => {
   const [login] = useLoginWithGoogleMutation()
   const user = useSelector((state) => state.auth.userInfo)
 
-  !user &&
-    useGoogleOneTapLogin({
-      onSuccess: async (response) => {
-        await login({ idToken: response.credential }).unwrap()
-        window.location.reload()
-        window.location.reload()
-      }
-    })
+  const handleLogin = async (response) => {
+    await login({ idToken: response.credential }).unwrap()
+    window.location.reload()
+  }
+
+  !user && useGoogleOneTapLogin({ onSuccess: handleLogin })
 
   const onShowNav = () => {
     setShowNav(!showNav)

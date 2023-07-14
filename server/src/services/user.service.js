@@ -12,7 +12,12 @@ const getUserById = async (userId) => {
 }
 
 const getMyQuestions = async (userId, limit, skip) => {
-  return await Question.aggregate([{ $match: { userId: new ObjectId(userId) } }, ...questionsQuery])
+  return await Question.aggregate([
+    { $match: { userId: new ObjectId(userId) } },
+    ...questionsQuery,
+    { $skip: skip },
+    { $limit: limit }
+  ])
 }
 
 const getMyQuestionsCount = async (userId) => {
@@ -20,7 +25,12 @@ const getMyQuestionsCount = async (userId) => {
 }
 
 const getMySaveQuestions = async (userId, limit, skip) => {
-  return await Question.aggregate([{ $match: { saves: { $in: [userId] } } }, ...questionsQuery])
+  return await Question.aggregate([
+    { $match: { saves: { $in: [userId] } } },
+    ...questionsQuery,
+    { $skip: skip },
+    { $limit: limit }
+  ])
 }
 
 const getMySaveQuestionsCount = async (userId) => {
@@ -28,7 +38,12 @@ const getMySaveQuestionsCount = async (userId) => {
 }
 
 const getMyLikesQuestions = async (userId, limit, skip) => {
-  return await Question.aggregate([{ $match: { likes: { $in: [userId] } } }, ...questionsQuery])
+  return await Question.aggregate([
+    { $match: { likes: { $in: [userId] } } },
+    ...questionsQuery,
+    { $skip: skip },
+    { $limit: limit }
+  ])
 }
 
 const getMyLikesQuestionsCount = async (userId) => {

@@ -3,15 +3,6 @@ export const questionApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getQuestions: builder.query({
       query: (page) => `/questions?page=${page}`,
-      serializeQueryArgs: ({ endpointName }) => {
-        return endpointName
-      },
-      merge: (currentCache, newItems) => {
-        currentCache.data.push(...newItems.data)
-      },
-      forceRefetch: ({ currentArg, previousArg }) => {
-        return currentArg !== previousArg
-      },
       providesTags: ['Question']
     }),
     getQuestion: builder.query({
@@ -20,15 +11,6 @@ export const questionApi = apiSlice.injectEndpoints({
     }),
     getQuestionsByKeyword: builder.query({
       query: ({ search, page }) => `/questions?search=${search}&page=${page}`,
-      serializeQueryArgs: ({ endpointName }) => {
-        return endpointName
-      },
-      merge: (currentCache, newItems) => {
-        currentCache.data.push(...newItems.data)
-      },
-      forceRefetch: ({ currentArg, previousArg }) => {
-        return currentArg !== previousArg
-      },
       providesTags: ['Question']
     }),
     likeQuestion: builder.mutation({

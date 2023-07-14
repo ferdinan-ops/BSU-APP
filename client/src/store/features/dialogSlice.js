@@ -25,9 +25,12 @@ export const dialogSlice = createSlice({
     },
     setIsLoading: (state, action) => {
       state.isLoading = action.payload
+    },
+    setIsOpen: (state, action) => {
+      state.isOpen = true
     }
   }
 })
 
-export const { closeDialog, openDialog, setIsLoading } = dialogSlice.actions
+export const { closeDialog, openDialog, setIsLoading, setIsOpen } = dialogSlice.actions
 export default dialogSlice.reducer

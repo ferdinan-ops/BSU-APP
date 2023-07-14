@@ -1,11 +1,14 @@
 import { HiOutlineBell, HiOutlineHome, HiXMark } from 'react-icons/hi2'
 import { Link, useNavigate } from 'react-router-dom'
 
+import { useGetNotReadCountQuery } from '../../store/api/notificationApi'
 import { Avatar, Button, Icon } from '../atoms'
 import Search from './Search'
 
 const UserMenu = ({ user, onShowNav }) => {
   const navigate = useNavigate()
+
+  const { data: notif, isSuccess } = useGetNotReadCountQuery()
 
   const navigateToCreate = () => {
     onShowNav(false)
@@ -29,8 +32,11 @@ const UserMenu = ({ user, onShowNav }) => {
           <span className="xl:hidden">Beranda</span>
         </Link>
         <Link to="/notification" onClick={handleCloseNav}>
-          <Icon className="hidden h-10 w-10 xl:flex">
+          <Icon className="relative hidden h-10 w-10 xl:flex">
             <HiOutlineBell className="text-[28px] text-font xl:flex" />
+            {isSuccess && notif?.data > 0 && (
+              <div className="absolute right-[7px] top-[5px] h-[14px] w-[14px] rounded-full border-2 border-white bg-primary" />
+            )}
           </Icon>
           <span className="xl:hidden">Notifikasi</span>
         </Link>

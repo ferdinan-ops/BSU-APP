@@ -39,15 +39,15 @@ const Create = () => {
       newData.append('images', image)
     })
 
-    await create(newData).unwrap()
+    const { data: result } = await create(newData).unwrap()
     dispatch(
       openDialog({
         title: 'Berhasil Upload Soal',
         content:
           'Soal yang kamu berikan telah berhasil kami proses dan upload, terima kasih sudah berkontribusi pada web ini',
-        buttonText: 'Kembali ke Beranda',
+        buttonText: 'Lihat soal',
         variant: 'success',
-        handler: () => navigate('/')
+        handler: () => navigate(`/${result}`)
       })
     )
   }

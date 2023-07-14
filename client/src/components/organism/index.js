@@ -8,5 +8,18 @@ import Description from './Description'
 import NotifCard from './notifications/NotifCard'
 import NotifSkeleton from './notifications/NotifSkeleton'
 import Reaction from './Reaction'
+import Pagination from './Pagination'
 
-export { Header, Post, PostSkeleton, Carousel, Comments, Description, NotifCard, NotifSkeleton, Posts, Reaction }
+export {
+  Header,
+  Post,
+  PostSkeleton,
+  Carousel,
+  Comments,
+  Description,
+  NotifCard,
+  NotifSkeleton,
+  Posts,
+  Reaction,
+  Pagination
+}

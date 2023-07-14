@@ -1,23 +1,15 @@
-import InfiniteScroll from 'react-infinite-scroll-component'
-
-import PostSkeleton from './PostSkeleton'
-import { Container } from '../../atoms'
 import Post from './Post'
+import { Container } from '../../atoms'
+import PostSkeleton from './PostSkeleton'
 
-const Posts = ({ posts, handler, className }) => {
+const Posts = ({ posts, className, isLoading, isSuccess }) => {
   return (
-    <InfiniteScroll
-      dataLength={posts.total_data}
-      next={handler}
-      hasMore={posts?.total_data > posts?.data?.length}
-      loader={<PostSkeleton count={3} />}
-    >
-      <Container className="mb-10 mt-5 grid grid-cols-1 gap-8 md:mt-10 md:grid-cols-2 xl:grid-cols-3">
-        {posts.data?.map((post) => (
-          <Post key={post._id} post={post} className={className} />
-        ))}
-      </Container>
-    </InfiniteScroll>
+    <Container className="my-5 grid grid-cols-1 gap-8 md:mt-10 md:grid-cols-2 xl:grid-cols-3">
+      {isLoading && <PostSkeleton count={6} />}
+      {isSuccess &&
+        posts.data.length > 0 &&
+        posts.data?.map((post) => <Post key={post._id} post={post} className={className} />)}
+    </Container>
   )
 }
 

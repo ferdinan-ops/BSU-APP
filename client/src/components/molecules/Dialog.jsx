@@ -46,17 +46,17 @@ const Dialog = () => {
             {variant === 'success' && <HiCheck />}
           </Icon>
           <div className="mt-1 text-center md:text-left">
-            <h3 className="text-base font-bold leading-6 text-font md:text-lg">{title}</h3>
+            <h3 className="text-base font-bold capitalize leading-6 text-font md:text-lg">{title}</h3>
             <p className="mt-2 text-[13px] font-normal text-gray-500 md:text-sm">{content}</p>
           </div>
         </div>
         <div className="flex flex-col-reverse items-center gap-2 bg-gray-50 px-4 py-3 md:flex-row md:justify-end md:gap-3 md:px-6">
-          <Button variant="outline" className="w-full px-6 md:w-fit md:text-[13px]" onClick={handleClose}>
+          <Button variant="outline" className="w-full px-6 md:w-fit md:text-xs" onClick={handleClose}>
             Batal
           </Button>
           <Button
             variant={variant}
-            className="w-full px-6 md:w-fit md:text-[13px]"
+            className="w-full px-6 capitalize md:w-fit md:text-xs"
             onClick={handleConfirm}
             loading={isLoading}
           >

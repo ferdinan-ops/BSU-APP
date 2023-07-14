@@ -3,53 +3,45 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import clsx from 'clsx'
 
-import { setComment } from '../../store/features/commentSlice'
-import { Icon } from '../atoms'
-import { useDeleteCommentMutation } from '../../store/api/commentApi'
+import { dangerMsg, successReportMsg } from '../../constants/dialogMessage'
 import { openDialog, setIsLoading } from '../../store/features/dialogSlice'
+import { useDeleteCommentMutation } from '../../store/api/commentApi'
 import { useReportCommentMutation } from '../../store/api/reportApi'
+import { setComment } from '../../store/features/commentSlice'
+import { useSuccessProsess } from '../../hooks'
+import { Icon } from '../atoms'
+import { toast } from 'react-hot-toast'
 
 const More = ({ comment, questionId }) => {
   const [show, setShow] = useState(false)
-  const dispatch = useDispatch()
 
+  const dispatch = useDispatch()
+  const reportMsg = successReportMsg('komentar')
   const user = useSelector((state) => state.auth.userInfo)
-  const [deleteComment, { isLoading, isSuccess }] = useDeleteCommentMutation()
+
+  const [deleteComment, { isLoading: isLoadingDelete, isSuccess: isSuccessDelete }] = useDeleteCommentMutation()
   const [reportComment, { isLoading: isLoadingReport, isSuccess: isSuccessReport }] = useReportCommentMutation()
+  useSuccessProsess({ isLoading: isLoadingReport, isSuccess: isSuccessReport, ...reportMsg })
 
   useEffect(() => {
-    if (isSuccess || isSuccessReport) dispatch(setIsLoading(false))
-    if (isLoading || isLoadingReport) dispatch(setIsLoading(true))
-  }, [isLoading, isSuccess, isLoadingReport, isSuccessReport])
+    if (isLoadingDelete) dispatch(setIsLoading(true))
+    if (isSuccessDelete) {
+      dispatch(setIsLoading(false))
+      toast.success('Komentar berhasil dihapus')
+    }
+  }, [isLoadingDelete, isSuccessDelete])
 
   const handleDelete = () => {
     setShow(false)
-    dispatch(
-      openDialog({
-        isOpen: true,
-        title: 'Hapus Komentar',
-        content:
-          'Apakah Anda yakin ingin menghapus komentar ini? Komentar ini akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan.',
-        buttonText: 'Hapus',
-        variant: 'danger',
-        handler: () => deleteComment(comment._id)
-      })
-    )
+    const msg = dangerMsg('hapus', 'komentar')
+    dispatch(openDialog({ ...msg, handler: () => deleteComment(comment._id) }))
   }
 
   const handleReport = () => {
     setShow(false)
-    dispatch(
-      openDialog({
-        isOpen: true,
-        title: 'Laporkan Komentar',
-        content:
-          'Apakah Anda yakin ingin melaporkan komentar ini? Komentar ini akan dilaporkan kepada admin. Tindakan ini tidak dapat dibatalkan.',
-        buttonText: 'Laporkan',
-        variant: 'danger',
-        handler: () => reportComment({ questionId, userCommentId: comment.user._id })
-      })
-    )
+    const msg = dangerMsg('laporkan', 'komentar')
+    const data = { questionId, userCommentId: comment.user._id }
+    dispatch(openDialog({ ...msg, handler: () => reportComment({ ...data }) }))
   }
 
   const handleEdit = () => {

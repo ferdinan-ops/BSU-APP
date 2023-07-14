@@ -19,9 +19,9 @@ const createQuestion = async (req, res) => {
   value.semester = value.semester.toString()
 
   try {
-    await QuestionService.addQuestionToDB(value)
+    const data = await QuestionService.addQuestionToDB(value)
     logger.info(`${method}:/questions${path}\tSukses menambahkan soal baru`)
-    return res.status(201).json({ message: `Sukses menambahkan soal ${value.mataKuliah}` })
+    return res.status(201).json({ message: `Sukses menambahkan soal ${value.mataKuliah}`, data: data._id })
   } catch (error) {
     logger.error(`${method}:/questions${path}\t${error}`)
     return res.status(400).json({ error })
@@ -33,11 +33,13 @@ const getQuestions = async (req, res) => {
   const { search } = query
 
   const currentPage = query.page || 1
-  const perPage = query.perPage || 9
+  const perPage = query.perPage || 6
   let skipItems = (parseInt(currentPage) - 1) * parseInt(perPage)
 
   let totalItem
   let questions
+
+  console.log({ page: currentPage, perPage, skipItems })
 
   try {
     if (search) {

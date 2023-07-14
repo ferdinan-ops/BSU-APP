@@ -33,19 +33,6 @@ const questionsQuery = [
   }
 ]
 
-// const questionsQuery = {
-//   _id: 1,
-//   mataKuliah: 1,
-//   fakultas: 1,
-//   programStudi: 1,
-//   semester: 1,
-//   kategori: 1,
-//   image: { $arrayElemAt: ['$images', 0] },
-//   createdAt: 1,
-//   saveCount: { $size: '$saves' },
-//   likeCount: { $size: '$likes' }
-// }
-
 const getQuestionsFromDB = async (limit, skip) => {
   return await Question.aggregate([...questionsQuery, { $skip: skip }, { $limit: limit }]).exec()
 }

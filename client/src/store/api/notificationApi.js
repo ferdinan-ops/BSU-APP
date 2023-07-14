@@ -19,8 +19,13 @@ export const notificationApi = apiSlice.injectEndpoints({
         method: 'PUT'
       }),
       invalidatesTags: ['Notification']
+    }),
+    getNotReadCount: builder.query({
+      query: () => '/notifications/count',
+      providesTags: ['Notification']
     })
   })
 })
 
-export const { useGetNotificationsQuery, useMarkAsReadMutation, useMarkAllAsReadMutation } = notificationApi
+export const { useGetNotificationsQuery, useMarkAsReadMutation, useMarkAllAsReadMutation, useGetNotReadCountQuery } =
+  notificationApi

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 
 import { Avatar, Button, Container, Loader, Section } from '../atoms'
-import { openDialog } from '../../store/features/dialogSlice'
+import { openDialog, setIsLoading } from '../../store/features/dialogSlice'
 import { useLogoutMutation } from '../../store/api/authApi'
 import { useGetUserQuery } from '../../store/api/userApi'
 import { Modal, Tab } from '../molecules'
@@ -18,19 +18,22 @@ const UserLayout = () => {
   const userLogin = useSelector((state) => state.auth.userInfo)
   const path = window.location.pathname.split('/').pop()
 
-  const [logout, { isSuccess: isSuccessLogout }] = useLogoutMutation()
+  const [logout, { isSuccess: isSuccessLogout, isLoading: isLoadingLogout }] = useLogoutMutation()
   const { data: user, isSuccess: isSuccessUserFetch } = useGetUserQuery(userId)
 
   useEffect(() => {
-    if (isSuccessLogout) navigate('/login', { replace: true })
-  }, [isSuccessLogout])
+    if (isSuccessLogout) {
+      dispatch(setIsLoading(false))
+      navigate('/login', { replace: true })
+    }
+    if (isLoadingLogout) dispatch(setIsLoading(true))
+  }, [isSuccessLogout, isLoadingLogout])
 
   if (!isSuccessUserFetch) return <Loader />
 
   const handleLogout = () => {
     dispatch(
       openDialog({
-        isOpen: true,
         title: 'Keluar',
         content: 'Apakah Anda yakin ingin keluar? Anda akan diarahkan ke halaman login.',
         buttonText: 'Keluar',
