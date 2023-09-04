@@ -54,25 +54,15 @@ const Update = () => {
       newData.append('images', image)
     })
 
-<<<<<<< HEAD
     const { data: result } = await update({ questionId: postId, body: newData }).unwrap()
-=======
-    await update({ questionId: postId, body: newData }).unwrap()
->>>>>>> 5d1be214b8273c62b6e84deee237bb7e0bbf953c
     dispatch(
       openDialog({
         title: 'Berhasil mengubah soal',
         content:
           'Soal yang kamu ubah telah berhasil kami proses dan upload kembali, terima kasih sudah berkontribusi pada web ini',
-<<<<<<< HEAD
         buttonText: 'Lihat Soal',
         variant: 'success',
         handler: () => navigate(`/${result}`)
-=======
-        buttonText: 'Kembali ke Beranda',
-        variant: 'success',
-        handler: () => navigate('/')
->>>>>>> 5d1be214b8273c62b6e84deee237bb7e0bbf953c
       })
     )
   }
