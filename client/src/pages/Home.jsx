@@ -1,41 +1,53 @@
-import { getQuestions } from '../store/features/questionSlice'
+import { useState } from 'react'
+import { FcSearch } from 'react-icons/fc'
+import { useSearchParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Post, Promote } from '../components/common'
-import { Waveform } from '@uiball/loaders'
-import { privateApi } from '../services'
-import { useEffect } from 'react'
+
+import { useGetQuestionsByKeywordQuery, useGetQuestionsQuery } from '../store/api/questionApi'
+import { setSearchPage } from '../store/features/searchSlice'
+import { NoData, Pagination, Posts, Section } from '../components'
 
 const Home = () => {
+  const [page, setPage] = useState(1)
+  const [searchParams] = useSearchParams()
+  const search = searchParams.get('search')
+
   const dispatch = useDispatch()
-  const API = privateApi({ contentType: 'application/json' })
-  const { loading, questions } = useSelector((state) => state.question)
+  const searchPage = useSelector((state) => state.search.page)
 
-  useEffect(() => {
-    document.title = 'BSU ~ Home'
-  }, [])
+  let posts
+  if (search) {
+    posts = useGetQuestionsByKeywordQuery({ search, page: searchPage })
+  } else {
+    posts = useGetQuestionsQuery(page)
+  }
 
-  useEffect(() => {
-    dispatch(getQuestions(API))
-  }, [dispatch])
+  const handlePrev = () => {
+    if (!search) return setPage(page - 1)
+    dispatch(setSearchPage(searchPage - 1))
+  }
 
-  let content
-  if (loading) {
-    content = (
-      <div className="flex h-full items-center justify-center">
-        <Waveform size={40} lineWeight={3.5} speed={1} color="#ddd" />
-      </div>
-    )
-  } else if (questions) {
-    content = questions.map((post) => <Post key={post._id} post={post} />)
+  const handleNext = () => {
+    if (!search) return setPage(page + 1)
+    dispatch(setSearchPage(searchPage + 1))
   }
 
   return (
-    <section className="z-0 flex min-h-[calc(100vh-100px)] justify-between bg-slate-100">
-      <div className="container mx-auto flex gap-20 px-[18px] py-8 xl:px-0 xl:py-[60px]">
-        <div className="flex flex-[2.3] flex-col gap-6 xl:gap-8">{content}</div>
-        <Promote />
-      </div>
-    </section>
+    <Section title="Beranda" className="z-0 min-h-[calc(100vh-100px)] bg-slate-100 pb-[40px] xl:pb-[60px]">
+      <Posts isLoading={posts.isLoading} isSuccess={posts.isSuccess} posts={posts.data} />
+      {posts.isSuccess && posts.data?.total_data > 6 && (
+        <Pagination handlePrev={handlePrev} handleNext={handleNext} page={search ? searchPage : page} posts={posts} />
+      )}
+      {posts.isError && posts.error?.status === 404 && (
+        <div className="m-auto w-4/12">
+          <NoData
+            Icon={FcSearch}
+            title="Tidak dapat menemukan soal yang kamu cari"
+            text={`Maaf, kami sudah mencari kemanapun. ${posts.error?.data.error} Coba cari dengan kata kunci lainnya`}
+          />
+        </div>
+      )}
+    </Section>
   )
 }
 

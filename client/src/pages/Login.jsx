@@ -1,53 +1,49 @@
-import { login, loginWithGoogleCustom, setUserInfo } from '../store/features/authSlice'
-import { loginInitialValues, loginValidation } from '../validations/auth.validation'
-import { Password, Button, TextField } from '../components/common'
-import { useDispatch, useSelector } from 'react-redux'
+import { FormProvider, useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { Link, useNavigate } from 'react-router-dom'
 import { useGoogleLogin } from '@react-oauth/google'
 import { FcGoogle } from 'react-icons/fc'
 import { toast } from 'react-hot-toast'
-import { useFormik } from 'formik'
 import { useEffect } from 'react'
+
+import { useLoginMutation, useLoginWithGoogleCustomMutation } from '../store/api/authApi'
+import { Button, Input, Password, Section } from '../components'
+import { loginValidation } from '../validations/auth.validation'
 
 const Login = () => {
   const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const { loading } = useSelector((state) => state.auth)
+  const methods = useForm({
+    mode: 'onTouched',
+    resolver: yupResolver(loginValidation)
+  })
+  const { handleSubmit, reset } = methods
+
+  const [login, { isLoading, isSuccess, isError, error }] = useLoginMutation()
+  const [loginWithGoogleCustom, { isSuccess: isSuccessGoogle, isLoading: isLoadingGoogle }] =
+    useLoginWithGoogleCustomMutation()
 
   useEffect(() => {
-    document.title = 'BSU ~ Masuk'
-  }, [])
-
-  const handleSubmit = async (values) => {
-    const { email, password } = values
-    try {
-      const data = await dispatch(login({ email, password })).unwrap()
-      dispatch(setUserInfo(data))
-      navigate('/')
+    if (isSuccess || isSuccessGoogle) {
+      reset()
+      navigate('/', { replace: true })
       toast.success('Berhasil Login')
-    } catch (err) {
-      toast.error(err.error)
     }
+    if (isError) toast.error(error.data.error)
+  }, [isLoading, isLoadingGoogle])
+
+  const handleLoginLocal = (values) => {
+    login(values)
   }
 
   const handleLoginWithGoogle = useGoogleLogin({
-    onSuccess: async (res) => {
+    onSuccess: (res) => {
       const { access_token: accessToken } = res
-      const data = await dispatch(loginWithGoogleCustom({ accessToken })).unwrap()
-      dispatch(setUserInfo(data))
-      navigate('/')
-      toast.success('Berhasil Login')
+      loginWithGoogleCustom({ accessToken })
     }
   })
 
-  const formik = useFormik({
-    initialValues: loginInitialValues,
-    validationSchema: loginValidation,
-    onSubmit: handleSubmit
-  })
-
   return (
-    <div className="flex w-full flex-col gap-7 font-source xl:w-[55%] xl:gap-8">
+    <Section className="gap-7 xl:w-[55%] xl:gap-8" title="Masuk">
       <div className="flex flex-col">
         <h1 className="text-[28px] font-bold xl:text-[36px]">Masuk</h1>
         <p className="text-[15px] font-medium text-font/60 xl:text-sm">
@@ -55,39 +51,17 @@ const Login = () => {
         </p>
       </div>
 
-      <form className="gap-3s flex flex-col xl:gap-4" onSubmit={formik.handleSubmit}>
-        <TextField
-          label="Email"
-          type="email"
-          name="email"
-          placeholder="name@email.com"
-          error={formik.touched.email && formik.errors.email && formik.errors.email}
-          {...formik.getFieldProps('email')}
-        />
-        <Password
-          label="Kata Sandi"
-          name="password"
-          error={formik.touched.password && formik.errors.password && formik.errors.password}
-          {...formik.getFieldProps('password')}
-        />
-        {/* <div className="flex items-center justify-between font-semibold tracking-wide ">
-          <Checkbox label="Ingat Saya" />
-          <Link to="/login" className="text-[13px] text-primary xl:text-sm">
-            Lupa Password?
-          </Link>
-        </div> */}
-        <Button
-          className="mt-2 bg-primary font-semibold text-white hover:bg-primary-hover disabled:bg-primary/60 xl:text-base"
-          isLoading={loading}
-        >
-          Masuk
-        </Button>
-      </form>
+      <FormProvider {...methods}>
+        <form className="flex flex-col gap-4 xl:gap-5" onSubmit={handleSubmit(handleLoginLocal)}>
+          <Input id="email" label="Email" placeholder="name@email.com" />
+          <Password id="password" label="Kata Sandi" />
+          <Button loading={isLoading} variant="primary">
+            Masuk
+          </Button>
+        </form>
+      </FormProvider>
 
-      <Button
-        className="-mt-4 gap-5 border border-slate-300 font-semibold hover:bg-slate-100 xl:text-base"
-        onClick={() => handleLoginWithGoogle()}
-      >
+      <Button className="-mt-4 gap-5" variant="outline" onClick={handleLoginWithGoogle}>
         <FcGoogle className="text-[22px] xl:text-2xl" />
         <span className="text-font">Masuk dengan Google</span>
       </Button>
@@ -98,7 +72,7 @@ const Login = () => {
           Daftar sekarang, gratis!
         </Link>
       </div>
-    </div>
+    </Section>
   )
 }
 

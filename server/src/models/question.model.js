@@ -19,7 +19,7 @@ const questionSchema = new mongoose.Schema(
       require: true
     },
     semester: {
-      type: Number,
+      type: String,
       require: true
     },
     kategori: {
@@ -52,8 +52,22 @@ const questionSchema = new mongoose.Schema(
       ref: 'comment'
     }
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 )
+
+questionSchema.virtual('user', {
+  ref: 'user',
+  localField: 'userId',
+  foreignField: '_id',
+  justOne: true
+})
+
+questionSchema.virtual('comments', {
+  ref: 'comment',
+  localField: 'commentId',
+  foreignField: '_id',
+  justOne: true
+})
 
 const Question = mongoose.model('question', questionSchema)
 module.exports = Question

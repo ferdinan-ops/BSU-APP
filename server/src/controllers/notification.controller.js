@@ -12,6 +12,17 @@ const getNotifications = async (req, res) => {
   }
 }
 
+const getNotificationNotRead = async (req, res) => {
+  const { userId, path, method } = req
+  try {
+    const notifications = await NotificationService.getNotifCountByUserId(userId)
+    logger.info(`${method}: /notification/${path}\tBerhasil mengambil total notifikasi dari userId ${userId}`)
+    return res.status(200).json({ data: notifications })
+  } catch (error) {
+    return res.status(400).json({ error })
+  }
+}
+
 const markAsRead = async (req, res) => {
   const { userId, path, method, params } = req
   try {
@@ -34,4 +45,4 @@ const markAllAsRead = async (req, res) => {
   }
 }
 
-module.exports = { getNotifications, markAsRead, markAllAsRead }
+module.exports = { getNotifications, markAsRead, markAllAsRead, getNotificationNotRead }

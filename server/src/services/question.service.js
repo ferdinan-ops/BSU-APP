@@ -4,7 +4,6 @@ const { compressedFile } = require('../utils/fileUtils')
 
 const questionsQuery = [
   {
-    // join data user untuk setiap question
     $lookup: {
       from: 'users',
       localField: 'userId',
@@ -14,16 +13,6 @@ const questionsQuery = [
     }
   },
   {
-    // join data comment untuk setiap question
-    $lookup: {
-      from: 'comments',
-      localField: 'commentId',
-      foreignField: '_id',
-      as: 'comments'
-    }
-  },
-  {
-    // memilih field yang ingin ditampilkan
     $project: {
       _id: 1,
       mataKuliah: 1,
@@ -34,30 +23,30 @@ const questionsQuery = [
       image: { $arrayElemAt: ['$images', 0] },
       createdAt: 1,
       updatedAt: 1,
-      user: { $arrayElemAt: ['$user', 0] }, // mengambil data user yang pertama dalam array
-      saveCount: { $size: '$saves' }, // menghitung jumlah data dari field 'saves'
-      likeCount: { $size: '$likes' } // menghitung jumlah data dari field 'likes'
+      user: { $arrayElemAt: ['$user', 0] },
+      saveCount: { $size: '$saves' },
+      likeCount: { $size: '$likes' }
     }
   },
   {
-    $sort: { createdAt: -1 } // sorting data berdasarkan createdAt secara descending
-  },
-  {
-    $limit: 5 // membatasi jumlah data yang ditampilkan menjadi 5
+    $sort: { createdAt: -1 }
   }
 ]
 
-const getQuestionsFromDB = async () => {
-  return await Question.aggregate(questionsQuery)
+const getQuestionsFromDB = async (limit, skip) => {
+  return await Question.aggregate([...questionsQuery, { $skip: skip }, { $limit: limit }]).exec()
+}
+
+const getQuestionsCountFromDB = async () => {
+  return await Question.find().countDocuments()
 }
 
 const addQuestionToDB = async (payload) => {
   return await Question.create(payload)
 }
 
-// populate data user dengan hanya mengambil field username dan email
 const getQuestionById = async (questionId) => {
-  return await Question.findById(questionId).populate('userId', 'username photo').exec()
+  return await Question.findById(questionId).populate('user', 'username photo provider').exec()
 }
 
 const updateQuestionById = async (questionId, payload) => {
@@ -91,7 +80,7 @@ const filterQuestionByFakultas = async (fakultas) => {
   return await Question.aggregate([{ $match: { fakultas } }, ...questionsQuery]).exec()
 }
 
-const searchQuestion = async (keyword) => {
+const searchQuestion = async (keyword, limit, skip) => {
   return await Question.aggregate([
     {
       $match: {
@@ -100,12 +89,32 @@ const searchQuestion = async (keyword) => {
           { fakultas: { $regex: keyword, $options: 'i' } },
           { programStudi: { $regex: keyword, $options: 'i' } },
           { kategori: { $regex: keyword, $options: 'i' } },
-          { dosen: { $regex: keyword, $options: 'i' } }
+          { dosen: { $regex: keyword, $options: 'i' } },
+          { semester: { $regex: keyword, $options: 'i' } },
+          { 'user.username': { $regex: keyword, $options: 'i' } },
+          { tahunAjaran: { $regex: keyword, $options: 'i' } }
         ]
       }
     },
-    ...questionsQuery
+    ...questionsQuery,
+    { $skip: skip },
+    { $limit: limit }
   ]).exec()
+}
+
+const getSearchQuestionCount = async (keyword) => {
+  return await Question.find({
+    $or: [
+      { mataKuliah: { $regex: keyword, $options: 'i' } },
+      { fakultas: { $regex: keyword, $options: 'i' } },
+      { programStudi: { $regex: keyword, $options: 'i' } },
+      { kategori: { $regex: keyword, $options: 'i' } },
+      { dosen: { $regex: keyword, $options: 'i' } },
+      { semester: { $regex: keyword, $options: 'i' } },
+      { 'user.username': { $regex: keyword, $options: 'i' } },
+      { tahunAjaran: { $regex: keyword, $options: 'i' } }
+    ]
+  }).countDocuments()
 }
 
 const proccessImages = async (files) => {
@@ -125,5 +134,7 @@ module.exports = {
   likeQuestionByUserId,
   saveQuestionByUserId,
   filterQuestionByFakultas,
-  proccessImages
+  proccessImages,
+  getQuestionsCountFromDB,
+  getSearchQuestionCount
 }

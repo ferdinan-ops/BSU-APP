@@ -46,7 +46,7 @@ const createComment = async (req, res) => {
       logger.info(`${method}: /notification${path}\tBerhasil push notifikasi`)
     }
 
-    await await CommentService.addCommentToDB({ comment, questionId, userId })
+    await CommentService.addCommentToDB({ comment, questionId, userId })
     logger.info(`${method}: /comments${path}\tBerhasil menambahkan komentar`)
     return res.status(201).json({ message: 'Berhasil menambahkan komentar' })
   } catch (error) {
@@ -65,7 +65,7 @@ const updateComment = async (req, res) => {
   }
 
   try {
-    await await CommentService.updateCommentByID(commentId, value.comment)
+    await CommentService.updateCommentByID(commentId, value.comment)
     logger.info(`${method}: /comments${path}\tBerhasil mengubah komentar`)
     return res.status(201).json({ message: `Berhasil mengubah komentar dengan ID ${commentId}` })
   } catch (error) {
@@ -78,12 +78,12 @@ const deleteComment = async (req, res) => {
   const { commentId } = params
 
   try {
-    const comment = await await CommentService.getCommentByID(commentId)
+    const comment = await CommentService.getCommentByID(commentId)
     if (!comment) {
       logger.error(`${method}:/questions${path}\tTidak dapat menemukan komentar`)
       return res.status(404).json({ error: `Tidak dapat menemukan komentar dengan ID ${commentId}` })
     }
-    await await CommentService.deleteCommentByID(commentId)
+    await CommentService.deleteCommentByID(commentId)
     logger.info(`${method}: /comments${path}\tBerhasil menghapus komentar`)
     return res.status(201).json({ message: 'Berhasil menghapus komentar' })
   } catch (error) {

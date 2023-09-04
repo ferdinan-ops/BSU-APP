@@ -16,11 +16,12 @@ const createQuestion = async (req, res) => {
     return res.status(400).json({ error: 'Tidak ada gambar yang diupload' })
   }
   value.images = await QuestionService.proccessImages(req.files)
+  value.semester = value.semester.toString()
 
   try {
-    await QuestionService.addQuestionToDB(value)
+    const data = await QuestionService.addQuestionToDB(value)
     logger.info(`${method}:/questions${path}\tSukses menambahkan soal baru`)
-    return res.status(201).json({ message: `Sukses menambahkan soal ${value.mataKuliah}` })
+    return res.status(201).json({ message: `Sukses menambahkan soal ${value.mataKuliah}`, data: data._id })
   } catch (error) {
     logger.error(`${method}:/questions${path}\t${error}`)
     return res.status(400).json({ error })
@@ -29,21 +30,22 @@ const createQuestion = async (req, res) => {
 
 const getQuestions = async (req, res) => {
   const { path, method, query } = req
-  const { fakultas, search } = query
+  const { search } = query
+
+  const currentPage = query.page || 1
+  const perPage = query.perPage || 6
+  let skipItems = (parseInt(currentPage) - 1) * parseInt(perPage)
+
+  let totalItem
+  let questions
+
+  console.log({ page: currentPage, perPage, skipItems })
 
   try {
-    let questions
-    if (fakultas) {
-      const data = await QuestionService.filterQuestionByFakultas(fakultas)
-      if (data.length === 0) {
-        const message = `Tidak dapat menemukan soal dari fakultas ${fakultas}`
-        logger.error(`${method}:/questions?fakultas=${fakultas}\t${message}`)
-        return res.status(404).json({ error: message })
-      }
-      questions = data
-      logger.info(`${method}:/questions/?fakultas=${fakultas}\tSukses menemukan soal dari fakultas ${fakultas}`)
-    } else if (search) {
-      const data = await QuestionService.searchQuestion(search)
+    if (search) {
+      const totalDoc = await QuestionService.getSearchQuestionCount(search)
+      totalItem = totalDoc
+      const data = await QuestionService.searchQuestion(search, perPage, skipItems)
       if (data.length === 0) {
         const message = `Tidak dapat menemukan soal dengan keyword ${search}`
         logger.error(`${method}:/questions?search=${search}\t${message}`)
@@ -52,11 +54,18 @@ const getQuestions = async (req, res) => {
       questions = data
       logger.info(`${method}:/questions?search=${search}\tSukses menemukan soal dari keyword ${search}`)
     } else {
-      questions = await QuestionService.getQuestionsFromDB()
+      const totalDoc = await QuestionService.getQuestionsCountFromDB()
+      totalItem = totalDoc
+      questions = await QuestionService.getQuestionsFromDB(perPage, skipItems)
       logger.info(`${method}:/questions${path}\tSukses seluruh mendapatkan soal`)
     }
 
-    return res.status(200).json({ data: questions })
+    return res.status(200).json({
+      data: questions,
+      total_data: totalItem,
+      current_page: parseInt(currentPage),
+      per_page: parseInt(perPage)
+    })
   } catch (error) {
     return res.status(400).json({ error })
   }
@@ -101,11 +110,12 @@ const updateQuestion = async (req, res) => {
     const result = await QuestionService.proccessImages(req.files)
     value.images = [...value.images, ...result]
   }
+  value.semester = value.semester.toString()
 
   try {
-    await QuestionService.updateQuestionById(questionId, value)
+    const data = await QuestionService.updateQuestionById(questionId, value)
     logger.info(`${method}:/questions${path}\tSukses mengubah soal`)
-    return res.status(200).json({ message: `Berhasil mengubah soal dengan ID ${questionId}` })
+    return res.status(200).json({ message: `Berhasil mengubah soal dengan ID ${questionId}`, data: data._id })
   } catch (error) {
     return res.status(400).json({ error })
   }

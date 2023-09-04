@@ -1,19 +1,28 @@
 import { ProtectedAuth, ProtectedRoute } from './components/routes'
-import { AuthLayout, MainLayout } from './components/common'
-import { Login, Register, Home, Create, Profile, Update, Detail } from './pages'
+import { AuthLayout, Dialog, MainLayout, UserLayout } from './components'
+import {
+  Login,
+  Register,
+  Home,
+  Create,
+  User,
+  Update,
+  Detail,
+  UserSave,
+  UserLike,
+  Notification,
+  NotFound
+} from './pages'
 import { Route, Routes } from 'react-router-dom'
-import localization from 'moment/locale/id'
 import { Toaster } from 'react-hot-toast'
-import moment from 'moment'
 
 const App = () => {
-  moment.updateLocale('id', localization)
-
   return (
     <>
       <div>
         <Toaster />
       </div>
+      <Dialog />
       <Routes>
         <Route element={<ProtectedAuth />}>
           <Route path="/" element={<AuthLayout />}>
@@ -21,13 +30,21 @@ const App = () => {
             <Route path="register" element={<Register />} />
           </Route>
         </Route>
-        <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<MainLayout />}>
-            <Route index element={<Home />} />
+
+        <Route path="/" element={<MainLayout />}>
+          <Route path="*" element={<NotFound />} />
+          <Route path="/404" element={<NotFound />} />
+          <Route index element={<Home />} />
+          <Route path=":postId" element={<Detail />} />
+          <Route element={<ProtectedRoute />}>
             <Route path="create" element={<Create />} />
             <Route path="update/:postId" element={<Update />} />
-            <Route path=":postId" element={<Detail />} />
-            <Route path="user/:id" element={<Profile />} />
+            <Route path="notification" element={<Notification />} />
+            <Route path="user/:userId" element={<UserLayout />}>
+              <Route index element={<User />} />
+              <Route path="save" element={<UserSave />} />
+              <Route path="like" element={<UserLike />} />
+            </Route>
           </Route>
         </Route>
       </Routes>

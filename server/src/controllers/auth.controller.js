@@ -57,7 +57,7 @@ const login = async (req, res) => {
     res.cookie('bsu', refreshToken, {
       httpOnly: true, // accessible only by web server
       secure: true, // https
-      sameSite: 'None', // cross-site cookie
+      sameSite: 'none', // cross-site cookie
       maxAge: 7 * 24 * 60 * 60 * 1000 // cookie expiry: set to match rT
     })
     res.json({ accessToken })
@@ -73,7 +73,7 @@ const loginWithGoogle = async (req, res) => {
     // Verify Google ID token
     const { name, email, picture } = await AuthService.verifyGoogleIdToken(body.idToken)
     let user = await AuthService.findUserByEmail(email)
-    if (!user) user = await AuthService.addUser({ username: name, email, photo: picture })
+    if (!user) user = await AuthService.addUser({ username: name, email, photo: picture, provider: 'google' })
 
     const { password, ...other } = user._doc
     const accessToken = AuthService.accessTokenSign({ ...other })
@@ -83,7 +83,7 @@ const loginWithGoogle = async (req, res) => {
     res.cookie('bsu', refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: 'None',
+      sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000
     })
     res.json({ accessToken })
@@ -98,7 +98,7 @@ const loginWithGoogleAccessToken = async (req, res) => {
   try {
     const { name, email, picture } = await AuthService.verifyGoogleAccessToken(body.accessToken)
     let user = await AuthService.findUserByEmail(email)
-    if (!user) user = await AuthService.addUser({ username: name, email, photo: picture })
+    if (!user) user = await AuthService.addUser({ username: name, email, photo: picture, provider: 'google' })
 
     const { password, ...other } = user._doc
     const accessToken = AuthService.accessTokenSign({ ...other })
@@ -108,7 +108,7 @@ const loginWithGoogleAccessToken = async (req, res) => {
     res.cookie('bsu', refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: 'None',
+      sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000
     })
     res.json({ accessToken })
@@ -152,7 +152,7 @@ const logout = (req, res) => {
     return res.sendStatus(204)
   }
 
-  res.clearCookie('bsu', { httpOnly: true, sameSite: 'None', secure: true })
+  res.clearCookie('bsu', { httpOnly: true, sameSite: 'none', secure: true })
   logger.info(`${req.method}:/auth${req.path}\tBerhasil menghapus token`)
   res.status(200).json({ message: 'Cookie cleared' })
 }
