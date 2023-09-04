@@ -21,7 +21,11 @@ const Register = () => {
   useEffect(() => {
     if (isSuccess) {
       reset()
+<<<<<<< HEAD
       navigate('/login')
+=======
+      navigate('/')
+>>>>>>> 5d1be214b8273c62b6e84deee237bb7e0bbf953c
       toast.success('Berhasil Terdaftar')
     }
     if (isError) toast.error(error.data.error)

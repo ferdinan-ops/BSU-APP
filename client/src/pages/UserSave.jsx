@@ -16,9 +16,13 @@ const UserSave = () => {
 
   return (
     <div className={clsx(isSuccess && posts.data.length === 0 && 'my-10 flex justify-center')}>
+<<<<<<< HEAD
       {isSuccess && posts.data.length > 0 && (
         <Posts isLoading={isLoading} isSuccess={isSuccess} posts={posts} className="border-2" />
       )}
+=======
+      <Posts isLoading={isLoading} isSuccess={isSuccess} posts={posts} className="border-2" />
+>>>>>>> 5d1be214b8273c62b6e84deee237bb7e0bbf953c
       {isSuccess && posts.data.length === 0 && (
         <NoData
           Icon={GiFullFolder}
