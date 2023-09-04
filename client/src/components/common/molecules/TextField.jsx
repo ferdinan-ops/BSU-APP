@@ -3,7 +3,7 @@ import { Input, Label } from '../atoms'
 
 const TextField = ({ label, error, ...rest }) => {
   return (
-    <div className="flex flex-col gap-2 xl:gap-3">
+    <div className="flex flex-col gap-1 xl:gap-2">
       <Label htmlFor={label}>{label}</Label>
       <Input
         id={label}

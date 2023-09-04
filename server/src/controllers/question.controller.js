@@ -6,7 +6,6 @@ const { deleteFile } = require('../utils/fileUtils')
 const createQuestion = async (req, res) => {
   const { path, body, method, userId } = req
   const { value, error } = questionValidation({ userId, ...body })
-  console.log({ value, files: req.files, body })
   if (error) {
     logger.error(`${method}:/questions${path}\t${error.details[0].message}`)
     return res.status(422).json({ error: error.details[0].message })
@@ -83,6 +82,8 @@ const getQuestion = async (req, res) => {
 
 const updateQuestion = async (req, res) => {
   const { body, path, method, params, userId } = req
+  if (!Array.isArray(body.images)) body.images = [body.images]
+
   const { questionId } = params
   const { value, error } = questionValidation({ userId, ...body })
 
@@ -91,11 +92,15 @@ const updateQuestion = async (req, res) => {
     return res.status(422).json({ error: error.details[0].message })
   }
 
-  if (req.files.length === 0) {
+  if (req.files.length === 0 && !value.images) {
     logger.error(`${method}:/questions${path}\tTidak ada gambar yang diupload`)
     return res.status(400).json({ error: 'Tidak ada gambar yang diupload' })
   }
-  value.images = await QuestionService.proccessImages(req.files)
+
+  if (req.files.length > 0) {
+    const result = await QuestionService.proccessImages(req.files)
+    value.images = [...value.images, ...result]
+  }
 
   try {
     await QuestionService.updateQuestionById(questionId, value)

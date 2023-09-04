@@ -28,10 +28,7 @@ const Post = ({ post }) => {
         </div>
 
         <div className="flex flex-col gap-4 xl:flex-[4]">
-          <Link
-            to={`/question/${post._id}`}
-            className="w-fit text-xl font-semibold capitalize hover:text-primary md:text-2xl"
-          >
+          <Link to={`/${post._id}`} className="w-fit text-xl font-semibold capitalize hover:text-primary md:text-2xl">
             {post.mataKuliah}
           </Link>
 

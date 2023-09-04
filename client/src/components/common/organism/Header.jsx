@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom'
 const Header = () => {
   const [showNav, setShowNav] = useState(false)
   const [showSearch, setShowSearch] = useState(false)
-
   const { userInfo } = useSelector((state) => state.auth)
 
   return (

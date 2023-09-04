@@ -1,13 +1,13 @@
-import { useEffect } from 'react'
-import { useAxios } from '../../../hooks'
-import { Waveform } from '@uiball/loaders'
-import { Post, Promote } from '../../common/organism'
+import { getQuestions } from '../store/features/questionSlice'
 import { useDispatch, useSelector } from 'react-redux'
-import { getQuestions } from '../../../store/features/questionSlice'
+import { Post, Promote } from '../components/common'
+import { Waveform } from '@uiball/loaders'
+import { privateApi } from '../services'
+import { useEffect } from 'react'
 
 const Home = () => {
   const dispatch = useDispatch()
-  const API = useAxios({ contentType: 'application/json' })
+  const API = privateApi({ contentType: 'application/json' })
   const { loading, questions } = useSelector((state) => state.question)
 
   useEffect(() => {

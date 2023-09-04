@@ -1,6 +1,6 @@
-import { login, loginWithGoogleCustom } from '../../../store/features/authSlice'
-import { loginInitialValues, loginValidation } from '../../../validations/auth.validation'
-import { Password, Button, TextField, Checkbox } from '../../common'
+import { login, loginWithGoogleCustom, setUserInfo } from '../store/features/authSlice'
+import { loginInitialValues, loginValidation } from '../validations/auth.validation'
+import { Password, Button, TextField } from '../components/common'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { useGoogleLogin } from '@react-oauth/google'
@@ -21,7 +21,8 @@ const Login = () => {
   const handleSubmit = async (values) => {
     const { email, password } = values
     try {
-      await dispatch(login({ email, password })).unwrap()
+      const data = await dispatch(login({ email, password })).unwrap()
+      dispatch(setUserInfo(data))
       navigate('/')
       toast.success('Berhasil Login')
     } catch (err) {
@@ -30,9 +31,10 @@ const Login = () => {
   }
 
   const handleLoginWithGoogle = useGoogleLogin({
-    onSuccess: (res) => {
+    onSuccess: async (res) => {
       const { access_token: accessToken } = res
-      dispatch(loginWithGoogleCustom({ accessToken }))
+      const data = await dispatch(loginWithGoogleCustom({ accessToken })).unwrap()
+      dispatch(setUserInfo(data))
       navigate('/')
       toast.success('Berhasil Login')
     }
@@ -45,15 +47,15 @@ const Login = () => {
   })
 
   return (
-    <div className="flex w-full flex-col gap-9 font-poppins xl:w-[55%] xl:gap-10">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-[28px] font-semibold xl:text-[36px]">Masuk</h1>
-        <p className="text-[15px] font-medium text-font/50 xl:text-sm">
+    <div className="flex w-full flex-col gap-7 font-source xl:w-[55%] xl:gap-8">
+      <div className="flex flex-col">
+        <h1 className="text-[28px] font-bold xl:text-[36px]">Masuk</h1>
+        <p className="text-[15px] font-medium text-font/60 xl:text-sm">
           Selamat datang di BSU, silahkan isi data yang diperlukan untuk bisa masuk ke aplikasi
         </p>
       </div>
 
-      <form className="flex flex-col gap-5 xl:gap-6" onSubmit={formik.handleSubmit}>
+      <form className="gap-3s flex flex-col xl:gap-4" onSubmit={formik.handleSubmit}>
         <TextField
           label="Email"
           type="email"
@@ -68,12 +70,12 @@ const Login = () => {
           error={formik.touched.password && formik.errors.password && formik.errors.password}
           {...formik.getFieldProps('password')}
         />
-        <div className="flex items-center justify-between font-semibold tracking-wide ">
+        {/* <div className="flex items-center justify-between font-semibold tracking-wide ">
           <Checkbox label="Ingat Saya" />
           <Link to="/login" className="text-[13px] text-primary xl:text-sm">
             Lupa Password?
           </Link>
-        </div>
+        </div> */}
         <Button
           className="mt-2 bg-primary font-semibold text-white hover:bg-primary-hover disabled:bg-primary/60 xl:text-base"
           isLoading={loading}
@@ -83,7 +85,7 @@ const Login = () => {
       </form>
 
       <Button
-        className="-mt-6 gap-5 border border-slate-300 font-semibold hover:bg-slate-100 xl:text-base"
+        className="-mt-4 gap-5 border border-slate-300 font-semibold hover:bg-slate-100 xl:text-base"
         onClick={() => handleLoginWithGoogle()}
       >
         <FcGoogle className="text-[22px] xl:text-2xl" />

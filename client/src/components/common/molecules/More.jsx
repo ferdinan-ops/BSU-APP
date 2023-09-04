@@ -1,21 +1,23 @@
 import { HiEllipsisHorizontal, HiOutlinePencil, HiOutlineTrash, HiOutlineFlag } from 'react-icons/hi2'
 import { deleteQuestion, getQuestions } from '../../../store/features/questionSlice'
 import { useDispatch, useSelector } from 'react-redux'
-import { useAxios } from '../../../hooks'
+import { privateApi } from '../../../services'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const More = ({ postUserId, postId }) => {
   const [show, setShow] = useState(false)
 
   const dispatch = useDispatch()
-  const API = useAxios({ contentType: 'application/json' })
+  const navigate = useNavigate()
+  const API = privateApi({ contentType: 'application/json' })
   const { userInfo } = useSelector((state) => state.auth)
 
   const handleDelete = async () => {
     const ask = window.confirm('Apakah anda yakin ingin menghapus soal ini?')
     if (ask) {
       await dispatch(deleteQuestion({ API, id: postId })).unwrap()
-      await dispatch(getQuestions(API)).unwrap()
+      dispatch(getQuestions(API))
     }
   }
 
@@ -34,7 +36,10 @@ const More = ({ postUserId, postId }) => {
       >
         {userInfo._id === postUserId ? (
           <>
-            <li className="flex cursor-pointer items-center gap-4 px-4 py-2 hover:bg-slate-200">
+            <li
+              className="flex cursor-pointer items-center gap-4 px-4 py-2 hover:bg-slate-200"
+              onClick={() => navigate(`/update/${postId}`)}
+            >
               <HiOutlinePencil className="text-lg text-font" />
               <span>Ubah</span>
             </li>

@@ -147,7 +147,7 @@ const refresh = (req, res) => {
 
 const logout = (req, res) => {
   const { cookies } = req
-  if (!cookies?.jwt) {
+  if (!cookies?.bsu) {
     logger.error(`${req.method}:/auth${req.path}\tTidak ada cookie jwt atau cookie secure`)
     return res.sendStatus(204)
   }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Input, Label } from '../atoms'
 import { HiEye, HiEyeSlash } from 'react-icons/hi2'
 
@@ -6,7 +6,7 @@ const Password = ({ label, error, ...rest }) => {
   const [showPassword, setShowPassword] = useState(false)
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-1 xl:gap-2">
       <Label htmlFor={label}>{label}</Label>
       <div
         className={`flex items-center gap-3 overflow-hidden rounded-lg border-2 bg-transparent px-4 py-2 xl:px-6 xl:py-3 ${

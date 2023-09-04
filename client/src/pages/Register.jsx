@@ -1,6 +1,6 @@
-import { registerInitialValues, registerValidation } from '../../../validations/auth.validation'
-import { register } from '../../../store/features/authSlice'
-import { Button, Password, TextField } from '../../common'
+import { registerInitialValues, registerValidation } from '../validations/auth.validation'
+import { Button, Password, TextField } from '../components/common'
+import { register } from '../store/features/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
@@ -34,15 +34,15 @@ const Register = () => {
   })
 
   return (
-    <div className="flex w-full flex-col gap-9 font-poppins xl:w-[55%] xl:gap-10">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-[28px] font-semibold xl:text-[36px]">Daftar</h1>
+    <div className="flex w-full flex-col gap-7 font-source xl:w-[55%] xl:gap-8">
+      <div className="flex flex-col">
+        <h1 className="text-[28px] font-bold xl:text-[36px]">Daftar</h1>
         <p className="text-sm font-medium text-font/50 xl:text-[15px]">
-          Silahkan isi data yang diperlukan dibawah ini untuk membuat akun BSU Anda
+          Silahkan isi data yang diperlukan dibawah ini untuk membuat akun
         </p>
       </div>
 
-      <form className="flex flex-col gap-7 xl:gap-8 " onSubmit={formik.handleSubmit}>
+      <form className="flex flex-col gap-5 xl:gap-6 " onSubmit={formik.handleSubmit}>
         <TextField
           placeholder="John Doe"
           label="Username"
@@ -80,9 +80,9 @@ const Register = () => {
       </form>
 
       <div className="text-center text-sm font-semibold text-font xl:text-base">
-        <span>Sudah punya akun? </span>
+        <span>Sudah punya akun? Ayo </span>
         <Link to="/login" className="text-primary hover:underline">
-          Login!
+          Masuk!
         </Link>
       </div>
     </div>

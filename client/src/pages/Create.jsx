@@ -1,10 +1,10 @@
-import { categoriesList, semesterList } from '../../../constants/listData'
-import { questionSchema, questionValues } from '../../../validations/question.schema'
-import { Button, Dropdown, TextField, Upload } from '../../common'
-import { addQuestion } from '../../../store/features/questionSlice'
+import { categoriesList, semesterList } from '../constants/listData'
+import { questionSchema, questionValues } from '../validations/question.validation'
+import { Button, Dropdown, TextField, Upload } from '../components/common'
+import { addQuestion } from '../store/features/questionSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { useAxios } from '../../../hooks'
+import { privateApi } from '../services'
 import { useEffect } from 'react'
 import { useFormik } from 'formik'
 
@@ -12,7 +12,7 @@ const Create = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { loading } = useSelector((state) => state.question)
-  const API = useAxios({ contentType: 'multipart/form-data' })
+  const API = privateApi({ contentType: 'multipart/form-data' })
 
   useEffect(() => {
     document.title = 'BSU ~ Upload Soal'
@@ -97,7 +97,7 @@ const Create = () => {
           </div>
           <Upload
             img={formik.values.images}
-            setImg={(value) => formik.setFieldValue('images', [...formik.values.images, ...value])}
+            setImg={(value) => formik.setFieldValue('images', value)}
             error={formik.touched.images && formik.errors.images}
           />
           <Button
