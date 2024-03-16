@@ -23,7 +23,7 @@ This BSU was created because Santo Thomas Catholic University did not yet have a
 
 **Server:** NodeJS, Express Js, MongoDB, Mongoose, Multer, Sharp, JWT, Joi, Javascript.
 
-**Client:** React, Redux, RTK Query, Tailwind CSS, React Hook Form, Yup, Typescript.
+**Client:** React, Redux, RTK Query, Tailwind CSS, React Hook Form, Yup, Javascript.
 
 
 ## Get Started
